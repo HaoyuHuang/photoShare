@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/userHomeTitlebarLayoutId"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="1.03"
+    android:background="@drawable/shape_bg_listview" >
+
+    <ImageView
+        android:id="@+id/userHomeTitleBarHead"
+        android:layout_width="@dimen/tinyImageWidth"
+        android:layout_height="@dimen/tinyImageHeight"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:contentDescription="@string/photos"
+        android:src="@drawable/app_list_corner_round" />
+
+    <TextView
+        android:id="@+id/userHomeTitleBarPhotosCnt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="30dp"
+        android:layout_toRightOf="@+id/userHomeTitleBarHead"
+        android:text="@string/photos" />
+
+    <TextView
+        android:id="@+id/userHomeTitleBarFollowersCnt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="20dp"
+        android:layout_toRightOf="@+id/userHomeTitleBarPhotosCnt"
+        android:text="@string/follower" />
+
+    <TextView
+        android:id="@+id/userHomeTitlebarFollowingCnt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="20dp"
+        android:layout_toRightOf="@+id/userHomeTitleBarFollowersCnt"
+        android:text="@string/follow" />
+
+    <ImageView
+        android:id="@+id/userHomeTitlebarArrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="20dp"
+        android:contentDescription="@string/defaultDesc"
+        android:src="@drawable/arrow" />
+
+</RelativeLayout>

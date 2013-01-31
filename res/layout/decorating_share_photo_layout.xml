@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/decoratingSharePhotoLayoutId"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical"
+        android:paddingBottom="15dp"
+        android:paddingLeft="25dp"
+        android:paddingTop="25dp" >
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/decoratingSharePhotoLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linearLayout1"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/shape_bg_listview"
+        android:orientation="horizontal"
+        android:weightSum="8" >
+
+        <ImageView
+            android:id="@+id/decoratingSharePhoto"
+            android:layout_width="@dimen/tinyImageWidth"
+            android:layout_height="@dimen/tinyImageHeight"
+            android:layout_weight="2"
+            android:contentDescription="@string/editPhotoCrop"
+            android:src="@drawable/icon" />
+
+        <EditText
+            android:id="@+id/decoratingSharePhotoCaption"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="6"
+            android:hint="@string/editPhotoCaption"
+            android:inputType="textMultiLine"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/decoratingSharePhotoLayout"
+        android:orientation="vertical"
+        android:paddingBottom="15dp"
+        android:paddingLeft="25dp"
+        android:paddingTop="25dp" >
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/decoratedPhotoSharingPreferenceListHolder"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linearLayout2"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/shape_bg_listview"
+        android:cacheColorHint="@null" />
+
+</RelativeLayout>

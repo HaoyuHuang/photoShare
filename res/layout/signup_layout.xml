@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/signupLayoutId"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/app_list_corner_shape"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="5dp"
+        android:paddingLeft="25dp"
+        android:paddingTop="15dp" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/account" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_bg_listview"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="8" >
+
+            <ImageView
+                android:layout_width="@dimen/tinyImageWidth"
+                android:layout_height="@dimen/tinyImageHeight"
+                android:layout_weight="1"
+                android:contentDescription="@string/mail"
+                android:src="@drawable/icon_1_n" />
+
+            <EditText
+                android:id="@+id/signupName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="7"
+                android:hint="@string/name" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="8" >
+
+            <ImageView
+                android:layout_width="@dimen/tinyImageWidth"
+                android:layout_height="@dimen/tinyImageHeight"
+                android:layout_weight="1"
+                android:contentDescription="@string/mail"
+                android:src="@drawable/icon_1_n" />
+
+            <EditText
+                android:id="@+id/signupPwd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="7"
+                android:hint="@string/password" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="5dp"
+        android:paddingLeft="25dp"
+        android:paddingTop="15dp" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/privateinfo" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_bg_listview"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="8" >
+
+            <ImageView
+                android:layout_width="@dimen/tinyImageWidth"
+                android:layout_height="@dimen/tinyImageHeight"
+                android:layout_weight="1"
+                android:contentDescription="@string/mail"
+                android:src="@drawable/icon_1_n" />
+
+            <EditText
+                android:id="@+id/signupMail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="7"
+                android:hint="@string/mail" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="8" >
+
+            <ImageView
+                android:layout_width="@dimen/tinyImageWidth"
+                android:layout_height="@dimen/tinyImageHeight"
+                android:layout_weight="1"
+                android:contentDescription="@string/mail"
+                android:src="@drawable/icon_1_n" />
+
+            <EditText
+                android:id="@+id/signupPseudoName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="7"
+                android:hint="@string/psuedoname" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="8" >
+
+            <ImageView
+                android:layout_width="@dimen/tinyImageWidth"
+                android:layout_height="@dimen/tinyImageHeight"
+                android:layout_weight="1"
+                android:contentDescription="@string/mail"
+                android:src="@drawable/icon_1_n" />
+
+            <EditText
+                android:id="@+id/signupPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="7"
+                android:hint="@string/phone" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

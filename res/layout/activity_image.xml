@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="435dip" >
+
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+
+            <com.photoshare.view.cropview.ImageZoomView
+                android:id="@+id/zoomView"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" >
+            </com.photoshare.view.cropview.ImageZoomView>
+
+            <ZoomControls
+                android:id="@+id/zoomCtrl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="fill_vertical" >
+            </ZoomControls>
+
+            <ProgressBar
+                android:id="@+id/progress_large"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:visibility="gone" />
+        </FrameLayout>
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:maxHeight="72dip"
+            android:maxWidth="72dip" />
+    </FrameLayout>
+
+    <HorizontalScrollView
+        android:id="@+id/scroll"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/quickaction_slider_background"
+        android:fadingEdgeLength="0dip"
+        android:paddingLeft="0dip"
+        android:scrollbars="none" >
+
+        <LinearLayout
+            android:id="@+id/tracks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="4dip"
+            android:paddingTop="4dip" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="-5dip"
+                android:layout_marginRight="-5dip"
+                android:src="@drawable/quickaction_slider_grip_left" />
+
+            <LinearLayout
+                android:layout_width="55dip"
+                android:layout_height="wrap_content"
+                android:background="@drawable/quickaction_slider_btn"
+                android:clickable="true"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="vertical"
+                android:paddingBottom="0dip"
+                android:paddingLeft="0dip"
+                android:paddingRight="0dip"
+                android:paddingTop="0dip" >
+
+                <Button
+                    android:id="@+id/btnHome"
+                    android:layout_width="55dip"
+                    android:layout_height="35dip"
+                    android:layout_alignParentLeft="true"
+                    android:background="@drawable/div_bg2"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:text="返回" >
+                </Button>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="55dip"
+                android:layout_height="wrap_content"
+                android:background="@drawable/quickaction_slider_btn"
+                android:clickable="true"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="vertical"
+                android:paddingBottom="0dip"
+                android:paddingLeft="0dip"
+                android:paddingRight="0dip"
+                android:paddingTop="0dip" >
+
+                <Button
+                    android:id="@+id/btnOperate"
+                    android:layout_width="55dip"
+                    android:layout_height="35dip"
+                    android:layout_alignParentLeft="true"
+                    android:background="@drawable/div_bg2"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:text="勾边" >
+                </Button>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="55dip"
+                android:layout_height="wrap_content"
+                android:background="@drawable/quickaction_slider_btn"
+                android:clickable="true"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="vertical"
+                android:paddingBottom="0dip"
+                android:paddingLeft="0dip"
+                android:paddingRight="0dip"
+                android:paddingTop="0dip" >
+
+                <Button
+                    android:id="@+id/btnMove"
+                    android:layout_width="55dip"
+                    android:layout_height="35dip"
+                    android:layout_alignParentLeft="true"
+                    android:background="@drawable/div_bg2"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:text="移图" >
+                </Button>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="55dip"
+                android:layout_height="wrap_content"
+                android:background="@drawable/quickaction_slider_btn"
+                android:clickable="true"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="vertical"
+                android:paddingBottom="0dip"
+                android:paddingLeft="0dip"
+                android:paddingRight="0dip"
+                android:paddingTop="0dip" >
+
+                <Button
+                    android:id="@+id/btnCrop"
+                    android:layout_width="55dip"
+                    android:layout_height="35dip"
+                    android:layout_toRightOf="@id/btnOperate"
+                    android:background="@drawable/div_bg2"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:text="裁剪" >
+                </Button>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="55dip"
+                android:layout_height="wrap_content"
+                android:background="@drawable/quickaction_slider_btn"
+                android:clickable="true"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="vertical"
+                android:paddingBottom="0dip"
+                android:paddingLeft="0dip"
+                android:paddingRight="0dip"
+                android:paddingTop="0dip" >
+
+                <Button
+                    android:id="@+id/btnRotate"
+                    android:layout_width="55dip"
+                    android:layout_height="35dip"
+                    android:layout_alignParentLeft="true"
+                    android:background="@drawable/div_bg2"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:text="右旋转" >
+                </Button>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="55dip"
+                android:layout_height="wrap_content"
+                android:background="@drawable/quickaction_slider_btn"
+                android:clickable="true"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="vertical"
+                android:paddingBottom="0dip"
+                android:paddingLeft="0dip"
+                android:paddingRight="0dip"
+                android:paddingTop="0dip" >
+
+                <Button
+                    android:id="@+id/btnCancel"
+                    android:layout_width="55dip"
+                    android:layout_height="35dip"
+                    android:layout_alignParentLeft="true"
+                    android:background="@drawable/div_bg2"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:text="重绘" >
+                </Button>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="55dip"
+                android:layout_height="wrap_content"
+                android:background="@drawable/quickaction_slider_btn"
+                android:clickable="true"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="vertical"
+                android:paddingBottom="0dip"
+                android:paddingLeft="0dip"
+                android:paddingRight="0dip"
+                android:paddingTop="0dip" >
+
+                <Button
+                    android:id="@+id/btnSave"
+                    android:layout_width="55dip"
+                    android:layout_height="35dip"
+                    android:layout_alignParentLeft="true"
+                    android:background="@drawable/div_bg2"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:text="保存" >
+                </Button>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="55dip"
+                android:layout_height="wrap_content"
+                android:background="@drawable/quickaction_slider_btn"
+                android:clickable="true"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="vertical"
+                android:paddingBottom="0dip"
+                android:paddingLeft="0dip"
+                android:paddingRight="0dip"
+                android:paddingTop="0dip" >
+
+                <Button
+                    android:id="@+id/btnUpload"
+                    android:layout_width="55dip"
+                    android:layout_height="35dip"
+                    android:layout_alignParentLeft="true"
+                    android:background="@drawable/div_bg2"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:text="上传" >
+                </Button>
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="-5dip"
+                android:layout_marginRight="-5dip"
+                android:src="@drawable/quickaction_slider_grip_right" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
+</LinearLayout>
