@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/personalProfileId"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="0.97" >
+
+    <EditText
+        android:id="@+id/mEditPseudoName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="18dp"
+        android:ems="10"
+        android:hint="@string/psuedoname"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/mEditWebsite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mEditPseudoName"
+        android:layout_centerHorizontal="true"
+        android:ems="10"
+        android:hint="@string/website" />
+
+    <EditText
+        android:id="@+id/mEditBio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mEditWebsite"
+        android:layout_centerHorizontal="true"
+        android:ems="10"
+        android:hint="@string/bio"
+        android:inputType="textPostalAddress"
+        android:lines="@integer/mEditBioLine" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:text="@string/privateinfo"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <EditText
+        android:id="@+id/mEditMail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:ems="10"
+        android:hint="@string/mail"
+        android:inputType="textEmailAddress" />
+
+    <EditText
+        android:id="@+id/mEditPhone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mEditMail"
+        android:layout_centerHorizontal="true"
+        android:ems="10"
+        android:hint="@string/phone"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/mEditBirthday"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mEditPhone"
+        android:layout_centerHorizontal="true"
+        android:ems="10"
+        android:hint="@string/birthday"
+        android:inputType="date" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/publicinfo"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <Button
+        android:id="@+id/mEditSubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/mEditBirthday"
+        android:layout_marginRight="22dp"
+        android:hint="@string/submit"
+        android:text="@string/submit" />
+
+</RelativeLayout>

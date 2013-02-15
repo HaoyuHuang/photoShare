@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/app_list_corner_shape" >
+
+    <RelativeLayout
+        android:id="@+id/mainLogLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/shape_bg_listview"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp" >
+
+        <ImageView
+            android:id="@+id/mainSignUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/signUp"
+            android:paddingBottom="20dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="15dp"
+            android:paddingTop="20dp"
+            android:src="@drawable/titlebar_right_button" />
+
+        <ImageView
+            android:id="@+id/mainSignIn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/mainSignUp"
+            android:contentDescription="@string/signIn"
+            android:paddingBottom="20dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="5dp"
+            android:paddingTop="20dp"
+            android:src="@drawable/titlebar_right_button" />
+    </RelativeLayout>
+
+</RelativeLayout>

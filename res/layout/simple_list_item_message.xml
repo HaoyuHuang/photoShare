@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/itemMessageLayoutId"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <ImageView
+        android:id="@+id/itemMessagePhoto"
+        android:layout_width="@dimen/tinyImageWidth"
+        android:layout_height="@dimen/tinyImageHeight"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:contentDescription="@string/photos"
+        android:src="@drawable/app_list_corner_round" />
+
+    <TextView
+        android:id="@+id/itemMessageName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="51dp"
+        android:layout_toRightOf="@+id/itemMessagePhoto"
+        android:text="@string/name" />
+
+    <TextView
+        android:id="@+id/itemMessageDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/itemMessageName"
+        android:layout_below="@+id/itemMessageName"
+        android:text="@string/defaultDesc" />
+
+    <Button
+        android:id="@+id/itemMessageBtn"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="42dp"
+        android:text="@string/submit" />
+
+</RelativeLayout>

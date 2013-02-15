@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <ImageView
+        android:id="@+id/newsPhoto"
+        android:layout_width="@dimen/tinyImageWidth"
+        android:layout_height="@dimen/tinyImageHeight"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="18dp"
+        android:layout_marginTop="22dp"
+        android:contentDescription="@string/photos"
+        android:src="@drawable/app_list_corner_round" />
+
+    <TextView
+        android:id="@+id/newsDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/newsPhoto"
+        android:layout_centerHorizontal="true"
+        android:text="@string/defaultDesc" />
+
+    <TextView
+        android:id="@+id/newsTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/newsDescription"
+        android:layout_below="@+id/newsDescription"
+        android:text="@string/date"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/newsUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/newsDescription"
+        android:layout_alignBottom="@+id/newsDescription"
+        android:layout_toLeftOf="@+id/newsDescription"
+        android:text="@string/name"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+</RelativeLayout>

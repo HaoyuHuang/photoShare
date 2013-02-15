@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/signInLayoutId"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/app_list_corner_shape"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="5dp"
+        android:paddingLeft="25dp"
+        android:paddingTop="15dp" >
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_bg_listview"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="8" >
+
+            <ImageView
+                android:id="@+id/signinImageViewId"
+                android:layout_width="@dimen/tinyImageWidth"
+                android:layout_height="@dimen/tinyImageHeight"
+                android:layout_weight="1"
+                android:contentDescription="@string/mail"
+                android:src="@drawable/icon_1_n" />
+
+            <EditText
+                android:id="@+id/signinName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="7"
+                android:hint="@string/name" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="8" >
+
+            <ImageView
+                android:id="@+id/signinImageViewPwdId"
+                android:layout_width="@dimen/tinyImageWidth"
+                android:layout_height="@dimen/tinyImageHeight"
+                android:layout_weight="1"
+                android:contentDescription="@string/mail"
+                android:src="@drawable/icon_1_n" />
+
+            <EditText
+                android:id="@+id/signinPwd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="7"
+                android:hint="@string/password" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

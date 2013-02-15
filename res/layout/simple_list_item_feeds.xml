@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/feedsItemLayoutId"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <ImageView
+        android:id="@+id/feedsUserHead"
+        android:layout_width="@dimen/tinyImageWidth"
+        android:layout_height="@dimen/tinyImageHeight"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:contentDescription="@string/photos"
+        android:src="@drawable/app_list_corner_round" />
+
+    <TextView
+        android:id="@+id/feedsUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/feedsUserHead"
+        android:layout_toRightOf="@+id/feedsUserHead"
+        android:text="@string/name"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/feedsDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/feedsUserName"
+        android:layout_alignParentRight="true"
+        android:text="@string/date"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <ImageView
+        android:id="@+id/feedPhoto"
+        android:layout_width="@dimen/largeImageWidth"
+        android:layout_height="@dimen/largeImageHeight"
+        android:layout_alignLeft="@+id/feedsUserName"
+        android:layout_below="@+id/feedsUserName"
+        android:layout_marginTop="15dp"
+        android:contentDescription="@string/photos"
+        android:src="@drawable/quickaction_slider_btn_pressed" />
+
+    <TextView
+        android:id="@+id/feedLike"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/feedPhoto"
+        android:background="@drawable/shape_bg_listview"
+        android:text="@string/like"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/feedComment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/feedLike"
+        android:layout_marginLeft="28dp"
+        android:layout_toRightOf="@+id/feedLike"
+        android:background="@drawable/shape_bg_listview"
+        android:text="@string/comment"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+</RelativeLayout>

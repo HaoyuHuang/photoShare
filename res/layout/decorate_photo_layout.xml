@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/editPhotoLayoutId"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:id="@+id/editPhotoCenterLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/editPhotoDecorateLayout"
+        android:layout_alignParentTop="true" >
+
+        <ImageView
+            android:id="@+id/editPhoto"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:contentDescription="@string/defaultDesc" >
+        </ImageView>
+    </LinearLayout>
+
+    <HorizontalScrollView
+        android:id="@+id/editPhotoDecorateLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/editPhotoSubmitLayout" >
+
+        <LinearLayout
+            android:id="@+id/editPhotoToolsGallery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" />
+    </HorizontalScrollView>
+
+    <RelativeLayout
+        android:id="@+id/editPhotoSubmitLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+id/editPhotoCancleBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:contentDescription="@string/editPhotoCancle"
+            android:src="@drawable/left_arrow" />
+
+        <ImageView
+            android:id="@+id/editPhotoSubmitBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/editPhotoCancleBtn"
+            android:contentDescription="@string/editPhotoCancle"
+            android:src="@drawable/arrow" />
+    </RelativeLayout>
+
+</RelativeLayout>
