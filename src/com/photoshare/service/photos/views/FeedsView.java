@@ -71,7 +71,7 @@ public class FeedsView {
 		 * @param textViewResourceId
 		 */
 		public FeedsAdapter() {
-			super(context, 0, feeds);
+			super(context, R.layout.simple_list_item_feeds, feeds);
 		}
 
 		/*
@@ -88,7 +88,7 @@ public class FeedsView {
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 			if (rowView == null) {
-				rowView = inflater.inflate(R.layout.feeds_layout, null);
+				rowView = inflater.inflate( R.layout.simple_list_item_feeds, null);
 				PhotoBean feed = getItem(position);
 				feeds = new FeedItemView(rowView, async, feed);
 				rowView.setTag(feeds);

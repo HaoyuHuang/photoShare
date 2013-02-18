@@ -10,7 +10,7 @@ public class CommentsGetInfoRequestParam extends RequestParam {
 	@Deprecated
 	private static final String METHOD = "commentGetInfo.do";
 
-	private static final String ACTION = "/CommentAction_getCommentInfo";
+	private static final String ACTION = "/CommentGetInfoAction";
 
 	public String getAction() {
 		return ACTION;

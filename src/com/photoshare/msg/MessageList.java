@@ -25,7 +25,7 @@ import com.photoshare.utils.async.AsyncUtils;
  */
 public class MessageList {
 
-	private static MessageList msgList = new MessageList();
+	private static final MessageList msgList = new MessageList();
 
 	private AsyncUtils async = AsyncUtils.getInstance();
 

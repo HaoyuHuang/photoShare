@@ -4,32 +4,64 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <ImageView
-        android:id="@+id/commentHead"
-        android:layout_width="@dimen/tinyImageWidth"
-        android:layout_height="@dimen/tinyImageHeight"
-        android:contentDescription="@string/photos" />
-
-    <TextView
-        android:id="@+id/commentUserName"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/commentItemLayoutHeaderId"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/commentHead"
-        android:textColor="@color/blue" />
+        android:orientation="horizontal" >
+	
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
 
-    <TextView
-        android:id="@+id/comment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/commentUserName"
-        android:layout_toRightOf="@+id/commentHead" />
+            <ImageView
+                android:id="@+id/commentHead"
+                android:layout_width="@dimen/tinyImageWidth"
+                android:layout_height="@dimen/tinyImageHeight"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="10dp"
+                android:contentDescription="@string/photos"
+                android:src="@drawable/app_list_corner_round" />
 
-    <TextView
-        android:id="@+id/commentDate"
-        android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/commentUserName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/commentHead"
+                android:text="@string/name"
+                android:textColor="@color/blue" />
+
+            <TextView
+                android:id="@+id/commentDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="@string/date"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/gray" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/commentItemLayoutContentId"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/comment"
-        android:layout_toRightOf="@+id/commentHead"
-        android:textColor="@color/gray" />
+        android:layout_below="@+id/commentItemLayoutHeaderId"
+        android:orientation="horizontal" 
+        android:layout_marginLeft="10dp"
+        >
+        <TextView
+            android:id="@+id/comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/comment" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/commentItemLayoutFooterId"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+    </LinearLayout>
 
 </RelativeLayout>

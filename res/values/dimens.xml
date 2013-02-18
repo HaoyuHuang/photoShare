@@ -17,11 +17,11 @@
     <dimen name="new_blog_size">70.0dp</dimen>
 
     <!-- Image Dimention -->
-    <dimen name="tinyImageWidth">120dp</dimen>
-    <dimen name="tinyImageHeight">120dp</dimen>
+    <dimen name="tinyImageWidth">20dp</dimen>
+    <dimen name="tinyImageHeight">20dp</dimen>
     <dimen name="middleImageWidth">240dp</dimen>
     <dimen name="middleImageHeight">240dp</dimen>
     <dimen name="largeImageWidth">720dp</dimen>
-    <dimen name="largeImageHeight">720dp</dimen>
+    <dimen name="largeImageHeight">600dp</dimen>
 
 </resources>

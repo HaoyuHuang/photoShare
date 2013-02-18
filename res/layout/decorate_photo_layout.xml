@@ -39,7 +39,7 @@
         android:layout_alignParentBottom="true"
         android:orientation="horizontal" >
 
-        <ImageView
+        <!-- <ImageView
             android:id="@+id/editPhotoCancleBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -53,7 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/editPhotoCancleBtn"
             android:contentDescription="@string/editPhotoCancle"
-            android:src="@drawable/arrow" />
+            android:src="@drawable/arrow" /> -->
     </RelativeLayout>
 
 </RelativeLayout>

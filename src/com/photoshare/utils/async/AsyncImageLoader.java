@@ -106,6 +106,9 @@ public class AsyncImageLoader {
 	}
 
 	private Bitmap getBitMapFromWeb(String path) throws RuntimeException {
+		if (path == null) {
+			
+		}
 		try {
 			byte[] bytes = getBytes(path, null);
 			Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0,

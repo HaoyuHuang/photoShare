@@ -4,62 +4,82 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <ImageView
-        android:id="@+id/feedsUserHead"
-        android:layout_width="@dimen/tinyImageWidth"
-        android:layout_height="@dimen/tinyImageHeight"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:contentDescription="@string/photos"
-        android:src="@drawable/app_list_corner_round" />
-
-    <TextView
-        android:id="@+id/feedsUserName"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/feedsItemLayoutHeaderId"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/feedsUserHead"
-        android:layout_toRightOf="@+id/feedsUserHead"
-        android:text="@string/name"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:orientation="horizontal" >
 
-    <TextView
-        android:id="@+id/feedsDate"
-        android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+            <ImageView
+                android:id="@+id/feedsUserHead"
+                android:layout_width="@dimen/tinyImageWidth"
+                android:layout_height="@dimen/tinyImageHeight"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="10dp"
+                android:contentDescription="@string/photos"
+                android:src="@drawable/app_list_corner_round" />
+
+            <TextView
+                android:id="@+id/feedsUserName"
+                android:layout_width="wrap_content"
+                android:layout_toRightOf="@+id/feedsUserHead"
+                android:layout_height="wrap_content"
+                android:text="@string/name"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/feedsDate"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/date"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/feedsItemLayoutContentId"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/feedsUserName"
-        android:layout_alignParentRight="true"
-        android:text="@string/date"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:layout_below="@+id/feedsItemLayoutHeaderId"
+        android:orientation="vertical" >
 
-    <ImageView
-        android:id="@+id/feedPhoto"
-        android:layout_width="@dimen/largeImageWidth"
-        android:layout_height="@dimen/largeImageHeight"
-        android:layout_alignLeft="@+id/feedsUserName"
-        android:layout_below="@+id/feedsUserName"
-        android:layout_marginTop="15dp"
-        android:contentDescription="@string/photos"
-        android:src="@drawable/quickaction_slider_btn_pressed" />
+        <ImageView
+            android:id="@+id/feedPhoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:contentDescription="@string/photos"
+            android:src="@drawable/quickaction_slider_btn_pressed" />
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/feedLike"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/feedsItemLayoutFooterId"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/feedPhoto"
-        android:background="@drawable/shape_bg_listview"
-        android:text="@string/like"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:layout_below="@+id/feedsItemLayoutContentId"
+        android:orientation="horizontal" >
 
-    <TextView
-        android:id="@+id/feedComment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/feedLike"
-        android:layout_marginLeft="28dp"
-        android:layout_toRightOf="@+id/feedLike"
-        android:background="@drawable/shape_bg_listview"
-        android:text="@string/comment"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:id="@+id/feedLike"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_bg_listview"
+            android:text="@string/like"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <TextView
+            android:id="@+id/feedComment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="28dp"
+            android:background="@drawable/shape_bg_listview"
+            android:text="@string/comment"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+    </LinearLayout>
 
 </RelativeLayout>

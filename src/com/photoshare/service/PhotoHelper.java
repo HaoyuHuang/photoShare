@@ -208,6 +208,7 @@ public class PhotoHelper {
 			}
 			photosBean = new PhotosGetInfoResponseBean(response);
 		} catch (RuntimeException re) {
+			re.printStackTrace();
 			Utils.logger("runtime exception " + re.getMessage());
 			throw new Throwable(re);
 		}

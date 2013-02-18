@@ -2,7 +2,7 @@
 <resources>
 
     <string name="hello">Hello World, UIActivity!</string>
-    <string name="app_name">UI</string>
+    <string name="app_name">photoShare</string>
 
     <!-- View Description -->
     <string name="popular">流行</string>
@@ -29,6 +29,8 @@
     <string name="date">日期</string>
     <string name="dragRefresh">下拉刷新</string>
     <string name="lastRefresh">上次更新</string>
+    <string name="toastStartCroping">开始裁剪喽</string>
+    <string name="toastStopCroping">停止裁剪喽</string>
 
     <!-- Profile Description -->
     <string name="account">账号</string>
@@ -98,6 +100,8 @@
     <!-- Buttons Text Description -->
     <string name="retake">重拍</string>
     <string name="loadMore">加载</string>
+    <string name="start">开始</string>
+    <string name="forward">前进</string>
     <string name="back">返回</string>
     <string name="search">搜索</string>
     <string name="submit">确定</string>

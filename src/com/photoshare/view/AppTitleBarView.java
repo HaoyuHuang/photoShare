@@ -122,14 +122,17 @@ public class AppTitleBarView {
 
 	public void setLeftBtnText(String leftBtnText) {
 		this.leftBtnText = leftBtnText;
+		this.titlebarLeftButton.setText(this.leftBtnText);
 	}
 
 	public void setRightBtnText(String rightBtnText) {
 		this.rightBtnText = rightBtnText;
+		this.titlebarRightButton.setText(this.rightBtnText);
 	}
 
 	public void setTitlebarText(String titlebarText) {
 		this.titlebarText = titlebarText;
+		this.titlebarTextView.setText(this.titlebarText);
 	}
 
 	public void displayErrorView(String errorMsg) {

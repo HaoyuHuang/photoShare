@@ -27,8 +27,10 @@
             android:id="@+id/titlebar_title_text"
             android:layout_width="20dp"
             android:layout_height="fill_parent"
+            android:layout_toRightOf="@+id/titlebar_left_button"
+            android:layout_toLeftOf="@+id/titlebar_right_button"
             android:gravity="center"
-            android:text=""
+            android:text="@string/app_name"
             android:textColor="#FFFFFF"
             android:textSize="20dp" />
 
@@ -38,7 +40,7 @@
             android:layout_height="40dp"
             android:layout_alignParentRight="true"
             android:background="@drawable/titlebar_right_button"
-            android:text="@string/app_name"
+            android:text="@string/forward"
             android:textColor="#FFFFFF"
             android:textSize="14dp" />
     </RelativeLayout>

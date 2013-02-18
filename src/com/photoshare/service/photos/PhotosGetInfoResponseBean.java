@@ -8,6 +8,7 @@ import org.json.JSONObject;
 
 import com.photoshare.common.ResponseBean;
 import com.photoshare.exception.NetworkException;
+import com.photoshare.utils.Utils;
 
 public class PhotosGetInfoResponseBean extends ResponseBean {
 
@@ -43,6 +44,7 @@ public class PhotosGetInfoResponseBean extends ResponseBean {
 				for (int i = 0; i < size; i++) {
 					PhotoBean bean = new PhotoBean();
 					bean.parse(array.optJSONObject(i));
+					Utils.logger(bean.toString());
 					if (bean != null) {
 						photos.add(bean);
 					}

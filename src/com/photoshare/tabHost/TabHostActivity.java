@@ -1,5 +1,6 @@
 package com.photoshare.tabHost;
 
+import android.app.Activity;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TabHost;
 
 import com.photoshare.common.AbstractRequestListener;
+import com.photoshare.common.TabActivityResultListener;
 import com.photoshare.exception.NetworkError;
 import com.photoshare.fragments.stacktrace.TracePhase;
 import com.photoshare.fragments.stacktrace.TraceStack;
@@ -21,6 +23,7 @@ import com.photoshare.tabHost.tab.TabNewsActivity;
 import com.photoshare.tabHost.tab.TabPopularActivity;
 import com.photoshare.utils.UserReader;
 import com.photoshare.utils.async.AsyncUtils;
+import com.renren.api.connect.android.Util;
 
 public class TabHostActivity extends TabActivity {
 
@@ -125,7 +128,19 @@ public class TabHostActivity extends TabActivity {
 			}
 
 		});
-
 	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		Util.logger("TabHost Activity Result");
+		Activity activity = getLocalActivityManager().getCurrentActivity();
+		if (activity instanceof TabActivityResultListener) {
+			TabActivityResultListener listener = (TabActivityResultListener) activity;
+			listener.onTabActivityResult(requestCode, resultCode, data);
+		}
+		super.onActivityResult(requestCode, resultCode, data);
+	}
+	
+	
 
 }

@@ -154,8 +154,10 @@ public class PhotoBean implements Parcelable {
 		sb.append(KEY_UID).append(" = ").append(uid).append("\r\n");
 		sb.append(KEY_UNAME).append(" = ").append(uname).append("\r\n");
 		sb.append(KEY_CAPTION).append(" = ").append(caption).append("\r\n");
-		sb.append(KEY_CREATE_TIME).append(" = ").append(sdf.format(createTime))
-				.append("\r\n");
+//		sb.append(KEY_CREATE_TIME).append(" = ").append(sdf.format(createTime))
+//				.append("\r\n");
+		sb.append(KEY_CREATE_TIME).append(" = ").append(createTime)
+		.append("\r\n");
 		sb.append(KEY_LIKES_COUNT).append(" = ").append(likesCount)
 				.append("\r\n");
 		sb.append(KEY_COMMENT_COUNT).append(" = ").append(commentCount)

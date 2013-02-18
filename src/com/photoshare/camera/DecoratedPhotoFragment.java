@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.photoshare.fragments.BaseFragment;
 import com.photoshare.polygonfill.DrawLineDelegate;
@@ -109,7 +110,7 @@ public class DecoratedPhotoFragment extends BaseFragment {
 
 		leftBtnText = getCancleText();
 		titlebarText = getCropingText();
-		rightBtnText = getSubmitText();
+		rightBtnText = getStartText();
 
 		initTitleBar(leftBtnText, rightBtnText, titlebarText);
 		mZoomView = (ImageZoomView) getActivity().findViewById(
@@ -160,12 +161,24 @@ public class DecoratedPhotoFragment extends BaseFragment {
 		return getString(R.string.fdecoratedPhotoShareFragment);
 	}
 
+	private String getToastStartCroping() {
+		return getString(R.string.toastStartCroping);
+	}
+
+	private String getToastStopCroping() {
+		return getString(R.string.toastStopCroping);
+	}
+
 	private String getDecoratedPhotoFragment() {
 		return getString(R.string.fdecoratedPhotoFragment);
 	}
 
 	private String getCameraPhotoFragment() {
 		return getString(R.string.fcameraPhotoFragment);
+	}
+
+	private String getStartText() {
+		return getString(R.string.start);
 	}
 
 	public void initImageView() {
@@ -262,6 +275,8 @@ public class DecoratedPhotoFragment extends BaseFragment {
 	}
 
 	private void resetCroping() {
+		Toast.makeText(getActivity(), getToastStopCroping(), Toast.LENGTH_SHORT)
+				.show();
 		resetZoomState();
 		if (mBitmap != null) {
 			mBitmap.recycle();
@@ -295,9 +310,9 @@ public class DecoratedPhotoFragment extends BaseFragment {
 	 */
 	@Override
 	protected void OnRightBtnClicked() {
-		isCroping = !isCroping;
-		if (isCroping) {
+		if (!isCroping) {
 			startCroping();
+			isCroping = true;
 			return;
 		}
 		pf = new PolygonFill(mBitmap.getWidth(), mBitmap.getHeight(),
@@ -316,7 +331,7 @@ public class DecoratedPhotoFragment extends BaseFragment {
 					}
 
 					public void onCancel() {
-
+						
 					}
 				});
 	}
@@ -325,8 +340,10 @@ public class DecoratedPhotoFragment extends BaseFragment {
 	 * 
 	 */
 	private void startCroping() {
+		Toast.makeText(this.getActivity(), getToastStartCroping(),
+				Toast.LENGTH_SHORT).show();
 		leftBtnText = getCancleText();
-		rightBtnText = getSubmitText();
+		rightBtnText = getCropingText();
 		setTitleBarText(leftBtnText, rightBtnText, titlebarText);
 		mZoomView.operateType = 2;
 	}
@@ -340,9 +357,10 @@ public class DecoratedPhotoFragment extends BaseFragment {
 	protected void OnLeftBtnClicked() {
 		if (isCroping) {
 			leftBtnText = getCancleText();
-			rightBtnText = getCropingText();
+			rightBtnText = getStartText();
 			setTitleBarText(leftBtnText, rightBtnText, titlebarText);
 			resetCroping();
+			isCroping = false;
 			return;
 		}
 		backward(null);

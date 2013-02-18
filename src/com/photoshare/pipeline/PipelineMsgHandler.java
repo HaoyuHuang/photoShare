@@ -67,7 +67,7 @@ public class PipelineMsgHandler {
 				request.tryAgain();
 				pipeline.notifySend(request);
 			} else {
-				messageList.add(request);
+				MessageList.getInstance().add(request);
 				pipeline.moveToLast();
 			}
 

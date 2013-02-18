@@ -1,15 +1,18 @@
 package com.photoshare.tabHost.tab;
 
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.photoshare.camera.CameraFragment;
+import com.photoshare.common.TabActivityResultListener;
 import com.photoshare.fragments.stacktrace.TraceElement;
 import com.photoshare.fragments.stacktrace.TracePhase;
 import com.photoshare.tabHost.BaseActivity;
 import com.photoshare.tabHost.R;
 
-public class TabCameraActivity extends BaseActivity {
+public class TabCameraActivity extends BaseActivity implements
+		TabActivityResultListener {
 	private CameraFragment uhf;
 
 	private boolean onStop;
@@ -23,7 +26,6 @@ public class TabCameraActivity extends BaseActivity {
 	}
 
 	private void initFragments() {
-
 		uhf = (CameraFragment) getFragmentManager().findFragmentById(
 				R.id.TabCameraLayoutHolderId);
 		uhf = CameraFragment.newInstance(R.id.TabCameraLayoutHolderId);
@@ -53,12 +55,13 @@ public class TabCameraActivity extends BaseActivity {
 		onStop = true;
 	}
 
-//	@Override
-//	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//		// TODO Auto-generated method stub
-////		super.onActivityResult(requestCode, resultCode, data);
-//		Utils.logger("onActivityResult");
-//	}
+	// @Override
+	// protected void onActivityResult(int requestCode, int resultCode, Intent
+	// data) {
+	// // TODO Auto-generated method stub
+	// // super.onActivityResult(requestCode, resultCode, data);
+	// Utils.logger("onActivityResult");
+	// }
 
 	@Override
 	protected void onResume() {
@@ -66,14 +69,18 @@ public class TabCameraActivity extends BaseActivity {
 		super.onResume();
 		if (onStop) {
 			stack.setCurrentPhase(TracePhase.CAMERA);
-//			Command.forwardTab((BaseFragment) getFragmentManager()
-//					.findFragmentById(R.id.TabCameraLayoutHolderId),
-//					getCameraFragment(), null);
+			// Command.forwardTab((BaseFragment) getFragmentManager()
+			// .findFragmentById(R.id.TabCameraLayoutHolderId),
+			// getCameraFragment(), null);
 		}
 	}
 
 	private String getCameraFragment() {
 		return getString(R.string.fcameraPhotoFragment);
+	}
+
+	public void onTabActivityResult(int requestCode, int resultCode, Intent data) {
+		uhf.onTakePhotoResult(requestCode, resultCode, data);
 	}
 
 }

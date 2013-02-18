@@ -25,7 +25,7 @@ public class PutCommentRequestParam extends RequestParam {
 	@Deprecated
 	private static final String METHOD = "putComment";
 
-	private static final String ACTION = "/CommentAction_putComment";
+	private static final String ACTION = "/CommentAction";
 
 	public String getAction() {
 		return ACTION;

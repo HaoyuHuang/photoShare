@@ -34,7 +34,7 @@ public class User {
 
 	private PipelineMsgHandler handler = new PipelineMsgHandler();
 	/** 服务器地址 */
-	private final String SERVER_URL = "http://192.168.1.200:8080/Spring3Struts2/photoShare-mobile";
+	private final String SERVER_URL = "http://169.254.64.26:8080/Spring3Struts2/photoShare-mobile";
 	/** 响应形式为Json */
 	public static final String RESPONSE_FORMAT_JSON = "json";
 	private final String LOG_TAG_REQUEST = "request";

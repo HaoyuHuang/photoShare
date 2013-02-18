@@ -102,7 +102,6 @@ public class FeedsFragment extends BaseFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		if (!processArguments()) {
-			System.out.println("FeedsViewCreatedHAHA!!!!!!!!!!!!!!");
 			container.addView(super.onCreateView(inflater, container,
 					savedInstanceState));
 		}

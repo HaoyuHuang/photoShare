@@ -69,9 +69,23 @@ public class CameraFragment extends BaseFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
-		initView();
-		if (isIntentAvailable(getActivity(), MediaStore.ACTION_IMAGE_CAPTURE)) {
-			dispatchTakePictureIntent(ACTION_TAKE_PHOTO_S);
+		if (processArguments()) {
+			initTitleBar(leftBtnText, rightBtnText, titlebarText);
+			initView();
+			initViews();
+			Bundle args = getArguments();
+			if (args.containsKey(PhotoBean.KEY_PHOTO)) {
+				photo = args.getParcelable(PhotoBean.KEY_PHOTO);
+				if (photo != null) {
+					mCameraView.setPhoto(photo);
+				}
+			}
+		} else {
+			initView();
+			if (isIntentAvailable(getActivity(),
+					MediaStore.ACTION_IMAGE_CAPTURE)) {
+				dispatchTakePictureIntent(ACTION_TAKE_PHOTO_S);
+			}
 		}
 	}
 
@@ -207,12 +221,11 @@ public class CameraFragment extends BaseFragment {
 		default:
 			break;
 		}
-		startActivityForResult(takePictureIntent, actionCode);
+		getActivity().getParent().startActivityForResult(takePictureIntent,
+				actionCode);
 	}
 
 	private void handleSmallCameraPhoto(Intent data) {
-		// Toast.makeText(getActivity(), "handle picture", Toast.LENGTH_LONG)
-		// .show();
 		if (data != null) {
 			Uri uri = data.getData();
 			if (uri != null) {
@@ -234,23 +247,15 @@ public class CameraFragment extends BaseFragment {
 	}
 
 	private void handleBigCameraPhoto() {
-		// Toast.makeText(getActivity(), "Take Picture",
-		// Toast.LENGTH_LONG).show();
 		if (!mCameraView.isCurrentPhotoPathNull()) {
-			Toast.makeText(getActivity(), "Take Picture", Toast.LENGTH_LONG)
-					.show();
 			mCameraView.setPic();
 			mCameraView.galleryAddPic();
 			mCameraView.setmCurrentPhotoPath(null);
 		}
 	}
 
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
+	public void onTakePhotoResult(int requestCode, int resultCode, Intent data) {
 		Utils.logger("Take Picture Done");
-		// Toast.makeText(getActivity(), "Take Picture",
-		// Toast.LENGTH_LONG).show();
 		initTitleBar(leftBtnText, rightBtnText, titlebarText);
 		initViews();
 		switch (requestCode) {
@@ -262,9 +267,6 @@ public class CameraFragment extends BaseFragment {
 		} // ACTION_TAKE_PHOTO_B
 		case ACTION_TAKE_PHOTO_S: {
 			if (resultCode == Activity.RESULT_OK) {
-				// Toast.makeText(getActivity(), "Take Picture",
-				// Toast.LENGTH_LONG)
-				// .show();
 				handleSmallCameraPhoto(data);
 			}
 			break;

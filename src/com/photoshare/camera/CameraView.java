@@ -45,8 +45,8 @@ public class CameraView {
 	/** Crop View */
 	private ImageView photoView;
 
-	private ImageView mSubmitView;
-	private ImageView mCancleView;
+	// private ImageView mSubmitView;
+	// private ImageView mCancleView;
 	private LinearLayout photoToolsView;
 	private static final String CAMERA_DIR = "/photoShare/";
 
@@ -68,30 +68,30 @@ public class CameraView {
 		photoToolsView = (LinearLayout) baseView
 				.findViewById(R.id.editPhotoToolsGallery);
 		photoView = (ImageView) baseView.findViewById(R.id.editPhoto);
-		mSubmitView = (ImageView) baseView
-				.findViewById(R.id.editPhotoSubmitBtn);
-		mCancleView = (ImageView) baseView
-				.findViewById(R.id.editPhotoCancleBtn);
-
-		mSubmitView.setOnClickListener(new OnClickListener() {
-
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				if (onCameraViewClick != null) {
-					onCameraViewClick.OnSubmitClick();
-				}
-			}
-		});
-
-		mCancleView.setOnClickListener(new OnClickListener() {
-
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				if (onCameraViewClick != null) {
-					onCameraViewClick.OnCancleClick();
-				}
-			}
-		});
+		// mSubmitView = (ImageView) baseView
+		// .findViewById(R.id.editPhotoSubmitBtn);
+		// mCancleView = (ImageView) baseView
+		// .findViewById(R.id.editPhotoCancleBtn);
+		//
+		// mSubmitView.setOnClickListener(new OnClickListener() {
+		//
+		// public void onClick(View v) {
+		// // TODO Auto-generated method stub
+		// if (onCameraViewClick != null) {
+		// onCameraViewClick.OnSubmitClick();
+		// }
+		// }
+		// });
+		//
+		// mCancleView.setOnClickListener(new OnClickListener() {
+		//
+		// public void onClick(View v) {
+		// // TODO Auto-generated method stub
+		// if (onCameraViewClick != null) {
+		// onCameraViewClick.OnCancleClick();
+		// }
+		// }
+		// });
 		applyImageTool();
 	}
 
@@ -105,14 +105,14 @@ public class CameraView {
 
 	public void DisappearPhotoTools() {
 		photoToolsView.setVisibility(View.GONE);
-		mSubmitView.setVisibility(View.GONE);
-		mCancleView.setVisibility(View.GONE);
+		// mSubmitView.setVisibility(View.GONE);
+		// mCancleView.setVisibility(View.GONE);
 	}
 
 	public void DisplayPhotoTools() {
 		photoToolsView.setVisibility(View.VISIBLE);
-		mSubmitView.setVisibility(View.VISIBLE);
-		mCancleView.setVisibility(View.VISIBLE);
+		// mSubmitView.setVisibility(View.VISIBLE);
+		// mCancleView.setVisibility(View.VISIBLE);
 	}
 
 	private View insertImage(final EditPhotoType type) {
@@ -260,7 +260,7 @@ public class CameraView {
 			photoView.setVisibility(View.VISIBLE);
 		}
 	}
-	
+
 	public void setDecoratedPhoto(Drawable photo) {
 		BitmapDrawable dP = (BitmapDrawable) photo;
 		if (dP != null) {

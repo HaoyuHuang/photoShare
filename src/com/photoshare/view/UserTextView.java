@@ -26,7 +26,7 @@ public class UserTextView {
 		this.text = text;
 	}
 
-	public void apply() {
+	public synchronized void apply() {
 
 		while (text.length() <= 8) {
 			text = text.concat(" ");
@@ -38,7 +38,7 @@ public class UserTextView {
 		spStr.setSpan(clickSpan, 0, text.length(),
 				Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
 		clickSpan.registerListener(listener);
-		textView.append(spStr);
+		textView.setText(spStr);
 		textView.setMovementMethod(LinkMovementMethod.getInstance());
 	}
 
