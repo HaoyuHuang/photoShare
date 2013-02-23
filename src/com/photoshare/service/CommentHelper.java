@@ -105,14 +105,41 @@ public class CommentHelper {
 	 * @param mCallback
 	 */
 	public void publishComment(PutCommentRequestParam params,
-			ICallback mCallback) {
+			final ICallback mCallback) {
 		if (params == null)
 			return;
+
+		// AMsg 及 Listener 将一起放入管道中
 		RequestMsg<PutCommentRequestParam> AMsg = new RequestMsg<PutCommentRequestParam>(
 				params, MsgType.COMMENT);
-		registerCallback(mCallback);
-		user.registerRequestListener(listener);
-		user.addMsg(AMsg);
+		AbstractRequestListener<String> listener = new AbstractRequestListener<String>() {
+
+			@Override
+			public void onComplete(String bean) {
+				// TODO Auto-generated method stub
+				if (mCallback != null) {
+					mCallback.OnComplete(new PutCommentResponseBean(bean));
+				}
+			}
+
+			@Override
+			public void onNetworkError(NetworkError networkError) {
+				// TODO Auto-generated method stub
+				if (mCallback != null) {
+					mCallback.OnNetworkError(networkError);
+				}
+			}
+
+			@Override
+			public void onFault(Throwable fault) {
+				// TODO Auto-generated method stub
+				if (mCallback != null) {
+					mCallback.OnFault(fault);
+				}
+			}
+
+		};
+		user.addMsg(AMsg, listener);
 	}
 
 	public interface ICallback {
@@ -123,37 +150,4 @@ public class CommentHelper {
 		public void OnNetworkError(NetworkError networkError);
 	}
 
-	private ICallback mCallback;
-
-	private AbstractRequestListener<String> listener = new AbstractRequestListener<String>() {
-
-		@Override
-		public void onComplete(String bean) {
-			// TODO Auto-generated method stub
-			if (mCallback != null) {
-				mCallback.OnComplete(new PutCommentResponseBean(bean));
-			}
-		}
-
-		@Override
-		public void onNetworkError(NetworkError networkError) {
-			// TODO Auto-generated method stub
-			if (mCallback != null) {
-				mCallback.OnNetworkError(networkError);
-			}
-		}
-
-		@Override
-		public void onFault(Throwable fault) {
-			// TODO Auto-generated method stub
-			if (mCallback != null) {
-				mCallback.OnFault(fault);
-			}
-		}
-
-	};
-
-	private void registerCallback(ICallback mCallback) {
-		this.mCallback = mCallback;
-	}
 }

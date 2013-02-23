@@ -7,10 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.photoshare.command.Command;
 import com.photoshare.common.AbstractRequestListener;
 import com.photoshare.exception.NetworkError;
 import com.photoshare.exception.NetworkException;
 import com.photoshare.fragments.BaseFragment;
+import com.photoshare.fragments.stacktrace.TraceConfig;
 import com.photoshare.history.SearchHistory;
 import com.photoshare.service.photos.PhotoBean;
 import com.photoshare.service.photos.PhotoType;
@@ -160,7 +162,8 @@ public class PreferenceSettingsFragment extends BaseFragment {
 					new Utils.OnOptionListener() {
 
 						public void onOK() {
-
+							// TODO Auto-generated method stub 清理XML文件
+							Command.Main(getActivity());
 						}
 
 						public void onCancel() {
@@ -175,7 +178,8 @@ public class PreferenceSettingsFragment extends BaseFragment {
 					PhotoType.MyLikedPhotos.toString());
 			param.putParcelable(UserInfo.KEY_USER_INFO, user.getUserInfo());
 			param.putParcelableArrayList(PhotoBean.KEY_PHOTOS, likesPhoto);
-			forward(getPhotoBarFragment(), param);
+			param.putBoolean(TraceConfig.getTrackBackward(), true);
+			forward(getFeedFragment(), param);
 		}
 
 		public void OnFindFriendClicked() {
@@ -212,9 +216,9 @@ public class PreferenceSettingsFragment extends BaseFragment {
 		}
 	};
 
-	private String getUserHomeFragment() {
-		return getString(R.string.fuserHomeFragment);
-	}
+	// private String getUserHomeFragment() {
+	// return getString(R.string.fuserHomeFragment);
+	// }
 
 	private String getProfileFragment() {
 		return getString(R.string.fpersonalProfileFragment);
@@ -224,9 +228,13 @@ public class PreferenceSettingsFragment extends BaseFragment {
 		return getString(R.string.ffindFriendsFragment);
 	}
 
-	private String getPhotoBarFragment() {
-		return getString(R.string.fphotoBarFragment);
+	private String getFeedFragment() {
+		return getString(R.string.ffeedsFragment);
 	}
+
+	// private String getPhotoBarFragment() {
+	// return getString(R.string.fphotoBarFragment);
+	// }
 
 	/*
 	 * (non-Javadoc)
@@ -234,7 +242,7 @@ public class PreferenceSettingsFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnRightBtnClicked()
 	 */
 	@Override
-	protected void OnRightBtnClicked() {
+	protected void onRightBtnClicked() {
 
 	}
 
@@ -244,8 +252,14 @@ public class PreferenceSettingsFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnLeftBtnClicked()
 	 */
 	@Override
-	protected void OnLeftBtnClicked() {
+	protected void onLeftBtnClicked() {
 		backward(null);
+	}
+
+	@Override
+	protected void onLoginSuccess() {
+		// TODO Auto-generated method stub
+
 	}
 
 }

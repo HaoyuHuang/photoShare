@@ -2,6 +2,7 @@ package com.photoshare.service.photos.views;
 
 import android.graphics.drawable.Drawable;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,6 +20,7 @@ public class FeedItemView {
 	private UserTextView mFeedUserName;
 	private ImageView mFeedUserHead;
 	private TextView mFeedDate;
+	private TextView mFeedFavor;
 	private UserTextView mFeedLike;
 	private UserTextView mFeedComment;
 	private ImageView hintImageView;
@@ -58,10 +60,20 @@ public class FeedItemView {
 		mFeedDate = (TextView) baseView.findViewById(R.id.feedsDate);
 
 		mFeedLike = new UserTextView(
-				(TextView) baseView.findViewById(R.id.feedComment), null, "喜欢"
+				(TextView) baseView.findViewById(R.id.feedLikeList), null, "喜欢"
 						+ photo.getLikesCount());
 		mFeedLike.registerListener(OnLikeClickListener);
 		mFeedLike.apply();
+		
+		mFeedFavor = (TextView) baseView.findViewById(R.id.feedLike);
+		mFeedFavor.setOnClickListener(new OnClickListener() {
+			
+			public void onClick(View v) {
+				if (mCallback != null) {
+					mCallback.OnLikeClick(photo);
+				}
+			}
+		});
 
 		mFeedPhoto = (ImageView) baseView.findViewById(R.id.feedPhoto);
 

@@ -35,6 +35,9 @@ public class PopularPhotosFragment extends BaseFragment {
 	private UserInfo userInfo;
 	private ArrayList<PhotoBean> photos;
 	private PhotoType type;
+	private int leftBtnVisibility = View.INVISIBLE;
+	private int rightBtnVisibility = View.INVISIBLE;
+	private String titleBarText;
 
 	private int demandPage;
 	private int currentPage;
@@ -134,6 +137,9 @@ public class PopularPhotosFragment extends BaseFragment {
 	 */
 	private void initView() {
 		Tag = getPopularFragment();
+		titleBarText = getPopularText();
+		initTitleBar("", "", titleBarText, leftBtnVisibility,
+				rightBtnVisibility);
 		popularView = new PopularPhotosView(getActivity().findViewById(
 				R.id.popularId), photos, async, getActivity());
 		popularView.registerCallback(mCallback);
@@ -231,13 +237,17 @@ public class PopularPhotosFragment extends BaseFragment {
 		return getString(R.string.fpopularPhotosFragment);
 	}
 
+	private String getPopularText() {
+		return getString(R.string.popular);
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see com.photoshare.fragments.BaseFragment#OnRightBtnClicked()
 	 */
 	@Override
-	protected void OnRightBtnClicked() {
+	protected void onRightBtnClicked() {
 
 	}
 
@@ -247,7 +257,13 @@ public class PopularPhotosFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnLeftBtnClicked()
 	 */
 	@Override
-	protected void OnLeftBtnClicked() {
+	protected void onLeftBtnClicked() {
+
+	}
+
+	@Override
+	protected void onLoginSuccess() {
+		// TODO Auto-generated method stub
 
 	}
 

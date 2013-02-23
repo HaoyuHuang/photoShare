@@ -15,6 +15,8 @@ public class ShareBean implements Parcelable {
 	private ShareType mShareType;
 	private String mShareAccount;
 	private String mSharePwd;
+	
+	public static final String KEY_SINA_WEIBO_REDIRECT_URL = "http://www.sina.com";
 
 	public static final String KEY_SHARE_BEANS = "shares";
 	public static final String KEY_SHARE_BEAN = "share";

@@ -22,7 +22,7 @@ import com.photoshare.service.users.UserInfo;
 import com.photoshare.tabHost.R;
 import com.photoshare.utils.Format;
 import com.photoshare.utils.async.AsyncUtils;
-import com.photoshare.view.listview.CornerListView;
+import com.photoshare.view.listview.MyListView;
 
 /**
  * @author czj_yy
@@ -32,10 +32,9 @@ public class CommentsInfoView {
 
 	private Context context;
 	private View baseView;
-	private CornerListView mCommentsView = null;
+	private MyListView mCommentsView = null;
 	private EditText comments;
 	private Button mCommentSubmit;
-	private Button mLoadMore;
 	private CommentAdapter mCommentAdapter;
 	private PhotoBean photoBean;
 	private AsyncUtils async;
@@ -66,13 +65,12 @@ public class CommentsInfoView {
 			return;
 		initiated = true;
 		mCommentAdapter = new CommentAdapter();
-		mCommentsView = (CornerListView) baseView
+		mCommentsView = (MyListView) baseView
 				.findViewById(R.id.commentlist);
 		mCommentsView.setAdapter(mCommentAdapter);
 		comments = (EditText) baseView.findViewById(R.id.putCommentEditText);
 		mCommentSubmit = (Button) baseView
 				.findViewById(R.id.putCommentSubmitBtn);
-		mLoadMore = (Button) baseView.findViewById(R.id.putCommentLoadMoreId);
 
 		mCommentSubmit.setOnClickListener(new OnClickListener() {
 
@@ -86,21 +84,6 @@ public class CommentsInfoView {
 			}
 		});
 
-		mLoadMore.setOnClickListener(new OnClickListener() {
-
-			public void onClick(View v) {
-				if (isMaxPage()) {
-					if (onCommentInfoClickListener != null) {
-						onCommentInfoClickListener.OnLoadAll();
-					}
-				} else {
-					if (onCommentInfoClickListener != null) {
-						onCommentInfoClickListener.OnLoadMore(currentPage,
-								demandPage);
-					}
-				}
-			}
-		});
 	}
 
 	private boolean initiated() {

@@ -21,7 +21,6 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.photoshare.fragments.BaseFragment;
 import com.photoshare.service.photos.EditPhotoType;
@@ -116,7 +115,7 @@ public class CameraFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnRightBtnClicked()
 	 */
 	@Override
-	protected void OnRightBtnClicked() {
+	protected void onRightBtnClicked() {
 		Bundle param = new Bundle();
 		param.putParcelable(PhotoBean.KEY_PHOTO, photo);
 		forward(getDecoratedPhotoFragment(), param);
@@ -128,7 +127,7 @@ public class CameraFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnLeftBtnClicked()
 	 */
 	@Override
-	protected void OnLeftBtnClicked() {
+	protected void onLeftBtnClicked() {
 		dispatchTakePictureIntent(ACTION_TAKE_PHOTO_S);
 	}
 
@@ -326,5 +325,11 @@ public class CameraFragment extends BaseFragment {
 			dispatchTakePictureIntent(ACTION_TAKE_PHOTO_B);
 		}
 	};
+
+	@Override
+	protected void onLoginSuccess() {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

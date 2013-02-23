@@ -223,25 +223,25 @@ public class AsyncUtils {
 	public void publishPhoto(PhotoUploadRequestParam photo,
 			AbstractRequestListener<PhotoUploadResponseBean> listener)
 			throws NetworkException {
-		checkLoggingStatus();
+//		checkLoggingStatus();
 		new PhotoHelper(user).asyncUploadPhoto(pool, photo, listener);
 	}
 
 	public void publishLikePhoto(PhotoLikeRequestParam like,
 			LikeHelper.ICallback mCallback) throws NetworkException {
-		checkLoggingStatus();
+//		checkLoggingStatus();
 		new LikeHelper(user).publishLikePhoto(like, mCallback);
 	}
 
 	public void publishFollow(UserFollowRequestParam follow,
 			FollowHelper.ICallback mCallback) throws NetworkException {
-		checkLoggingStatus();
+//		checkLoggingStatus();
 		new FollowHelper(user).publishFollow(follow, mCallback);
 	}
 
 	public void publishComments(PutCommentRequestParam param,
 			CommentHelper.ICallback mCallback) throws NetworkException {
-		checkLoggingStatus();
+//		checkLoggingStatus();
 		new CommentHelper(user).publishComment(param, mCallback);
 	}
 
@@ -270,13 +270,10 @@ public class AsyncUtils {
 		imageLoader.docorateImage(pool, type, raw, mCallback);
 	}
 
-	public String request(final String action, final Bundle parameters)
-			throws RuntimeException, NetworkError {
-
-		AsyncRequest asyncRequest = new AsyncRequest(action);
-		asyncRequest.parameters = parameters;
-		pool.execute(asyncRequest);
-		return asyncRequest.get();
+	public void request(final String action, final Bundle parameters,
+			final AbstractRequestListener<String> listener) {
+		AsyncRequest request = new AsyncRequest(parameters, action, listener);
+		pool.execute(request);
 	}
 
 	public void readUserInfo(final UserReader reader,
@@ -419,7 +416,7 @@ public class AsyncUtils {
 		}
 	}
 
-	private class AsyncRequest implements Runnable {
+	private final class AsyncRequest implements Runnable {
 
 		private String resp;
 
@@ -427,11 +424,14 @@ public class AsyncUtils {
 
 		private String action;
 
-		/**
-		 * @param action
-		 */
-		public AsyncRequest(String action) {
+		private AbstractRequestListener<String> listener;
+
+		public AsyncRequest(Bundle parameters, String action,
+				AbstractRequestListener<String> listener) {
+			super();
+			this.parameters = parameters;
 			this.action = action;
+			this.listener = listener;
 		}
 
 		/*
@@ -443,17 +443,28 @@ public class AsyncUtils {
 
 			try {
 				resp = user.request(action, parameters);
-				NetworkError networkError = Utils.parseNetworkError(resp);
-				if (networkError != null) {
-					throw new NetworkError(networkError);
+				if (resp != null) {
+					Utils.checkResponse(resp);
+
+				} else {
+					Utils.logger("null response");
+					if (listener != null) {
+						listener.onFault(new NetworkException(
+								NetworkError.ERROR_CODE_UNKNOWN_ERROR,
+								"null response", "null response"));
+					}
+				}
+				if (listener != null) {
+					listener.onComplete(resp);
 				}
 			} catch (RuntimeException e) {
-				throw new RuntimeException(e.getMessage());
+				if (listener != null) {
+					listener.onFault(e);
+				}
+			} catch (NetworkException e) {
+				listener.onNetworkError(new NetworkError(e.getMessage()));
 			}
 		}
 
-		public String get() {
-			return resp;
-		}
 	}
 }

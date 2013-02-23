@@ -5,7 +5,7 @@ package com.photoshare.fragments;
 
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ImageView;
+import android.widget.Button;
 
 import com.photoshare.tabHost.R;
 
@@ -17,8 +17,8 @@ import com.photoshare.tabHost.R;
  */
 public class MainView {
 
-	private ImageView mSignUpView;
-	private ImageView mSignInView;
+	private Button mSignUpView;
+	private Button mSignInView;
 	private View baseView;
 
 	/**
@@ -30,8 +30,8 @@ public class MainView {
 	}
 
 	public void applyView() {
-		mSignInView = (ImageView) baseView.findViewById(R.id.mainSignIn);
-		mSignUpView = (ImageView) baseView.findViewById(R.id.mainSignUp);
+		mSignInView = (Button) baseView.findViewById(R.id.mainSignIn);
+		mSignUpView = (Button) baseView.findViewById(R.id.mainSignUp);
 
 		mSignInView.setOnClickListener(new OnClickListener() {
 

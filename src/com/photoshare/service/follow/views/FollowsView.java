@@ -17,7 +17,7 @@ import com.photoshare.common.IObserver;
 import com.photoshare.service.users.UserInfo;
 import com.photoshare.tabHost.R;
 import com.photoshare.utils.async.AsyncUtils;
-import com.photoshare.view.listview.CornerListView;
+import com.photoshare.view.listview.MyListView;
 
 /**
  * @author czj_yy
@@ -25,7 +25,7 @@ import com.photoshare.view.listview.CornerListView;
  */
 public class FollowsView {
 
-	private CornerListView followList;
+	private MyListView followList;
 	private View baseView;
 	private ArrayList<UserInfo> followsInfo;
 	private Context context;
@@ -47,7 +47,7 @@ public class FollowsView {
 	}
 
 	public void applyView() {
-		followList = (CornerListView) baseView
+		followList = (MyListView) baseView
 				.findViewById(R.id.userFollowListView);
 		FollowAdapter adapter = new FollowAdapter();
 		followList.setAdapter(adapter);

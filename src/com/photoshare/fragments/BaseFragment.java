@@ -25,6 +25,8 @@ import com.photoshare.service.photos.views.PopularPhotosFragment;
 import com.photoshare.service.signin.UserSignInRequestParam;
 import com.photoshare.service.signin.UserSignInResponseBean;
 import com.photoshare.service.users.UserInfo;
+import com.photoshare.service.users.views.OtherHomeTitleBarFragment;
+import com.photoshare.service.users.views.UserHomeTitleBarFragment;
 import com.photoshare.tabHost.R;
 import com.photoshare.utils.User;
 import com.photoshare.utils.Utils;
@@ -68,10 +70,10 @@ public abstract class BaseFragment extends Fragment {
 
 	}
 
-//	@Override
-//	public void onActivityCreated(Bundle savedInstanceState) {
-//		super.onActivityCreated(savedInstanceState);
-//	}
+	// @Override
+	// public void onActivityCreated(Bundle savedInstanceState) {
+	// super.onActivityCreated(savedInstanceState);
+	// }
 
 	protected void initTitleBar(String leftBtnText, String rightBtnText,
 			String titlebarText) {
@@ -101,6 +103,11 @@ public abstract class BaseFragment extends Fragment {
 		titleView.setLeftBtnText(leftBtnText);
 		titleView.setRightBtnText(rightBtnText);
 		titleView.setTitlebarText(titlebarText);
+	}
+
+	protected void setTitleBarDrawable(int leftRid, int rightRidd) {
+		titleView.setTitleLeftButtonBackground(leftRid);
+		titleView.setTitleRightButtonBackground(rightRidd);
 	}
 
 	protected void AsyncSignIn() {
@@ -196,7 +203,7 @@ public abstract class BaseFragment extends Fragment {
 				getActivity().runOnUiThread(new Runnable() {
 
 					public void run() {
-
+						
 					}
 
 				});
@@ -208,12 +215,14 @@ public abstract class BaseFragment extends Fragment {
 	/**
 	 * 
 	 */
-	protected abstract void OnRightBtnClicked();
+	protected abstract void onRightBtnClicked();
 
 	/**
 	 * 
 	 */
-	protected abstract void OnLeftBtnClicked();
+	protected abstract void onLeftBtnClicked();
+	
+	protected abstract void onLoginSuccess();
 
 	protected final Handler mExceptionHandler = new Handler() {
 
@@ -509,11 +518,11 @@ public abstract class BaseFragment extends Fragment {
 	private AppTitleBarView.OnTitleBarBtnClickedListener onTitleBarBtnClickedListener = new AppTitleBarView.OnTitleBarBtnClickedListener() {
 
 		public void OnRightBtnClick() {
-			OnRightBtnClicked();
+			onRightBtnClicked();
 		}
 
 		public void OnLeftBtnClick() {
-			OnLeftBtnClicked();
+			onLeftBtnClicked();
 		}
 	};
 }

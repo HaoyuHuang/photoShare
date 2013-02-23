@@ -4,11 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-
-    <com.photoshare.view.listview.CornerListView
+	
+    <com.photoshare.view.listview.MyListView
         android:id="@+id/likesListView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-    </com.photoshare.view.listview.CornerListView>
-
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/div_bg2"
+        android:cacheColorHint="#00000000"
+        android:listSelector="@drawable/timer_list_selector"
+        android:paddingBottom="-10dip" />
+    
 </LinearLayout>

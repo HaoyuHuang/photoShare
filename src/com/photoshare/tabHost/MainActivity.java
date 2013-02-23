@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import com.photoshare.fragments.MainFragment;
 import com.photoshare.fragments.stacktrace.TraceElement;
+import com.photoshare.fragments.stacktrace.TracePhase;
 
 /**
  * @author Aron
@@ -24,6 +25,7 @@ public class MainActivity extends BaseActivity {
 		// Execute a transaction, replacing any existing fragment
 		// with this one inside the frame.
 		mf.setCanonicalTag(getMainFragment());
+		stack.setCurrentPhase(TracePhase.MAIN);
 		TraceElement element = new TraceElement(getMainFragment(), null);
 		stack.forward(element);
 		FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -53,8 +55,14 @@ public class MainActivity extends BaseActivity {
 	}
 
 	@Override
+	public void onBackPressed() {
+		// do nothing
+	}
+
+	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
+		stack.setCurrentPhase(TracePhase.MAIN);
 		super.onResume();
 	}
 

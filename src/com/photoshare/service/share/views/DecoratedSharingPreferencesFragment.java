@@ -10,7 +10,10 @@ import java.io.IOException;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,11 +29,13 @@ import com.photoshare.tabHost.R;
 import com.photoshare.utils.Utils;
 import com.photoshare.view.NotificationDisplayer;
 import com.renren.api.connect.android.Renren;
+import com.renren.api.connect.android.Util;
 import com.renren.api.connect.android.common.AbstractRequestListener;
 import com.renren.api.connect.android.exception.RenrenAuthError;
 import com.renren.api.connect.android.exception.RenrenError;
 import com.renren.api.connect.android.photos.PhotoUploadResponseBean;
 import com.renren.api.connect.android.view.RenrenAuthListener;
+import com.weibo.sdk.android.Oauth2AccessToken;
 import com.weibo.sdk.android.Weibo;
 import com.weibo.sdk.android.WeiboAuthListener;
 import com.weibo.sdk.android.WeiboDialogError;
@@ -51,7 +56,8 @@ public class DecoratedSharingPreferencesFragment extends BaseFragment {
 	private Renren mRenren;
 
 	private Weibo mWeibo;
-	private SinaWeiboToken wToken;
+
+	public static final String TAG = "sinasdk";
 	private SsoHandler mSsoHandler;
 
 	private NotificationDisplayer mNotificationDisplayer;
@@ -140,15 +146,27 @@ public class DecoratedSharingPreferencesFragment extends BaseFragment {
 			case RenRen:
 				mRenren = new Renren(type.getApiKey(), type.getSecretKey(),
 						type.getAppId(), getActivity());
-				mRenren.authorize(getActivity(), null, mRenrenAuthListener,
-						type.getType());
+				mRenren.init(getActivity());
+				mRenren.authorize(getActivity(), new RenrenAuthListenerImpl());
 				mNotificationDisplayer.setTag(getRenrenTag());
 				break;
 			case SinaWeibo:
-				wToken = SinaWeiboToken.getInstance();
-				wToken.readAccessToken(getActivity());
+				mWeibo = Weibo.getInstance(type.getApiKey(),
+						ShareBean.KEY_SINA_WEIBO_REDIRECT_URL);
+				try {
+					Class sso = Class
+							.forName("com.weibo.sdk.android.sso.SsoHandler");
+					mSsoHandler = new SsoHandler(getActivity(), mWeibo);
+					mSsoHandler.authorize(new SinaWeiboAuthListener());
+					
+				} catch (ClassNotFoundException e) {
+					Log.i(TAG, "com.weibo.sdk.android.sso.SsoHandler not found");
+					mWeibo.authorize(getActivity(), new SinaWeiboAuthListener());
+				}
+
+				SinaWeiboToken.readAccessToken(getActivity());
 				mNotificationDisplayer.setTag(getSinaWeiboTag());
-				if (wToken.isTokenValid()) {
+				if (SinaWeiboToken.isSeesionValid()) {
 					Weibo.isWifi = Utility.isWifi(getActivity());
 					try {
 						Class.forName("com.weibo.sdk.android.api.WeiboAPI");
@@ -158,8 +176,8 @@ public class DecoratedSharingPreferencesFragment extends BaseFragment {
 								.sendToTarget();
 					}
 				} else {
-					mSsoHandler = new SsoHandler(getActivity(), mWeibo);
-					mSsoHandler.authorize(mWeiboAuthListener);
+//					mSsoHandler = new SsoHandler(getActivity(), mWeibo);
+//					mSsoHandler.authorize(mWeiboAuthListener);
 				}
 				break;
 			case TxWeibo:
@@ -178,6 +196,7 @@ public class DecoratedSharingPreferencesFragment extends BaseFragment {
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		Util.logger("Call back");
 		super.onActivityResult(requestCode, resultCode, data);
 		if (mRenren != null) {
 			mRenren.authorizeCallback(requestCode, resultCode, data);
@@ -188,11 +207,26 @@ public class DecoratedSharingPreferencesFragment extends BaseFragment {
 		}
 	}
 
-	final RenrenAuthListener mRenrenAuthListener = new RenrenAuthListener() {
+	public void onAuthorizeCallback(int requestCode, int resultCode, Intent data) {
+		Util.logger("AuthCallback");
+		if (mRenren != null) {
+			mRenren.authorizeCallback(requestCode, resultCode, data);
+			return;
+		}
+		if (mSsoHandler != null) {
+			mSsoHandler.authorizeCallBack(requestCode, resultCode, data);
+		}
+	}
+
+	class RenrenAuthListenerImpl implements RenrenAuthListener {
 
 		public void onComplete(Bundle values) {
+			Util.logger("complete");
 			ShareHelper helper = new ShareHelper();
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			Drawable d = getResources().getDrawable(
+					R.drawable.titlebar_left_button);
+			photo = ((BitmapDrawable) d).getBitmap();
 			photo.compress(CompressFormat.PNG, 100, baos);
 			File file = Utils.getFileFromBytes(baos.toByteArray(), "bitmap");
 
@@ -229,18 +263,21 @@ public class DecoratedSharingPreferencesFragment extends BaseFragment {
 		}
 
 		public void onRenrenAuthError(RenrenAuthError renrenAuthError) {
+			Util.logger("AuthError");
 			mExceptionHandler
 					.obtainMessage(NetworkError.ERROR_RENREN_AUTHORIZE)
 					.sendToTarget();
 		}
 
 		public void onCancelLogin() {
+			Util.logger("cancle");
 			mExceptionHandler
 					.obtainMessage(NetworkError.ERROR_RENREN_AUTHORIZE)
 					.sendToTarget();
 		}
 
 		public void onCancelAuth(Bundle values) {
+			Util.logger("AuthCancle");
 			mExceptionHandler
 					.obtainMessage(NetworkError.ERROR_RENREN_AUTHORIZE)
 					.sendToTarget();
@@ -248,7 +285,7 @@ public class DecoratedSharingPreferencesFragment extends BaseFragment {
 
 	};
 
-	final WeiboAuthListener mWeiboAuthListener = new WeiboAuthListener() {
+	class SinaWeiboAuthListener implements WeiboAuthListener {
 
 		public void onWeiboException(WeiboException arg0) {
 			mExceptionHandler.obtainMessage(
@@ -263,17 +300,17 @@ public class DecoratedSharingPreferencesFragment extends BaseFragment {
 		public void onComplete(Bundle values) {
 			String token = values.getString("access_token");
 			String expires_in = values.getString("expires_in");
-			wToken = SinaWeiboToken.getInstance();
-			wToken.newToken(token, expires_in);
+			Oauth2AccessToken wToken = SinaWeiboToken.createToken(token,
+					expires_in);
 
-			if (wToken.isTokenValid()) {
+			if (wToken.isSessionValid()) {
 				try {
 					Class.forName("com.weibo.sdk.android.api.WeiboAPI");
 				} catch (ClassNotFoundException e) {
 					mExceptionHandler
 							.obtainMessage(NetworkError.ERROR_SINA_WEIBO_AUTHORIZE);
 				}
-				wToken.keepAccessToken(getActivity());
+				SinaWeiboToken.keepAccessToken(getActivity(), wToken);
 			}
 
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -305,7 +342,7 @@ public class DecoratedSharingPreferencesFragment extends BaseFragment {
 				}
 			};
 
-			StatusesAPI api = new StatusesAPI(wToken.getAccessToken());
+			StatusesAPI api = new StatusesAPI(wToken);
 			if (file != null) {
 				api.upload(caption, file.getAbsolutePath(), "90.0", "90.0",
 						listener);
@@ -327,7 +364,7 @@ public class DecoratedSharingPreferencesFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnRightBtnClicked()
 	 */
 	@Override
-	protected void OnRightBtnClicked() {
+	protected void onRightBtnClicked() {
 
 	}
 
@@ -337,8 +374,14 @@ public class DecoratedSharingPreferencesFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnLeftBtnClicked()
 	 */
 	@Override
-	protected void OnLeftBtnClicked() {
+	protected void onLeftBtnClicked() {
 		backward(null);
+	}
+
+	@Override
+	protected void onLoginSuccess() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import com.photoshare.common.RequestParam;
 import com.photoshare.exception.NetworkException;
+import com.photoshare.service.users.UserInfo;
 
 /**
  * @author czj_yy
@@ -114,7 +115,8 @@ public class FollowGetNewsRequestParam extends RequestParam {
 		if (fields != null) {
 			parameters.putString("fields", fields);
 		}
-		parameters.putLong(NewsBean.KEY_USER_ID, uid);
+		parameters.putString(UserInfo.KEY_USER_INFO + "." + UserInfo.KEY_UID,
+				uid + "");
 		return parameters;
 	}
 

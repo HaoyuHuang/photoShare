@@ -68,7 +68,8 @@ public class CommentsFragment extends BaseFragment {
 				}
 			}
 			initViews();
-			if (photo != null && photo.getComments() != null) {
+			if (photo != null && photo.getComments() != null
+					&& !photo.getComments().isEmpty()) {
 
 			} else {
 				AsyncGetComments(0, 20);
@@ -186,7 +187,7 @@ public class CommentsFragment extends BaseFragment {
 				getActivity().runOnUiThread(new Runnable() {
 
 					public void run() {
-						if (bean != null) {
+						if (bean.getComments() != null) {
 							if (bean.getComments().size() != 0) {
 								commentView.addComments(bean.getComments());
 							}
@@ -230,7 +231,7 @@ public class CommentsFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnRightBtnClicked()
 	 */
 	@Override
-	protected void OnRightBtnClicked() {
+	protected void onRightBtnClicked() {
 
 	}
 
@@ -240,7 +241,7 @@ public class CommentsFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnLeftBtnClicked()
 	 */
 	@Override
-	protected void OnLeftBtnClicked() {
+	protected void onLeftBtnClicked() {
 		backward(null);
 	}
 
@@ -319,5 +320,11 @@ public class CommentsFragment extends BaseFragment {
 			});
 		}
 	};
+
+	@Override
+	protected void onLoginSuccess() {
+		// TODO Auto-generated method stub
+
+	}
 
 }

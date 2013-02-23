@@ -17,6 +17,7 @@ import com.photoshare.service.signup.UserSignUpResponseBean;
 import com.photoshare.tabHost.R;
 import com.photoshare.utils.Format;
 import com.photoshare.utils.async.AsyncUtils;
+import com.renren.api.connect.android.Util;
 
 /**
  * @author Aron
@@ -45,7 +46,7 @@ public class SignUpFragment extends BaseFragment {
 
 	private void initViews() {
 		leftBtnText = getMainText();
-		titlebarText = getSignUpText();
+		rightBtnText = getSignUpText();
 		initTitleBar(leftBtnText, rightBtnText, titlebarText,
 				leftBtnVisibility, rightBtnVisibility);
 		signUpView = new SignUpView(getActivity().findViewById(
@@ -67,7 +68,7 @@ public class SignUpFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnRightBtnClicked()
 	 */
 	@Override
-	protected void OnRightBtnClicked() {
+	protected void onRightBtnClicked() {
 		AsyncSignUp();
 	}
 
@@ -77,7 +78,7 @@ public class SignUpFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnLeftBtnClicked()
 	 */
 	@Override
-	protected void OnLeftBtnClicked() {
+	protected void onLeftBtnClicked() {
 		backward(null);
 	}
 
@@ -112,6 +113,7 @@ public class SignUpFragment extends BaseFragment {
 			@Override
 			public void onComplete(UserSignUpResponseBean bean) {
 				if (bean != null) {
+					Util.logger(bean.getSignupInfo().getUid() + "");
 					user.setUserInfo(bean.getSignupInfo());
 					user.setLogging(true);
 				}
@@ -162,6 +164,12 @@ public class SignUpFragment extends BaseFragment {
 		SignUpFragment sf = new SignUpFragment();
 		sf.setFragmentViewId(fragmentViewId);
 		return sf;
+	}
+
+	@Override
+	protected void onLoginSuccess() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

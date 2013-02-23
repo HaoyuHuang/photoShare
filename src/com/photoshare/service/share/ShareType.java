@@ -27,8 +27,8 @@ public enum ShareType {
 
 		}
 	},
-	RenRen(1, "188602", "989d893cd06e4c9da30b0f28161361fd",
-			"f270c6d5e0b54c4aab379574c5247f26") {
+	RenRen(1, "105381", "6b1016db20c540e78bd1b20be4c707a3",
+			"4723a695c09e4ddebbe8d87393d95fb4") {
 		@Override
 		public void setAppId(String appId) {
 			// TODO Auto-generated method stub
@@ -46,8 +46,11 @@ public enum ShareType {
 
 		}
 	},
-	SinaWeibo(2, "188602", "989d893cd06e4c9da30b0f28161361fd",
-			"f270c6d5e0b54c4aab379574c5247f26") {
+	
+	// 3508959734
+	// demo: 966056985
+	SinaWeibo(2, "3508959734", "966056985",
+			"639f56698089d08847ed4754d0ebfc19") {
 		@Override
 		public void setAppId(String appId) {
 			// TODO Auto-generated method stub
@@ -57,13 +60,13 @@ public enum ShareType {
 		@Override
 		public void setApiKey(String apiKey) {
 			// TODO Auto-generated method stub
-			this.apiKey = "989d893cd06e4c9da30b0f28161361fd";
+			this.apiKey = "966056985";
 		}
 
 		@Override
 		public void setSecretKey(String secretKey) {
 			// TODO Auto-generated method stub
-			this.secretKey = "f270c6d5e0b54c4aab379574c5247f26";
+			this.secretKey = "639f56698089d08847ed4754d0ebfc19";
 		}
 	},
 	TxWeibo(3, "188602", "989d893cd06e4c9da30b0f28161361fd",

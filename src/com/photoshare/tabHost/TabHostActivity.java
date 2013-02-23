@@ -131,6 +131,12 @@ public class TabHostActivity extends TabActivity {
 	}
 
 	@Override
+	protected void onResume() {
+		stack.setCurrentPhase(TracePhase.HOME);
+		super.onResume();
+	}
+
+	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Util.logger("TabHost Activity Result");
 		Activity activity = getLocalActivityManager().getCurrentActivity();
@@ -140,7 +146,5 @@ public class TabHostActivity extends TabActivity {
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
-	
-	
 
 }

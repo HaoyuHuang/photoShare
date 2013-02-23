@@ -10,6 +10,7 @@ import com.photoshare.msg.RequestMsg;
 import com.photoshare.pipeline.PipelineMsgHandler;
 import com.photoshare.service.photos.PhotoBean;
 import com.photoshare.service.users.UserInfo;
+import com.renren.api.connect.android.Util;
 
 /*
  * 单例
@@ -34,7 +35,7 @@ public class User {
 
 	private PipelineMsgHandler handler = new PipelineMsgHandler();
 	/** 服务器地址 */
-	private final String SERVER_URL = "http://169.254.64.26:8080/Spring3Struts2/photoShare-mobile";
+	private final String SERVER_URL = "http://222.94.219.153:8080/Spring3Struts2/photoShare-mobile";
 	/** 响应形式为Json */
 	public static final String RESPONSE_FORMAT_JSON = "json";
 	private final String LOG_TAG_REQUEST = "request";
@@ -174,12 +175,9 @@ public class User {
 		return response;
 	}
 
-	public void addMsg(RequestMsg<? extends RequestParam> AMsg) {
-		handler.addMsg(AMsg);
-	}
-
-	public void registerRequestListener(AbstractRequestListener<String> listener) {
-		handler.registerRequestListener(listener);
+	public void addMsg(final RequestMsg<? extends RequestParam> AMsg,
+			final AbstractRequestListener<String> listener) {
+		handler.addMsg(AMsg, listener);
 	}
 
 	public String getPwd() {
@@ -220,6 +218,17 @@ public class User {
 
 	public void setConfigured(boolean configured) {
 		this.configured = configured;
+	}
+
+	public boolean isCurrentUser(UserInfo info) {
+		Util.logger("currentUser");
+		if (info != null) {
+			if (user.getUserInfo().getUid() == info.getUid()) {
+				Util.logger("isCurrentUser");
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

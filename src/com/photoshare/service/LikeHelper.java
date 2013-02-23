@@ -109,17 +109,46 @@ public class LikeHelper {
 	 * @param param
 	 * @param mCallback
 	 */
-	public void publishLikePhoto(PhotoLikeRequestParam param,
-			ICallback mCallback) {
-
-		if (param == null)
+	public void publishLikePhoto(PhotoLikeRequestParam params,
+			final ICallback mCallback) {
+		
+		if (params == null)
 			return;
-
+		
+		Utils.logger(params.toString());
+		
+		// AMsg 及 Listener 将一起放入管道中
 		RequestMsg<PhotoLikeRequestParam> AMsg = new RequestMsg<PhotoLikeRequestParam>(
-				param, MsgType.LIKE);
-		user.registerRequestListener(listener);
-		registerCallback(mCallback);
-		user.addMsg(AMsg);
+				params, MsgType.LIKE);
+		
+		AbstractRequestListener<String> listener = new AbstractRequestListener<String>() {
+
+			@Override
+			public void onComplete(String bean) {
+				// TODO Auto-generated method stub
+				if (mCallback != null) {
+					mCallback.OnComplete(new PhotoLikeResponseBean(bean));
+				}
+			}
+
+			@Override
+			public void onNetworkError(NetworkError networkError) {
+				// TODO Auto-generated method stub
+				if (mCallback != null) {
+					mCallback.OnNetworkError(networkError);
+				}
+			}
+
+			@Override
+			public void onFault(Throwable fault) {
+				// TODO Auto-generated method stub
+				if (mCallback != null) {
+					mCallback.OnFault(fault);
+				}
+			}
+
+		};
+		user.addMsg(AMsg, listener);
 	}
 
 	public interface ICallback {
@@ -130,37 +159,4 @@ public class LikeHelper {
 		public void OnFault(Throwable fault);
 	}
 
-	private ICallback mCallback;
-
-	private AbstractRequestListener<String> listener = new AbstractRequestListener<String>() {
-
-		@Override
-		public void onComplete(String bean) {
-			// TODO Auto-generated method stub
-			if (mCallback != null) {
-				mCallback.OnComplete(new PhotoLikeResponseBean(bean));
-			}
-		}
-
-		@Override
-		public void onNetworkError(NetworkError networkError) {
-			// TODO Auto-generated method stub
-			if (mCallback != null) {
-				mCallback.OnNetworkError(networkError);
-			}
-		}
-
-		@Override
-		public void onFault(Throwable fault) {
-			// TODO Auto-generated method stub
-			if (mCallback != null) {
-				mCallback.OnFault(fault);
-			}
-		}
-
-	};
-
-	private void registerCallback(ICallback mCallback) {
-		this.mCallback = mCallback;
-	}
 }

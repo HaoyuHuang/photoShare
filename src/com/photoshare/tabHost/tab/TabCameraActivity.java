@@ -1,15 +1,22 @@
 package com.photoshare.tabHost.tab;
 
+import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import com.photoshare.camera.CameraFragment;
 import com.photoshare.common.TabActivityResultListener;
 import com.photoshare.fragments.stacktrace.TraceElement;
 import com.photoshare.fragments.stacktrace.TracePhase;
+import com.photoshare.service.photos.PhotoBean;
+import com.photoshare.service.share.views.DecoratedSharingPreferencesFragment;
 import com.photoshare.tabHost.BaseActivity;
 import com.photoshare.tabHost.R;
+import com.renren.api.connect.android.Util;
 
 public class TabCameraActivity extends BaseActivity implements
 		TabActivityResultListener {
@@ -22,7 +29,7 @@ public class TabCameraActivity extends BaseActivity implements
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tab_camera_layout_holder);
-		initFragments();
+		initFragmentss();
 	}
 
 	private void initFragments() {
@@ -31,6 +38,30 @@ public class TabCameraActivity extends BaseActivity implements
 		uhf = CameraFragment.newInstance(R.id.TabCameraLayoutHolderId);
 		uhf.setCanonicalTag(getCameraFragment());
 		TraceElement element = new TraceElement(getCameraFragment(), null);
+		stack.setCurrentPhase(TracePhase.CAMERA);
+		stack.forward(element);
+		// Execute a transaction, replacing any existing fragment
+		// with this one inside the frame.
+		FragmentTransaction ft = getFragmentManager().beginTransaction();
+		ft.replace(R.id.TabCameraLayoutHolderId, uhf);
+		// ft.show(details);
+		ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+		ft.commit();
+	}
+
+	private void initFragmentss() {
+		DecoratedSharingPreferencesFragment uhf = (DecoratedSharingPreferencesFragment) getFragmentManager()
+				.findFragmentById(R.id.TabCameraLayoutHolderId);
+		uhf = DecoratedSharingPreferencesFragment
+				.newInstance(R.id.TabCameraLayoutHolderId);
+		uhf.setCanonicalTag(getCameraFragment());
+		TraceElement element = new TraceElement(getCameraFragment(), null);
+		Drawable d = getResources()
+				.getDrawable(R.drawable.titlebar_left_button);
+		Bitmap b = ((BitmapDrawable) d).getBitmap();
+		Bundle args = new Bundle();
+		args.putParcelable(PhotoBean.KEY_PHOTO, b);
+		args.putString(PhotoBean.KEY_CAPTION, "test");
 		stack.setCurrentPhase(TracePhase.CAMERA);
 		stack.forward(element);
 		// Execute a transaction, replacing any existing fragment
@@ -55,14 +86,6 @@ public class TabCameraActivity extends BaseActivity implements
 		onStop = true;
 	}
 
-	// @Override
-	// protected void onActivityResult(int requestCode, int resultCode, Intent
-	// data) {
-	// // TODO Auto-generated method stub
-	// // super.onActivityResult(requestCode, resultCode, data);
-	// Utils.logger("onActivityResult");
-	// }
-
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
@@ -80,7 +103,18 @@ public class TabCameraActivity extends BaseActivity implements
 	}
 
 	public void onTabActivityResult(int requestCode, int resultCode, Intent data) {
-		uhf.onTakePhotoResult(requestCode, resultCode, data);
+		Util.logger("onTabActivityResult");
+		if (uhf.isVisible()) {
+			uhf.onTakePhotoResult(requestCode, resultCode, data);
+		} else {
+			Fragment f = getFragmentManager().findFragmentById(
+					R.id.TabCameraLayoutHolderId);
+			if (f instanceof DecoratedSharingPreferencesFragment) {
+				Util.logger("decorated");
+				DecoratedSharingPreferencesFragment dspf = (DecoratedSharingPreferencesFragment) f;
+				dspf.onAuthorizeCallback(requestCode, resultCode, data);
+			}
+		}
 	}
 
 }

@@ -9,6 +9,7 @@ import com.photoshare.exception.NetworkError;
 import com.photoshare.exception.NetworkException;
 import com.photoshare.msg.MessageList;
 import com.photoshare.msg.RequestMsg;
+import com.photoshare.utils.Utils;
 import com.photoshare.utils.async.AsyncUtils;
 
 /**
@@ -21,71 +22,96 @@ public class PipelineMsgHandler {
 		register();
 	}
 
-	private AsyncUtils async;
+	private AsyncUtils async = AsyncUtils.getInstance();
 
 	private OutboundPipeline pipeline = OutboundPipeline.getInstance();
 
 	private MessageList messageList = MessageList.getInstance();
 
-	private AbstractRequestListener<String> listener;
-
 	public static final int MAX_TRIAL = 3;
 
 	private OutboundPipeline.Listener msgListener = new OutboundPipeline.Listener() {
 
-		public void add(RequestMsg<? extends RequestParam> request) {
-			// TODO Auto-generated method stub
+		public void onFreshMsgBoard(RequestMsg<? extends RequestParam> request,
+				AbstractRequestListener<String> listener) {
 			asyncPublishRequest(request, listener);
 		}
 	};
 
 	private void asyncPublishRequest(
-			RequestMsg<? extends RequestParam> request,
-			AbstractRequestListener<String> listener) {
+			final RequestMsg<? extends RequestParam> request,
+			final AbstractRequestListener<String> listener) {
+		Utils.logger("asyncPublishRequest");
+		async = AsyncUtils.getInstance();
 		if (request == null)
 			return;
-		String resp = null;
+		final AbstractRequestListener<String> httpListener = new AbstractRequestListener<String>() {
+
+			@Override
+			public void onNetworkError(NetworkError networkError) {
+				// TODO Auto-generated method stub
+				if (listener != null) {
+					listener.onNetworkError(networkError);
+				}
+			}
+
+			@Override
+			public void onFault(Throwable fault) {
+				// TODO Auto-generated method stub
+				if (listener != null) {
+					listener.onFault(fault);
+				}
+				if (request.getTrial() <= MAX_TRIAL) {
+					request.tryAgain();
+					pipeline.notifySendToTargetHandler(request, listener);
+				} else {
+					messageList.add(request);
+					pipeline.moveToLast();
+				}
+			}
+
+			@Override
+			public void onComplete(String bean) {
+				// TODO Auto-generated method stub
+				request.setSend(true);
+				pipeline.scanAndDiscard();
+				if (listener != null) {
+					listener.onComplete(bean);
+				}
+			}
+		};
+
 		try {
-			resp = async.request(request.getType().getAction(), request
-					.getAMsg().getParams());
-			request.setSend(true);
-			pipeline.scanAndDiscard();
-			if (listener != null) {
-				listener.onComplete(resp);
+			if (async != null) {
+				Utils.logger("async not null-----------------");
 			}
-		} catch (NetworkError e) {
-			// TODO Auto-generated catch block
-			if (listener != null) {
-				listener.onNetworkError(e);
+			
+			if (request.getType() != null) {
+				Utils.logger(request.getType().getAction() + " not null-----------------");
 			}
-		} catch (RuntimeException e) {
-			// TODO Auto-generated catch block
-			if (listener != null) {
-				listener.onFault(e);
+			
+			if (request.getAMsg() != null) {
+				Utils.logger("amsg not null-----------------");
 			}
-			if (request.getTrial() <= MAX_TRIAL) {
-				request.tryAgain();
-				pipeline.notifySend(request);
-			} else {
-				MessageList.getInstance().add(request);
-				pipeline.moveToLast();
-			}
-
+			
+			async.request(request.getType().getAction(), request.getAMsg()
+					.getParams(), httpListener);
 		} catch (NetworkException e) {
-
+			if (listener != null) {
+				listener.onNetworkError(new NetworkError(e.getMessage()));
+			}
 		}
+
 	}
 
-	public void addMsg(RequestMsg<? extends RequestParam> AMsg) {
-		pipeline.add(AMsg);
+	public void addMsg(RequestMsg<? extends RequestParam> AMsg,
+			final AbstractRequestListener<String> listener) {
+		Utils.logger(AMsg.toString());
+		pipeline.add(AMsg, listener);
 	}
 
 	private void register() {
 		pipeline.registerListener(msgListener);
-	}
-
-	public void registerRequestListener(AbstractRequestListener<String> listener) {
-		this.listener = listener;
 	}
 
 }

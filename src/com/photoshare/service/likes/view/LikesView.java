@@ -17,14 +17,14 @@ import com.photoshare.service.likes.LikeBean;
 import com.photoshare.service.users.UserInfo;
 import com.photoshare.tabHost.R;
 import com.photoshare.utils.async.AsyncUtils;
-import com.photoshare.view.listview.CornerListView;
+import com.photoshare.view.listview.MyListView;
 
 /**
  * @author czj_yy
  * 
  */
 public class LikesView {
-	private CornerListView mLikesListView;
+	private MyListView mLikesListView;
 	private Context context;
 	private View baseView;
 	private ArrayList<LikeBean> beans;
@@ -46,7 +46,7 @@ public class LikesView {
 	}
 
 	public void applyView() {
-		mLikesListView = (CornerListView) baseView
+		mLikesListView = (MyListView) baseView
 				.findViewById(R.id.likesListView);
 		LikesAdapter adapter = new LikesAdapter();
 		mLikesListView.setAdapter(adapter);

@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.photoshare.exception.NetworkError;
 import com.photoshare.fragments.BaseFragment;
@@ -16,8 +15,10 @@ import com.photoshare.service.share.ShareType;
 import com.photoshare.service.share.SinaWeiboToken;
 import com.photoshare.tabHost.R;
 import com.renren.api.connect.android.Renren;
+import com.renren.api.connect.android.Util;
 import com.renren.api.connect.android.exception.RenrenAuthError;
 import com.renren.api.connect.android.view.RenrenAuthListener;
+import com.weibo.sdk.android.Oauth2AccessToken;
 import com.weibo.sdk.android.Weibo;
 import com.weibo.sdk.android.WeiboAuthListener;
 import com.weibo.sdk.android.WeiboDialogError;
@@ -95,13 +96,24 @@ public class SharePreferencesFragment extends BaseFragment {
 			case RenRen:
 				mRenren = new Renren(type.getApiKey(), type.getSecretKey(),
 						type.getAppId(), getActivity());
-				mRenren.authorize(getActivity(), null, mRenrenAuthListener,
-						type.getType());
+				mRenren.init(getActivity());
+				mRenren.authorize(getActivity(), new RenrenAuthListenerImpl());
 				break;
 			case SinaWeibo:
-				wToken = SinaWeiboToken.getInstance();
-				wToken.readAccessToken(getActivity());
-				if (wToken.isTokenValid()) {
+				mWeibo = Weibo.getInstance(type.getApiKey(),
+						ShareBean.KEY_SINA_WEIBO_REDIRECT_URL);
+				try {
+					Class sso = Class
+							.forName("com.weibo.sdk.android.sso.SsoHandler");
+					mSsoHandler = new SsoHandler(getActivity(), mWeibo);
+					mSsoHandler.authorize(new SinaWeiboAuthListener());
+					
+				} catch (ClassNotFoundException e) {
+					mWeibo.authorize(getActivity(), new SinaWeiboAuthListener());
+				}
+
+				SinaWeiboToken.readAccessToken(getActivity());
+				if (SinaWeiboToken.isSeesionValid()) {
 					Weibo.isWifi = Utility.isWifi(getActivity());
 					try {
 						Class.forName("com.weibo.sdk.android.api.WeiboAPI");
@@ -111,8 +123,8 @@ public class SharePreferencesFragment extends BaseFragment {
 								.sendToTarget();
 					}
 				} else {
-					mSsoHandler = new SsoHandler(getActivity(), mWeibo);
-					mSsoHandler.authorize(mWeiboAuthListener);
+//					mSsoHandler = new SsoHandler(getActivity(), mWeibo);
+//					mSsoHandler.authorize(mWeiboAuthListener);
 				}
 				break;
 			case TxWeibo:
@@ -120,35 +132,36 @@ public class SharePreferencesFragment extends BaseFragment {
 			default:
 				break;
 			}
+			if (info != null && info.isValid()) {
+
+			} else {
+
+			}
 		}
 	};
 
-	final RenrenAuthListener mRenrenAuthListener = new RenrenAuthListener() {
+	class RenrenAuthListenerImpl implements RenrenAuthListener {
 
 		public void onComplete(Bundle values) {
-			getActivity().runOnUiThread(new Runnable() {
-
-				public void run() {
-					// TODO Auto-generated method stub
-					Toast.makeText(getActivity(), "renren", Toast.LENGTH_LONG)
-							.show();
-				}
-			});
+			Util.logger("complete");
 		}
 
 		public void onRenrenAuthError(RenrenAuthError renrenAuthError) {
+			Util.logger("AuthError");
 			mExceptionHandler
 					.obtainMessage(NetworkError.ERROR_RENREN_AUTHORIZE)
 					.sendToTarget();
 		}
 
 		public void onCancelLogin() {
+			Util.logger("cancle");
 			mExceptionHandler
 					.obtainMessage(NetworkError.ERROR_RENREN_AUTHORIZE)
 					.sendToTarget();
 		}
 
 		public void onCancelAuth(Bundle values) {
+			Util.logger("AuthCancle");
 			mExceptionHandler
 					.obtainMessage(NetworkError.ERROR_RENREN_AUTHORIZE)
 					.sendToTarget();
@@ -156,7 +169,7 @@ public class SharePreferencesFragment extends BaseFragment {
 
 	};
 
-	final WeiboAuthListener mWeiboAuthListener = new WeiboAuthListener() {
+	class SinaWeiboAuthListener implements WeiboAuthListener {
 
 		public void onWeiboException(WeiboException arg0) {
 			mExceptionHandler.obtainMessage(
@@ -171,17 +184,19 @@ public class SharePreferencesFragment extends BaseFragment {
 		public void onComplete(Bundle values) {
 			String token = values.getString("access_token");
 			String expires_in = values.getString("expires_in");
-			wToken = SinaWeiboToken.getInstance();
-			wToken.newToken(token, expires_in);
-			if (wToken.isTokenValid()) {
+			Oauth2AccessToken wToken = SinaWeiboToken.createToken(token,
+					expires_in);
+
+			if (wToken.isSessionValid()) {
 				try {
 					Class.forName("com.weibo.sdk.android.api.WeiboAPI");
 				} catch (ClassNotFoundException e) {
 					mExceptionHandler
 							.obtainMessage(NetworkError.ERROR_SINA_WEIBO_AUTHORIZE);
 				}
-				wToken.keepAccessToken(getActivity());
+				SinaWeiboToken.keepAccessToken(getActivity(), wToken);
 			}
+
 		}
 
 		public void onCancel() {
@@ -196,7 +211,7 @@ public class SharePreferencesFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnRightBtnClicked()
 	 */
 	@Override
-	protected void OnRightBtnClicked() {
+	protected void onRightBtnClicked() {
 
 	}
 
@@ -206,12 +221,18 @@ public class SharePreferencesFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnLeftBtnClicked()
 	 */
 	@Override
-	protected void OnLeftBtnClicked() {
+	protected void onLeftBtnClicked() {
 		backward(null);
 	}
 
 	private String getPreferenceSettingsFragment() {
 		return getString(R.string.fpreferenceSettingsFragment);
+	}
+
+	@Override
+	protected void onLoginSuccess() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

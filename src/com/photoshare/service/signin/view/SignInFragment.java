@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.photoshare.command.Command;
 import com.photoshare.fragments.BaseFragment;
 import com.photoshare.tabHost.R;
 
@@ -52,7 +53,7 @@ public class SignInFragment extends BaseFragment {
 
 	private void initViews() {
 		leftBtnText = getMainText();
-		titlebarText = getSigninText();
+		rightBtnText = getSigninText();
 		initTitleBar(leftBtnText, rightBtnText, titlebarText,
 				leftBtnVisibility, rightBtnVisibility);
 		signInView = new SignInView(getActivity().findViewById(
@@ -66,7 +67,7 @@ public class SignInFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnRightBtnClicked()
 	 */
 	@Override
-	protected void OnRightBtnClicked() {
+	protected void onRightBtnClicked() {
 		AsyncSignIn(signInView.getNameString(), signInView.getPwdString());
 	}
 
@@ -76,8 +77,14 @@ public class SignInFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnLeftBtnClicked()
 	 */
 	@Override
-	protected void OnLeftBtnClicked() {
+	protected void onLeftBtnClicked() {
 		backward(null);
+	}
+
+	@Override
+	protected void onLoginSuccess() {
+		// TODO Auto-generated method stub
+		Command.TabHost(getActivity());
 	}
 
 }

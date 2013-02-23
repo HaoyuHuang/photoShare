@@ -166,6 +166,10 @@ public class FeedsView {
 	public void registerCallback(OnFeedsActionListener actionListener) {
 		this.mFeedsActionListener = actionListener;
 	}
+	
+	public void onRefreshComplete() {
+		feedsView.onRefreshComplete();
+	}
 
 	private OnFeedsActionListener mFeedsActionListener;
 

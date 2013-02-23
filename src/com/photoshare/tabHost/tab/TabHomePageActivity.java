@@ -9,11 +9,12 @@ import android.os.Bundle;
 import com.photoshare.cache.MyPhotoList;
 import com.photoshare.command.Command;
 import com.photoshare.fragments.BaseFragment;
-import com.photoshare.fragments.UserHomeFragment;
 import com.photoshare.fragments.stacktrace.TraceElement;
 import com.photoshare.fragments.stacktrace.TracePhase;
 import com.photoshare.service.photos.PhotoBean;
 import com.photoshare.service.photos.PhotoType;
+import com.photoshare.service.users.UserInfo;
+import com.photoshare.service.users.views.UserHomeFragment;
 import com.photoshare.tabHost.BaseActivity;
 import com.photoshare.tabHost.R;
 
@@ -72,6 +73,7 @@ public class TabHomePageActivity extends BaseActivity {
 		uhf = UserHomeFragment.newInstance(R.id.TabHomePageLayoutHolderId2);
 		uhf.setCanonicalTag(getUserHomeFragment());
 		Bundle args = new Bundle();
+		args.putParcelable(UserInfo.KEY_USER_INFO, user.getUserInfo());
 		args.putParcelableArrayList(PhotoBean.KEY_PHOTOS, photos.getPhotos());
 		args.putString(PhotoBean.KEY_PHOTO_TYPE, PhotoType.MyPhotos.toString());
 		uhf.setArguments(args);

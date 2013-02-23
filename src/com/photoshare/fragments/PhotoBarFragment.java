@@ -92,6 +92,28 @@ public class PhotoBarFragment extends BaseFragment {
 				R.id.showPhotoBarId), type, userInfo);
 		photoBar.registerListener(ShowPhotoActionListener);
 		photoBar.applyView();
+		ShowPopularView();
+	}
+	
+	private void ShowPopularView() {
+		Bundle bundle = new Bundle();
+		bundle.putParcelable(UserInfo.KEY_USER_INFO, userInfo);
+		bundle.putString(PhotoBean.KEY_PHOTO_TYPE, type.toString());
+		bundle.putParcelableArrayList(PhotoBean.KEY_PHOTOS, photos);
+		bundle.putBoolean(TraceConfig.getTrackBackward(), true);
+		ShowPopularFragment(getLayoutHolderId(), bundle);
+	}
+	
+	private void ShowFeedsView() {
+		Bundle bundle = new Bundle();
+		bundle.putParcelable(UserInfo.KEY_USER_INFO, userInfo);
+		bundle.putString(PhotoBean.KEY_PHOTO_TYPE,
+				type.toString());
+		if (photos != null) {
+			bundle.putParcelableArrayList(PhotoBean.KEY_PHOTOS, photos);
+		}
+		bundle.putBoolean(TraceConfig.getTrackBackward(), true);
+		ShowFeedsFragment(getLayoutHolderId(), bundle);
 	}
 
 	private PhotoBarView.OnActionListener ShowPhotoActionListener = new PhotoBarView.OnActionListener() {
@@ -99,26 +121,14 @@ public class PhotoBarFragment extends BaseFragment {
 		public void ShowProfile(UserInfo info) {
 			forward(getProfileFragment(), info.params());
 		}
-
+		
 		public void ShowPopularItems() {
-			Bundle bundle = new Bundle();
-			bundle.putParcelable(UserInfo.KEY_USER_INFO, userInfo);
-			bundle.putString(PhotoBean.KEY_PHOTO_TYPE, type.toString());
-			bundle.putParcelableArrayList(PhotoBean.KEY_PHOTOS, photos);
-			bundle.putBoolean(TraceConfig.getTrackBackward(), true);
-			ShowPopularFragment(getLayoutHolderId(), bundle);
+			ShowPopularView();
 		}
 
+		
 		public void ShowFeedsItem() {
-			Bundle bundle = new Bundle();
-			bundle.putParcelable(UserInfo.KEY_USER_INFO, userInfo);
-			bundle.putString(PhotoBean.KEY_PHOTO_TYPE,
-					PhotoType.MyFeeds.toString());
-			if (photos != null) {
-				bundle.putParcelableArrayList(PhotoBean.KEY_PHOTOS, photos);
-			}
-			bundle.putBoolean(TraceConfig.getTrackBackward(), true);
-			ShowFeedsFragment(getLayoutHolderId(), bundle);
+			ShowFeedsView();
 		}
 
 	};
@@ -141,7 +151,7 @@ public class PhotoBarFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnRightBtnClicked()
 	 */
 	@Override
-	protected void OnRightBtnClicked() {
+	protected void onRightBtnClicked() {
 		// do nothing
 	}
 
@@ -151,8 +161,14 @@ public class PhotoBarFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnLeftBtnClicked()
 	 */
 	@Override
-	protected void OnLeftBtnClicked() {
+	protected void onLeftBtnClicked() {
 		// do nothing
+	}
+
+	@Override
+	protected void onLoginSuccess() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

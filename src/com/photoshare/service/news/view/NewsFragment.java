@@ -90,6 +90,8 @@ public class NewsFragment extends BaseFragment {
 				R.id.newsLayoutId), getActivity(), async);
 		mNewsView.registerNewsClickListener(onNewsClickListener);
 		mNewsView.applyView();
+		setTitleBarDrawable(R.drawable.titlebar_right_button,
+				R.drawable.titlebar_right_button);
 	}
 
 	@Override
@@ -281,7 +283,7 @@ public class NewsFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnRightBtnClicked()
 	 */
 	@Override
-	protected void OnRightBtnClicked() {
+	protected void onRightBtnClicked() {
 		try {
 			AsyncGetUserNews(NewsType.MY_NEWS);
 		} catch (NetworkException e) {
@@ -295,11 +297,17 @@ public class NewsFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnLeftBtnClicked()
 	 */
 	@Override
-	protected void OnLeftBtnClicked() {
+	protected void onLeftBtnClicked() {
 		try {
 			AsyncGetUserNews(NewsType.FOLLOWING_NEWS);
 		} catch (NetworkException e) {
 			AsyncSignIn();
 		}
+	}
+
+	@Override
+	protected void onLoginSuccess() {
+		// TODO Auto-generated method stub
+		
 	}
 }

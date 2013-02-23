@@ -38,7 +38,7 @@ public class FeedsItemFragment extends BaseFragment {
 	private String leftBtnText = "";
 	private String rightBtnText = "";
 	private String titlebarText = "";
-	private int leftBtnVisibility = View.GONE;
+	private int leftBtnVisibility = View.VISIBLE;
 	private int rightBtnVisibility = View.GONE;
 	private NotificationDisplayer mNotificationDisplayer;
 
@@ -84,6 +84,7 @@ public class FeedsItemFragment extends BaseFragment {
 				leftBtnText = bundle.getString(AppTitleBarView.LEFT_BTN_TEXT);
 			}
 		}
+		leftBtnText = getBackText();
 		titlebarText = getPhotoText();
 		initTitleBar(leftBtnText, rightBtnText, titlebarText,
 				leftBtnVisibility, rightBtnVisibility);
@@ -238,6 +239,10 @@ public class FeedsItemFragment extends BaseFragment {
 		return getString(R.string.fcommentsFragment);
 	}
 
+	private String getBackText() {
+		return getString(R.string.back);
+	}
+
 	private FeedItemView.ICallback mCallback = new FeedItemView.ICallback() {
 
 		public void OnNameClick(UserInfo info) {
@@ -313,7 +318,7 @@ public class FeedsItemFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnRightBtnClicked()
 	 */
 	@Override
-	protected void OnRightBtnClicked() {
+	protected void onRightBtnClicked() {
 
 	}
 
@@ -323,8 +328,14 @@ public class FeedsItemFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnLeftBtnClicked()
 	 */
 	@Override
-	protected void OnLeftBtnClicked() {
+	protected void onLeftBtnClicked() {
 		backward(null);
+	}
+
+	@Override
+	protected void onLoginSuccess() {
+		// TODO Auto-generated method stub
+
 	}
 
 }

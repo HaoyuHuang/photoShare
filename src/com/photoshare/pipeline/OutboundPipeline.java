@@ -6,11 +6,12 @@ package com.photoshare.pipeline;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import com.photoshare.common.AbstractRequestListener;
 import com.photoshare.common.RequestParam;
 import com.photoshare.msg.RequestMsg;
 
 /**
- * @author czj_yy
+ * @author Aron
  * 
  */
 public class OutboundPipeline {
@@ -29,8 +30,9 @@ public class OutboundPipeline {
 
 	private LinkedList<RequestMsg<? extends RequestParam>> MsgQueue = new LinkedList<RequestMsg<? extends RequestParam>>();
 
-	public boolean add(RequestMsg<? extends RequestParam> request) {
-		notifySend(request);
+	public boolean add(RequestMsg<? extends RequestParam> request,
+			final AbstractRequestListener<String> listener) {
+		notifySendToTargetHandler(request, listener);
 		return MsgQueue.add(request);
 	}
 
@@ -41,14 +43,14 @@ public class OutboundPipeline {
 	}
 
 	public interface Listener {
-		public void add(RequestMsg<? extends RequestParam> request);
+		public void onFreshMsgBoard(RequestMsg<? extends RequestParam> request, AbstractRequestListener<String> listener);
 	}
 
 	private ArrayList<Listener> listeners = new ArrayList<Listener>();
 
-	public void notifySend(RequestMsg<? extends RequestParam> request) {
-		for (Listener listener : listeners) {
-			listener.add(request);
+	public void notifySendToTargetHandler(RequestMsg<? extends RequestParam> request, final AbstractRequestListener<String> listener) {
+		for (Listener lis : listeners) {
+			lis.onFreshMsgBoard(request, listener);
 		}
 	}
 

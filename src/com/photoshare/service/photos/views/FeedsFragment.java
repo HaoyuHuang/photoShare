@@ -25,6 +25,7 @@ import com.photoshare.service.photos.PhotosGetInfoRequestParam;
 import com.photoshare.service.photos.PhotosGetInfoResponseBean;
 import com.photoshare.service.users.UserInfo;
 import com.photoshare.tabHost.R;
+import com.photoshare.utils.Utils;
 import com.photoshare.view.NotificationDisplayer;
 
 /**
@@ -62,12 +63,6 @@ public class FeedsFragment extends BaseFragment {
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
-		if (savedInstanceState != null) {
-			if (savedInstanceState.containsKey(PhotoBean.KEY_PHOTOS)) {
-				photos = savedInstanceState
-						.getParcelableArrayList(PhotoBean.KEY_PHOTOS);
-			}
-		}
 
 		super.onActivityCreated(savedInstanceState);
 		Bundle bundle = getArguments();
@@ -87,15 +82,15 @@ public class FeedsFragment extends BaseFragment {
 		titlebarText = getFeedsText();
 		initTitleBar(leftBtnText, rightBtnText, titlebarText,
 				leftBtnVisibility, rightBtnVisibility);
-		// if (photos != null || photos.size() != 0) {
-		// initFeeds();
-		// } else {
-		try {
-			AsyncGetFeeds();
-		} catch (NetworkException e) {
-			AsyncSignIn();
+		if (photos != null && photos.size() != 0) {
+			initFeeds();
+		} else {
+			try {
+				AsyncGetFeeds();
+			} catch (NetworkException e) {
+				AsyncSignIn();
+			}
 		}
-		// }
 	}
 
 	@Override
@@ -136,7 +131,7 @@ public class FeedsFragment extends BaseFragment {
 		PhotoLikeRequestParam param = new PhotoLikeRequestParam.LikeBuilder()
 				.UserId(user.getUserInfo().getUid()).PhotoId(photo.getPid())
 				.isLike(photo.isLike()).build();
-		mNotificationDisplayer.displayNotification();
+//		mNotificationDisplayer.displayNotification();
 
 		LikeHelper.ICallback mCallback = new LikeHelper.ICallback() {
 
@@ -196,7 +191,8 @@ public class FeedsFragment extends BaseFragment {
 				getActivity().runOnUiThread(new Runnable() {
 
 					public void run() {
-
+						if (feedsView != null)
+							feedsView.onRefreshComplete();
 					}
 
 				});
@@ -209,7 +205,8 @@ public class FeedsFragment extends BaseFragment {
 				getActivity().runOnUiThread(new Runnable() {
 
 					public void run() {
-
+						if (feedsView != null)
+							feedsView.onRefreshComplete();
 					}
 
 				});
@@ -225,6 +222,8 @@ public class FeedsFragment extends BaseFragment {
 
 					public void run() {
 						initFeeds();
+						if (feedsView != null)
+							feedsView.onRefreshComplete();
 					}
 
 				});
@@ -262,6 +261,7 @@ public class FeedsFragment extends BaseFragment {
 
 		public void OnLikeClick(PhotoBean photo) {
 			try {
+				Utils.logger("OnLikeClicked");
 				AsyncLikePhoto(photo);
 			} catch (NetworkException e) {
 				AsyncSignIn();
@@ -344,7 +344,7 @@ public class FeedsFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnRightBtnClicked()
 	 */
 	@Override
-	protected void OnRightBtnClicked() {
+	protected void onRightBtnClicked() {
 
 	}
 
@@ -354,7 +354,7 @@ public class FeedsFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnLeftBtnClicked()
 	 */
 	@Override
-	protected void OnLeftBtnClicked() {
+	protected void onLeftBtnClicked() {
 
 	}
 
@@ -368,6 +368,12 @@ public class FeedsFragment extends BaseFragment {
 
 	private String getLikeFragment() {
 		return getString(R.string.flikeFragment);
+	}
+
+	@Override
+	protected void onLoginSuccess() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

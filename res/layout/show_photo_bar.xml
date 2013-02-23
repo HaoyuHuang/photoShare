@@ -3,7 +3,6 @@
     android:id="@+id/showPhotoBarId"
     android:layout_width="fill_parent"
     android:layout_height="match_parent"
-    
     android:orientation="vertical" >
 
     <RelativeLayout
@@ -11,38 +10,40 @@
         android:layout_height="wrap_content"
         android:background="@drawable/shape_bg_listview" >
 
-        <Button
-            android:id="@+id/showPopularPhotoBtn"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="21dp"
-            android:background="@color/white"
-            android:text="@string/popular" />
+            android:orientation="horizontal"
+            android:background="@drawable/shape_bg_listview" 
+             >
 
-        <Button
-            android:id="@+id/showFeedsPhotoBtn"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/showPopularPhotoBtn"
-            android:background="@color/white"
-            android:text="@string/feeds" />
+            <Button
+                android:id="@+id/showPopularPhotoBtn"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="21dp"
+                android:background="@color/white"
+                android:text="@string/popular" />
 
-        <Button
-            android:id="@+id/showProfileBtn"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="28dp"
-            android:layout_toRightOf="@+id/showFeedsPhotoBtn"
-            android:background="@color/white"
-            android:text="@string/profile"
-            android:width="150dp" />
+            <Button
+                android:id="@+id/showFeedsPhotoBtn"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:text="@string/feeds" />
+
+            <Button
+                android:id="@+id/showProfileBtn"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+	            android:layout_marginLeft="28dp"
+                android:background="@color/white"
+                android:text="@string/profile"
+                android:width="150dp" />
+        </LinearLayout>
     </RelativeLayout>
 
     <FrameLayout

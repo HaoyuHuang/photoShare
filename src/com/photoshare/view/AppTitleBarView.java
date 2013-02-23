@@ -135,6 +135,14 @@ public class AppTitleBarView {
 		this.titlebarTextView.setText(this.titlebarText);
 	}
 
+	public void setTitleLeftButtonBackground(int rid) {
+		this.titlebarLeftButton.setBackgroundResource(rid);
+	}
+
+	public void setTitleRightButtonBackground(int rid) {
+		this.titlebarRightButton.setBackgroundResource(rid);
+	}
+
 	public void displayErrorView(String errorMsg) {
 		errorText.setText(errorMsg);
 		Log.e("displayError", errorMsg);

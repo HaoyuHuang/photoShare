@@ -26,7 +26,6 @@ import com.photoshare.service.photos.PhotoBean;
 import com.photoshare.service.photos.PhotoUploadRequestParam;
 import com.photoshare.service.photos.PhotoUploadResponseBean;
 import com.photoshare.tabHost.R;
-import com.photoshare.tabHost.TabHostActivity;
 import com.photoshare.utils.Utils;
 import com.photoshare.view.NotificationDisplayer;
 
@@ -71,7 +70,7 @@ public class DecoratedPhotoShareFragment extends BaseFragment {
 	}
 
 	@Override
-	protected void OnRightBtnClicked() {
+	protected void onRightBtnClicked() {
 		try {
 			upload();
 		} catch (NetworkException e) {
@@ -80,9 +79,16 @@ public class DecoratedPhotoShareFragment extends BaseFragment {
 		}
 	}
 
+	private String getDecoratedSharingPreferenceFragment() {
+		return getString(R.string.fdecoratedSharingPreferenceFragment);
+	}
+
 	@Override
-	protected void OnLeftBtnClicked() {
-		backward(null);
+	protected void onLeftBtnClicked() {
+		Bundle args = new Bundle();
+		args.putParcelable(PhotoBean.KEY_PHOTO, photo);
+		args.putString(PhotoBean.KEY_CAPTION, shareView.getCaption());
+		forward(getDecoratedSharingPreferenceFragment(), args);
 	}
 
 	@Override
@@ -106,14 +112,15 @@ public class DecoratedPhotoShareFragment extends BaseFragment {
 	}
 
 	private void initViews() {
-		leftBtnText = getCameraText();
+		leftBtnText = getShareText();
 		titlebarText = getPhotoText();
 		rightBtnText = getSubmitText();
 		initTitleBar(leftBtnText, rightBtnText, titlebarText);
+		setTitleBarDrawable(R.drawable.titlebar_right_button,
+				R.drawable.titlebar_right_button);
 		shareView = new DecoratedPhotoShareView(getActivity().findViewById(
 				R.id.decoratingSharePhotoLayoutId));
 		shareView.applyView();
-
 		displayer = new NotificationDisplayer.NotificationBuilder()
 				.Context(getActivity()).Tag(MsgType.PHOTO.toString())
 				.ContentTitle(getContentTitle()).ContentText(getContent())
@@ -128,8 +135,8 @@ public class DecoratedPhotoShareFragment extends BaseFragment {
 		return getString(R.string.uploadPhotoContent);
 	}
 
-	private String getCameraText() {
-		return getString(R.string.camera);
+	private String getShareText() {
+		return getString(R.string.share);
 	}
 
 	private String getSubmitText() {
@@ -204,8 +211,8 @@ public class DecoratedPhotoShareFragment extends BaseFragment {
 									FeedsList feeds = FeedsList.getInstance();
 									PhotoBean photo = bean.get();
 									feeds.addFeed(photo);
-//									TabHostActivity
-//											.setCurrentTab(TabHostActivity.TAB_HOME);
+									// TabHostActivity
+									// .setCurrentTab(TabHostActivity.TAB_HOME);
 
 								}
 
@@ -214,5 +221,11 @@ public class DecoratedPhotoShareFragment extends BaseFragment {
 					}
 				});
 		displayer.cancleNotification();
+	}
+
+	@Override
+	protected void onLoginSuccess() {
+		// TODO Auto-generated method stub
+		
 	}
 }

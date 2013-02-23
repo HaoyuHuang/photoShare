@@ -38,15 +38,42 @@ public class FollowHelper {
 	 * @param param
 	 * @param mCallback
 	 */
-	public void publishFollow(UserFollowRequestParam param, ICallback mCallback) {
+	public void publishFollow(UserFollowRequestParam param,
+			final ICallback mCallback) {
 
 		if (param == null)
 			return;
 		RequestMsg<UserFollowRequestParam> AMsg = new RequestMsg<UserFollowRequestParam>(
 				param, MsgType.FOLLOW);
-		user.registerRequestListener(listener);
-		registerCallback(mCallback);
-		user.addMsg(AMsg);
+
+		AbstractRequestListener<String> listener = new AbstractRequestListener<String>() {
+
+			@Override
+			public void onComplete(String bean) {
+				// TODO Auto-generated method stub
+				if (mCallback != null) {
+					mCallback.OnComplete(new UserFollowResponseBean(bean));
+				}
+			}
+
+			@Override
+			public void onNetworkError(NetworkError networkError) {
+				// TODO Auto-generated method stub
+				if (mCallback != null) {
+					mCallback.OnNetworkError(networkError);
+				}
+			}
+
+			@Override
+			public void onFault(Throwable fault) {
+				// TODO Auto-generated method stub
+				if (mCallback != null) {
+					mCallback.OnFault(fault);
+				}
+			}
+
+		};
+		user.addMsg(AMsg, listener);
 	}
 
 	public interface ICallback {
@@ -56,36 +83,6 @@ public class FollowHelper {
 
 		public void OnFault(Throwable fault);
 	}
-
-	private ICallback mCallback;
-
-	private AbstractRequestListener<String> listener = new AbstractRequestListener<String>() {
-
-		@Override
-		public void onComplete(String bean) {
-			// TODO Auto-generated method stub
-			if (mCallback != null) {
-				mCallback.OnComplete(new UserFollowResponseBean(bean));
-			}
-		}
-
-		@Override
-		public void onNetworkError(NetworkError networkError) {
-			// TODO Auto-generated method stub
-			if (mCallback != null) {
-				mCallback.OnNetworkError(networkError);
-			}
-		}
-
-		@Override
-		public void onFault(Throwable fault) {
-			// TODO Auto-generated method stub
-			if (mCallback != null) {
-				mCallback.OnFault(fault);
-			}
-		}
-
-	};
 
 	/**
 	 * 同步调用getUsersInfo接口<br>
@@ -160,10 +157,6 @@ public class FollowHelper {
 			}
 		});
 
-	}
-
-	private void registerCallback(ICallback mCallback) {
-		this.mCallback = mCallback;
 	}
 
 }

@@ -279,10 +279,10 @@ public class DecoratedPhotoFragment extends BaseFragment {
 				.show();
 		resetZoomState();
 		if (mBitmap != null) {
-			mBitmap.recycle();
+//			mBitmap.recycle();
 		}
 		if (bmp != null) {
-			bmp.recycle();
+//			bmp.recycle();
 		}
 		mZoomView.operateType = 1;
 		mBitmap = oBitmap;
@@ -296,10 +296,10 @@ public class DecoratedPhotoFragment extends BaseFragment {
 			mZoomView.Destroy();
 		}
 		if (mBitmap != null) {
-			mBitmap.recycle();
+//			mBitmap.recycle();
 		}
 		if (bmp != null) {
-			bmp.recycle();
+//			bmp.recycle();
 		}
 	}
 
@@ -309,7 +309,7 @@ public class DecoratedPhotoFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnRightBtnClicked()
 	 */
 	@Override
-	protected void OnRightBtnClicked() {
+	protected void onRightBtnClicked() {
 		if (!isCroping) {
 			startCroping();
 			isCroping = true;
@@ -354,7 +354,7 @@ public class DecoratedPhotoFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnLeftBtnClicked()
 	 */
 	@Override
-	protected void OnLeftBtnClicked() {
+	protected void onLeftBtnClicked() {
 		if (isCroping) {
 			leftBtnText = getCancleText();
 			rightBtnText = getStartText();
@@ -364,6 +364,12 @@ public class DecoratedPhotoFragment extends BaseFragment {
 			return;
 		}
 		backward(null);
+	}
+
+	@Override
+	protected void onLoginSuccess() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
