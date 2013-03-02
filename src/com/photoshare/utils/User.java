@@ -1,6 +1,8 @@
 package com.photoshare.utils;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -11,6 +13,7 @@ import com.photoshare.pipeline.PipelineMsgHandler;
 import com.photoshare.service.photos.PhotoBean;
 import com.photoshare.service.users.UserInfo;
 import com.renren.api.connect.android.Util;
+import com.weibo.sdk.android.Oauth2AccessToken;
 
 /*
  * 单例
@@ -35,7 +38,7 @@ public class User {
 
 	private PipelineMsgHandler handler = new PipelineMsgHandler();
 	/** 服务器地址 */
-	private final String SERVER_URL = "http://222.94.219.153:8080/Spring3Struts2/photoShare-mobile";
+	private final String SERVER_URL = "http://117.88.140.234:8080/Spring3Struts2/photoShare-mobile";
 	/** 响应形式为Json */
 	public static final String RESPONSE_FORMAT_JSON = "json";
 	private final String LOG_TAG_REQUEST = "request";
@@ -59,6 +62,63 @@ public class User {
 	public boolean logout(Context context) {
 		Utils.clearCookies(context);
 		return true;
+	}
+
+	public static final class UserAccessToken {
+		private static final String USER_PREFERENCE_NAME = "user_access_token";
+
+		private static final String USER_PREFERENCE_MAIL = "mail";
+
+		private static final String USER_PREFERENCE_PWD = "pwd";
+
+		private static final String USER_PREFERENCE_ID = "id";
+
+		/**
+		 * 保存accesstoken到SharedPreferences
+		 * 
+		 * @param context
+		 *            Activity 上下文环境
+		 * @param token
+		 *            Oauth2AccessToken
+		 */
+		public static void keepAccessToken(Context context, User user) {
+			SharedPreferences pref = context.getSharedPreferences(
+					USER_PREFERENCE_NAME, Context.MODE_APPEND);
+			Editor editor = pref.edit();
+			editor.putString(USER_PREFERENCE_MAIL, user.getMail());
+			editor.putLong(USER_PREFERENCE_ID, user.getUserInfo().getUid());
+			editor.putString(USER_PREFERENCE_PWD, user.getPwd());
+			editor.commit();
+		}
+
+		/**
+		 * 清空sharepreference
+		 * 
+		 * @param context
+		 */
+		public static void clear(Context context) {
+			SharedPreferences pref = context.getSharedPreferences(
+					USER_PREFERENCE_NAME, Context.MODE_APPEND);
+			Editor editor = pref.edit();
+			editor.clear();
+			editor.commit();
+		}
+
+		/**
+		 * 从SharedPreferences读取accessstoken
+		 * 
+		 * @param context
+		 * @return Oauth2AccessToken
+		 */
+		public static void readAccessToken(Context context) {
+			SharedPreferences pref = context.getSharedPreferences(
+					USER_PREFERENCE_NAME, Context.MODE_APPEND);
+			user.setMail(pref.getString(USER_PREFERENCE_MAIL, ""));
+			user.setPwd(pref.getString(USER_PREFERENCE_PWD, ""));
+			UserInfo info = new UserInfo();
+			info.setUid(pref.getLong(USER_PREFERENCE_ID, 0L));
+			user.setUserInfo(info);
+		}
 	}
 
 	public void init(String mail, String pwd) {

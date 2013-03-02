@@ -29,7 +29,7 @@ public class TabCameraActivity extends BaseActivity implements
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tab_camera_layout_holder);
-		initFragmentss();
+		initFragments();
 	}
 
 	private void initFragments() {

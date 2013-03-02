@@ -40,6 +40,9 @@ import com.photoshare.view.AppTitleBarView;
 public abstract class BaseFragment extends Fragment {
 	public static final String KEY_FRAGMENT_VIEW_ID = "fragmentViewId";
 	public static final String KEY_TAG = "tag";
+	public static final String KEY_WRAPPER_ID = "wrapperId";
+	public static final String KEY_WRAPPED_ID = "wrappedId";
+
 	protected int fragmentViewId;
 	protected AsyncUtils async = AsyncUtils.getInstance();
 	protected User user = User.getInstance();
@@ -122,6 +125,7 @@ public abstract class BaseFragment extends Fragment {
 					public void run() {
 						mExceptionHandler.obtainMessage(
 								NetworkError.ERROR_SIGN_IN).sendToTarget();
+						User.UserAccessToken.clear(getActivity());
 					}
 
 				});
@@ -146,12 +150,14 @@ public abstract class BaseFragment extends Fragment {
 					if (info != null) {
 						user.setUserInfo(info);
 						user.setLogging(true);
+						User.UserAccessToken.keepAccessToken(getActivity(),
+								user);
 					}
 				}
 				getActivity().runOnUiThread(new Runnable() {
 
 					public void run() {
-
+						onLoginSuccess();
 					}
 
 				});
@@ -171,6 +177,7 @@ public abstract class BaseFragment extends Fragment {
 					public void run() {
 						mExceptionHandler.obtainMessage(
 								NetworkError.ERROR_SIGN_IN).sendToTarget();
+						User.UserAccessToken.clear(getActivity());
 					}
 
 				});
@@ -198,12 +205,14 @@ public abstract class BaseFragment extends Fragment {
 						user.setPwd(pwd);
 						user.setUserInfo(info);
 						user.setLogging(true);
+						User.UserAccessToken.keepAccessToken(getActivity(),
+								user);
 					}
 				}
 				getActivity().runOnUiThread(new Runnable() {
 
 					public void run() {
-						
+						onLoginSuccess();
 					}
 
 				});
@@ -221,7 +230,7 @@ public abstract class BaseFragment extends Fragment {
 	 * 
 	 */
 	protected abstract void onLeftBtnClicked();
-	
+
 	protected abstract void onLoginSuccess();
 
 	protected final Handler mExceptionHandler = new Handler() {
@@ -438,19 +447,19 @@ public abstract class BaseFragment extends Fragment {
 		this.Tag = canonicalTag;
 	}
 
-	protected void ShowOtherHomeTitleBarFragment(int fragmentViewId,
-			UserInfo info) {
+	protected void ShowOtherHomeTitleBarFragment(int fragmentViewId, Bundle args) {
 		OtherHomeTitleBarFragment ohtbf = OtherHomeTitleBarFragment
 				.newInstance(fragmentViewId);
-		Bundle args = new Bundle();
-		args.putParcelable(UserInfo.KEY_USER_INFO, info);
 		ohtbf.setArguments(args);
+		Utils.logger("ShowOtherHomeTitleBarFragment from UserHome");
 		persist(fragmentViewId, ohtbf);
 	}
 
-	protected void ShowUserHomeTitleBarFragment(int fragmentViewId) {
+	protected void ShowUserHomeTitleBarFragment(int fragmentViewId, Bundle args) {
 		UserHomeTitleBarFragment uhtbf = UserHomeTitleBarFragment
 				.newInstance(fragmentViewId);
+		uhtbf.setArguments(args);
+		Utils.logger("ShowUserHomeTitleBarFragment from UserHome");
 		persist(fragmentViewId, uhtbf);
 	}
 
@@ -469,6 +478,7 @@ public abstract class BaseFragment extends Fragment {
 		PopularPhotosFragment ppf = PopularPhotosFragment
 				.newInstance(fragmentViewId);
 		ppf.setArguments(args);
+		Utils.logger("ShowPopularFragment from UserHome");
 		persist(fragmentViewId, ppf);
 	}
 
@@ -500,7 +510,8 @@ public abstract class BaseFragment extends Fragment {
 			if (params.containsKey(TraceConfig.getTrackBackward())) {
 				Utils.logger("Fragment ----------- backward"
 						+ params.getBoolean(TraceConfig.getTrackBackward()));
-				return params.getBoolean(TraceConfig.getTrackBackward());
+				return params.getBoolean(TraceConfig.getTrackBackward())
+						|| params.containsKey(KEY_WRAPPER_ID);
 			}
 		}
 		return false;

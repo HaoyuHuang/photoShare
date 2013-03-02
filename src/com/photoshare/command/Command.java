@@ -92,7 +92,15 @@ public final class Command {
 	}
 
 	public static void forward(BaseFragment base, String invokeName, Bundle args) {
-		int fragmentViewId = base.getFragmentViewId();
+		int fragmentViewId;
+		// 如果有Wrapper Id的话，替换Wrapper Id
+		if (args != null && args.containsKey(BaseFragment.KEY_WRAPPER_ID)) {
+			fragmentViewId = args.getInt(BaseFragment.KEY_WRAPPER_ID);
+			args.remove(BaseFragment.KEY_WRAPPER_ID);
+		} else {
+			fragmentViewId = base.getFragmentViewId();
+		}
+
 		BaseFragment target = invoke(base, invokeName, args);
 		TraceStack stack = TraceStack.getInstance();
 		if (target != null) {
@@ -106,6 +114,15 @@ public final class Command {
 					args, invokeName);
 			stack.forward(element);
 			target.setArguments(args);
+			if (args.containsKey(BaseFragment.KEY_WRAPPED_ID)) {
+				int[] wrappedIds = args
+						.getIntArray(BaseFragment.KEY_WRAPPED_ID);
+				for (int wrappedId : wrappedIds) {
+					ft.remove(base.getFragmentManager().findFragmentById(
+							wrappedId));
+				}
+				args.remove(BaseFragment.KEY_WRAPPED_ID);
+			}
 			ft.replace(fragmentViewId, target);
 			ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 			ft.commit();

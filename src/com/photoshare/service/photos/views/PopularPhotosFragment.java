@@ -123,11 +123,31 @@ public class PopularPhotosFragment extends BaseFragment {
 	}
 
 	@Override
+	public void onResume() {
+		Bundle bundle = getArguments();
+		if (bundle != null) {
+			if (bundle.containsKey(UserInfo.KEY_USER_INFO)) {
+				userInfo = bundle.getParcelable(UserInfo.KEY_USER_INFO);
+			}
+			if (bundle.containsKey(PhotoBean.KEY_PHOTO_TYPE)) {
+				type = PhotoType.SWITCH(bundle
+						.getString(PhotoBean.KEY_PHOTO_TYPE));
+			}
+			if (bundle.containsKey(PhotoBean.KEY_PHOTOS)) {
+				photos = bundle.getParcelableArrayList(PhotoBean.KEY_PHOTOS);
+			}
+		}
+	}
+
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		if (!processArguments()) {
 			container.addView(super.onCreateView(inflater, container,
 					savedInstanceState));
+			titleBarText = getPopularText();
+			initTitleBar("", "", titleBarText, leftBtnVisibility,
+					rightBtnVisibility);
 		}
 		return inflater.inflate(R.layout.popular_layout, container, false);
 	}
@@ -137,9 +157,6 @@ public class PopularPhotosFragment extends BaseFragment {
 	 */
 	private void initView() {
 		Tag = getPopularFragment();
-		titleBarText = getPopularText();
-		initTitleBar("", "", titleBarText, leftBtnVisibility,
-				rightBtnVisibility);
 		popularView = new PopularPhotosView(getActivity().findViewById(
 				R.id.popularId), photos, async, getActivity());
 		popularView.registerCallback(mCallback);

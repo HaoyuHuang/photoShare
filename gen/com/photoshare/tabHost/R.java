@@ -227,8 +227,8 @@ public final class R {
         public static final int popularView=0x7f0a0054;
         public static final int preferenceSettingsLayoutId=0x7f0a0055;
         public static final int profileLayout=0x7f0a0056;
-        public static final int profilePrivate=0x7f0a00be;
-        public static final int profilePublic=0x7f0a00bd;
+        public static final int profilePrivate=0x7f0a00bf;
+        public static final int profilePublic=0x7f0a00be;
         public static final int progress_large=0x7f0a0002;
         public static final int putCommentEditText=0x7f0a0016;
         public static final int putCommentSubmitBtn=0x7f0a0017;
@@ -269,15 +269,16 @@ public final class R {
         public static final int tracks=0x7f0a0005;
         public static final int userFollowListLayoutId=0x7f0a00b2;
         public static final int userFollowListView=0x7f0a00b3;
-        public static final int userHomeShowPhotoBarId=0x7f0a00b5;
-        public static final int userHomeTitleBarFollowersCnt=0x7f0a00b9;
-        public static final int userHomeTitleBarHead=0x7f0a00b7;
-        public static final int userHomeTitleBarId=0x7f0a00b4;
-        public static final int userHomeTitleBarPhotosCnt=0x7f0a00b8;
-        public static final int userHomeTitlebarArrow=0x7f0a00bb;
-        public static final int userHomeTitlebarFollowingCnt=0x7f0a00ba;
-        public static final int userHomeTitlebarLayoutId=0x7f0a00b6;
-        public static final int userProfileView=0x7f0a00bc;
+        public static final int userHomeShowPhotoBarId=0x7f0a00b6;
+        public static final int userHomeTitleBarFollowersCnt=0x7f0a00ba;
+        public static final int userHomeTitleBarHead=0x7f0a00b8;
+        public static final int userHomeTitleBarId=0x7f0a00b5;
+        public static final int userHomeTitleBarPhotosCnt=0x7f0a00b9;
+        public static final int userHomeTitlebarArrow=0x7f0a00bc;
+        public static final int userHomeTitlebarFollowingCnt=0x7f0a00bb;
+        public static final int userHomeTitlebarLayoutId=0x7f0a00b7;
+        public static final int userHomeWrapperId=0x7f0a00b4;
+        public static final int userProfileView=0x7f0a00bd;
         public static final int zoomCtrl=0x7f0a0001;
         public static final int zoomView=0x7f0a0000;
     }

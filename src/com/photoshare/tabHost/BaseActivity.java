@@ -155,7 +155,11 @@ public class BaseActivity extends Activity {
 			Utils.OnOptionListener listener) {
 		Utils.showOptionWindow(this, title, text, listener);
 	}
-
+	
+	protected void onLoginSuccess() {
+		
+	}
+	
 	/**
 	 * 显示Toast提示
 	 * 
@@ -209,7 +213,7 @@ public class BaseActivity extends Activity {
 
 					public void run() {
 						// TODO Auto-generated method stub
-
+						onLoginSuccess();
 					}
 
 				});

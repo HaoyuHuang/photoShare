@@ -52,6 +52,18 @@ public class UserHomeTitleBarFragment extends BaseFragment {
 		barView.applyView();
 	}
 
+	private Bundle generate() {
+		Bundle args = new Bundle();
+		Bundle bundle = getArguments();
+		if (bundle.containsKey(KEY_WRAPPER_ID)) {
+			args.putInt(KEY_WRAPPER_ID, bundle.getInt(KEY_WRAPPER_ID));
+		}
+		if (bundle.containsKey(KEY_WRAPPED_ID)) {
+			args.putIntArray(KEY_WRAPPED_ID, bundle.getIntArray(KEY_WRAPPED_ID));
+		}
+		return args;
+	}
+
 	private UserHomeTitleBarView.ICallback mCallback = new UserHomeTitleBarView.ICallback() {
 
 		public void OnPhotosCntClick() {
@@ -59,7 +71,7 @@ public class UserHomeTitleBarFragment extends BaseFragment {
 		}
 
 		public void OnFollowingCntClick() {
-			Bundle param = new Bundle();
+			Bundle param = generate();
 			param.putParcelable(UserInfo.KEY_USER_INFO, user.getUserInfo());
 			param.putString(UserInfo.KEY_FOLLOW_TYPE,
 					FollowType.FOLLOWING.toString());
@@ -67,7 +79,7 @@ public class UserHomeTitleBarFragment extends BaseFragment {
 		}
 
 		public void OnFollowerCntClick() {
-			Bundle param = new Bundle();
+			Bundle param = generate();
 			param.putParcelable(UserInfo.KEY_USER_INFO, user.getUserInfo());
 			param.putString(UserInfo.KEY_FOLLOW_TYPE,
 					FollowType.FOLLOWER.toString());
@@ -75,7 +87,7 @@ public class UserHomeTitleBarFragment extends BaseFragment {
 		}
 
 		public void OnEditInfoClick() {
-			forward(getProfileFragment(), null);
+			forward(getProfileFragment(), generate());
 		}
 
 		public void OnUserHeadLoaded(final ImageView imageView,
@@ -89,7 +101,12 @@ public class UserHomeTitleBarFragment extends BaseFragment {
 		}
 
 		public void OnDefault(final ImageView imageView) {
-			imageView.setImageResource(R.drawable.icon);
+			getActivity().runOnUiThread(new Runnable() {
+
+				public void run() {
+					imageView.setImageResource(R.drawable.icon);
+				}
+			});
 		}
 	};
 
@@ -128,6 +145,5 @@ public class UserHomeTitleBarFragment extends BaseFragment {
 	@Override
 	protected void onLoginSuccess() {
 		// TODO Auto-generated method stub
-		
 	}
 }

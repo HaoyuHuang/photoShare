@@ -8,6 +8,7 @@ import com.photoshare.common.AbstractRequestListener;
 import com.photoshare.exception.NetworkError;
 import com.photoshare.service.users.UserInfo;
 import com.photoshare.service.users.UserInfoReader;
+import com.photoshare.utils.User;
 import com.photoshare.utils.UserReader;
 
 /**
@@ -40,25 +41,18 @@ public class WelcomeActivity extends BaseActivity {
 
 					public void run() {
 						// TODO Auto-generated method stub
-						if (user.isFieldsEmpty()) {
-							startMain();
-							return;
-						}
-						if (bean != null) {
-							startTabHost();
-						}
+						AsyncSignIn();
 					}
 
 				});
 			}
 
+			@SuppressWarnings("unused")
 			@Override
 			public void onNetworkError(NetworkError networkError) {
-				// TODO Auto-generated method stub
 				runOnUiThread(new Runnable() {
 
 					public void run() {
-						// TODO Auto-generated method stub
 						startMain();
 					}
 				});
@@ -70,8 +64,12 @@ public class WelcomeActivity extends BaseActivity {
 				runOnUiThread(new Runnable() {
 
 					public void run() {
-						// TODO Auto-generated method stub
-						startMain();
+						User.UserAccessToken.readAccessToken(getBaseContext());
+						if (user.isFieldsEmpty()) {
+							startMain();
+						} else {
+							AsyncSignIn();
+						}
 					}
 				});
 			}
@@ -86,4 +84,16 @@ public class WelcomeActivity extends BaseActivity {
 	private void startMain() {
 		Command.Main(this);
 	}
+
+	@Override
+	protected void onLoginSuccess() {
+		super.onLoginSuccess();
+		if (user.isFieldsEmpty()) {
+			startMain();
+			return;
+		} else {
+			startTabHost();
+		}
+	}
+
 }

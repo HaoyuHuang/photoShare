@@ -31,7 +31,7 @@ public class UserHomeFragment extends BaseFragment {
 	private String leftBtnText = "";
 	private String rightBtnText = "";
 	private String titlebarText = "";
-	private int leftBtnVisibility = View.GONE;
+	private int leftBtnVisibility = View.VISIBLE;
 	private int rightBtnVisibility = View.VISIBLE;
 
 	public static UserHomeFragment newInstance(int fragmentViewId) {
@@ -50,7 +50,42 @@ public class UserHomeFragment extends BaseFragment {
 		super.onActivityCreated(savedInstanceState);
 		initViews();
 	}
-	
+
+	private void initUserHomeTitleBar() {
+		rightBtnText = getSettingsText();
+		titlebarText = getHomeText();
+		leftBtnVisibility = View.GONE;
+		rightBtnVisibility = View.VISIBLE;
+		initTitleBar(leftBtnText, rightBtnText, titlebarText,
+				leftBtnVisibility, rightBtnVisibility);
+		Util.logger("ShowUserHomeTitleBarFragment");
+		Bundle args = new Bundle();
+		args.putInt(KEY_WRAPPED_ID, R.id.userHomeWrapperId);
+		args.putIntArray(KEY_WRAPPED_ID, new int[] { R.id.userHomeTitleBarId,
+				R.id.userHomeShowPhotoBarId });
+		System.out
+				.println("-------------------------------------------info != null");
+		ShowUserHomeTitleBarFragment(R.id.userHomeTitleBarId, args);
+	}
+
+	private void initOtherHomeTitleBar() {
+		leftBtnText = getBackText();
+		titlebarText = getHomeText();
+		leftBtnVisibility = View.VISIBLE;
+		rightBtnVisibility = View.GONE;
+		initTitleBar(leftBtnText, rightBtnText, titlebarText,
+				leftBtnVisibility, rightBtnVisibility);
+		Util.logger("ShowUserHomeTitleBarFragment");
+		Bundle args = new Bundle();
+		args.putInt(KEY_WRAPPED_ID, R.id.userHomeWrapperId);
+		args.putIntArray(KEY_WRAPPED_ID, new int[] { R.id.userHomeTitleBarId,
+				R.id.userHomeShowPhotoBarId });
+		args.putParcelable(UserInfo.KEY_USER_INFO, info);
+		System.out
+				.println("-------------------------------------------info == null");
+		ShowOtherHomeTitleBarFragment(R.id.userHomeTitleBarId, args);
+	}
+
 	private void initViews() {
 		ArrayList<PhotoBean> photos = null;
 		Bundle bundle = getArguments();
@@ -62,28 +97,24 @@ public class UserHomeFragment extends BaseFragment {
 				photos = bundle.getParcelableArrayList(PhotoBean.KEY_PHOTOS);
 			}
 		}
-		rightBtnText = getSettingsText();
-		titlebarText = getHomeText();
-		initTitleBar(leftBtnText, rightBtnText, titlebarText,
-				leftBtnVisibility, rightBtnVisibility);
 		PhotoType type = PhotoType.MyPhotos;
 
-		if (info != null) {
-			if (user.isCurrentUser(info)) {
-				Util.logger("ShowUserHomeTitleBarFragment");
-				ShowUserHomeTitleBarFragment(R.id.userHomeTitleBarId);
-			}
+		if (user.isCurrentUser(info)) {
+			initUserHomeTitleBar();
 		} else {
-			ShowOtherHomeTitleBarFragment(R.id.userHomeTitleBarId, info);
+			initOtherHomeTitleBar();
 		}
 		Bundle args = new Bundle();
 		args.putParcelable(UserInfo.KEY_USER_INFO, info);
 		args.putParcelableArrayList(PhotoBean.KEY_PHOTOS, photos);
 		args.putString(PhotoBean.KEY_PHOTO_TYPE, PhotoType.MyPhotos.toString());
 		args.putBoolean(TraceConfig.getTrackBackward(), true);
+		args.putInt(KEY_WRAPPED_ID, R.id.userHomeWrapperId);
+		args.putIntArray(KEY_WRAPPED_ID, new int[] { R.id.userHomeTitleBarId,
+				R.id.userHomeShowPhotoBarId });
 		ShowPopularFragment(R.id.userHomeShowPhotoBarId, args);
-//		ShowPhotoBarFragment(R.id.userHomeShowPhotoBarId, PhotoType.MyPhotos,
-//				info, photos);
+		// ShowPhotoBarFragment(R.id.userHomeShowPhotoBarId, PhotoType.MyPhotos,
+		// info, photos);
 	}
 
 	@Override
@@ -102,11 +133,21 @@ public class UserHomeFragment extends BaseFragment {
 		return getString(R.string.home);
 	}
 
+	private String getBackText() {
+		return getString(R.string.back);
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		Log.i("UserHomeFragment", "titleBarCreated");
-		if (!processArguments()) {
+		Bundle bundle = getArguments();
+		if (bundle != null) {
+			if (bundle.containsKey(UserInfo.KEY_USER_INFO)) {
+				info = bundle.getParcelable(UserInfo.KEY_USER_INFO);
+			}
+		}
+		if (!processArguments() && user.isCurrentUser(info)) {
 			container.addView(super.onCreateView(inflater, container,
 					savedInstanceState));
 		}
@@ -137,12 +178,13 @@ public class UserHomeFragment extends BaseFragment {
 	@Override
 	protected void onLeftBtnClicked() {
 		// do nothing
+		backward(getArguments());
 	}
 
 	@Override
 	protected void onLoginSuccess() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }
