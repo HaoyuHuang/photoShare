@@ -10,7 +10,8 @@ import com.photoshare.common.Builder;
 import com.photoshare.exception.NetworkException;
 
 public class CommentInfo implements Parcelable {
-
+	
+	public static final String KEY_COMMENTS = "comments";
 	public static final String KEY_COMMENT = "comment";
 	public static final String KEY_CID = "cid";
 	public static final String KEY_PID = "pid";

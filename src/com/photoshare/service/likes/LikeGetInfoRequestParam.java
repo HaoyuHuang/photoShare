@@ -67,7 +67,7 @@ public class LikeGetInfoRequestParam extends RequestParam {
 		if (fields != null) {
 			parameters.putString("fields", fields);
 		}
-		parameters.putString(LikeBean.KEY_LIKES + "." + LikeBean.KEY_PID, pid
+		parameters.putString(LikeBean.KEY_LIKE + "." + LikeBean.KEY_PID, pid
 				+ "");
 		return parameters;
 	}

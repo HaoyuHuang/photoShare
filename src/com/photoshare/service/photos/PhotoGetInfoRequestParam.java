@@ -65,7 +65,7 @@ public class PhotoGetInfoRequestParam extends RequestParam {
 		Bundle bundle = new Bundle();
 		bundle.putString("method", METHOD);
 		bundle.putString("fields", fields);
-		bundle.putString(PhotoBean.KEY_PHOTO + "." + PhotoBean.KEY_PID, pid
+		bundle.putString(PhotoBean.KEY_PHOTO + "Bean." + PhotoBean.KEY_PID, pid
 				+ "");
 		return bundle;
 	}

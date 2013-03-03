@@ -27,9 +27,12 @@ public class UserPrivacyResponseBean extends ResponseBean {
 			return;
 
 		try {
-			JSONObject json = new JSONObject(response);
-			isPrivacy = json.optBoolean(UserInfo.KEY_PRIVACY);
-			uid = json.optLong(UserInfo.KEY_UID);
+			JSONObject obj = new JSONObject(response);
+			JSONObject json = obj.optJSONObject(UserInfo.KEY_USER_INFO);
+			if (json != null) {
+				isPrivacy = json.optBoolean(UserInfo.KEY_PRIVACY);
+				uid = json.optLong(UserInfo.KEY_UID);
+			}
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

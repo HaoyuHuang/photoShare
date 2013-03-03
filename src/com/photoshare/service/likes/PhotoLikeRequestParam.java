@@ -48,11 +48,11 @@ public class PhotoLikeRequestParam extends RequestParam {
 	public Bundle getParams() throws NetworkException {
 		Bundle parameters = new Bundle();
 		parameters.putString("method", METHOD);
-		parameters.putString(LikeBean.KEY_LIKES + "." + LikeBean.KEY_UID,
+		parameters.putString(LikeBean.KEY_LIKE + "." + LikeBean.KEY_UID,
 				userId + "");
-		parameters.putString(LikeBean.KEY_LIKES + "." + LikeBean.KEY_PID,
+		parameters.putString(LikeBean.KEY_LIKE + "." + LikeBean.KEY_PID,
 				photoId + "");
-		parameters.putString(LikeBean.KEY_LIKES + "." + LikeBean.KEY_IS_LIKE,
+		parameters.putString(LikeBean.KEY_LIKE + "." + LikeBean.KEY_IS_LIKE,
 				isLike + "");
 		return parameters;
 	}

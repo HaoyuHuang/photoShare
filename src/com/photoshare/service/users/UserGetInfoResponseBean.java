@@ -24,9 +24,10 @@ public class UserGetInfoResponseBean extends ResponseBean {
 
 		try {
 			JSONObject obj = new JSONObject(response);
-			if (obj != null) {
+			JSONObject json = obj.optJSONObject(UserInfo.KEY_USER_INFO);
+			if (json != null) {
 				user = new UserInfo();
-				user.parse(obj);
+				user.parse(json);
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();

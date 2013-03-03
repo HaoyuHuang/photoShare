@@ -24,7 +24,8 @@ public class PutCommentResponseBean extends ResponseBean {
 		super(response);
 		// TODO Auto-generated constructor stub
 		try {
-			JSONObject json = new JSONObject(response);
+			JSONObject obj = new JSONObject(response);
+			JSONObject json = obj.optJSONObject(CommentInfo.KEY_COMMENT);
 			comment = new CommentInfo();
 			comment.parse(json);
 		} catch (JSONException e) {

@@ -26,7 +26,7 @@ public class CommentsGetInfoResponseBean extends ResponseBean {
 
 		try {
 			JSONObject obj = new JSONObject(response);
-			JSONArray array = obj.optJSONArray(CommentInfo.KEY_COMMENT);
+			JSONArray array = obj.optJSONArray(CommentInfo.KEY_COMMENTS);
 			if (array != null) {
 				comments = new ArrayList<CommentInfo>();
 				int size = array.length();
