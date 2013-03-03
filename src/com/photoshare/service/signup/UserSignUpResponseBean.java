@@ -31,9 +31,10 @@ public class UserSignUpResponseBean extends ResponseBean {
 			return;
 		try {
 			JSONObject obj = new JSONObject(response);
-			if (obj != null) {
+			JSONObject json = obj.optJSONObject(UserInfo.KEY_USER_INFO);
+			if (json != null) {
 				signupInfo = new UserInfo();
-				signupInfo.parse(obj);
+				signupInfo.parse(json);
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();

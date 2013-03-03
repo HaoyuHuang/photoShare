@@ -13,7 +13,6 @@ import com.photoshare.pipeline.PipelineMsgHandler;
 import com.photoshare.service.photos.PhotoBean;
 import com.photoshare.service.users.UserInfo;
 import com.renren.api.connect.android.Util;
-import com.weibo.sdk.android.Oauth2AccessToken;
 
 /*
  * 单例
@@ -38,7 +37,7 @@ public class User {
 
 	private PipelineMsgHandler handler = new PipelineMsgHandler();
 	/** 服务器地址 */
-	private final String SERVER_URL = "http://117.88.140.234:8080/Spring3Struts2/photoShare-mobile";
+	private final String SERVER_URL = "http://121.237.46.242:8080/Spring3Struts2/photoShare-mobile";
 	/** 响应形式为Json */
 	public static final String RESPONSE_FORMAT_JSON = "json";
 	private final String LOG_TAG_REQUEST = "request";

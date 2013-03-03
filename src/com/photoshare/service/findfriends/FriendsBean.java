@@ -8,5 +8,5 @@ package com.photoshare.service.findfriends;
  * 
  */
 public class FriendsBean {
-	public static final String KEY_FRIENDS = "friend";
+	public static final String KEY_FRIENDS = "friends";
 }

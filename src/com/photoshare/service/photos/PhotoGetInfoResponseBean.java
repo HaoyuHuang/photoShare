@@ -29,7 +29,8 @@ public class PhotoGetInfoResponseBean extends ResponseBean {
 
 		try {
 			JSONObject obj = new JSONObject(response);
-			photo = new PhotoBean().parse(obj);
+			JSONObject json = obj.optJSONObject(PhotoBean.KEY_PHOTO);
+			photo = new PhotoBean().parse(json);
 		} catch (JSONException e) {
 
 		} catch (NetworkException e) {

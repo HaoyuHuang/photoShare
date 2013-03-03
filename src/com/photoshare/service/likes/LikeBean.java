@@ -16,7 +16,8 @@ import com.photoshare.exception.NetworkException;
  * 
  */
 public class LikeBean implements Parcelable {
-	public static final String KEY_LIKES = "like";
+	public static final String KEY_LIKE = "like";
+	public static final String KEY_LIKES = "likes";
 	public static final String KEY_LID = "lid";
 	public static final String KEY_PID = "pid";
 	public static final String KEY_UID = "uid";

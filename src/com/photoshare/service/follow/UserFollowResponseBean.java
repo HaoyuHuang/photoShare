@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.photoshare.common.ResponseBean;
+import com.photoshare.service.users.UserInfo;
 import com.photoshare.utils.Utils;
 
 /**
@@ -21,8 +22,8 @@ public class UserFollowResponseBean extends ResponseBean {
 
 	private long FollowId;
 
-	public static final String KEY_USER_ID = "userId";
-	public static final String KEY_FOLLOW_ID = "followId";
+	public static final String KEY_USER_ID = "uid";
+	public static final String KEY_FOLLOW_ID = "fid";
 	public static final String KEY_FOLLOWING = "isFollowing";
 
 	/**
@@ -37,10 +38,11 @@ public class UserFollowResponseBean extends ResponseBean {
 
 		try {
 			JSONObject obj = new JSONObject(response);
-			if (obj != null) {
-				isFollowing = obj.optBoolean(KEY_FOLLOWING);
-				UserId = obj.optLong(KEY_USER_ID);
-				FollowId = obj.optLong(KEY_FOLLOW_ID);
+			JSONObject json = obj.optJSONObject(UserInfo.KEY_FOLLOW);
+			if (json != null) {
+				isFollowing = json.optBoolean(KEY_FOLLOWING);
+				UserId = json.optLong(KEY_USER_ID);
+				FollowId = json.optLong(KEY_FOLLOW_ID);
 			}
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block

@@ -124,6 +124,7 @@ public class PopularPhotosFragment extends BaseFragment {
 
 	@Override
 	public void onResume() {
+		super.onResume();
 		Bundle bundle = getArguments();
 		if (bundle != null) {
 			if (bundle.containsKey(UserInfo.KEY_USER_INFO)) {

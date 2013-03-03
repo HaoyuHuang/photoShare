@@ -39,10 +39,11 @@ public class PhotoLikeResponseBean extends ResponseBean {
 
 		try {
 			JSONObject obj = new JSONObject(response);
-			if (obj != null) {
-				isLike = obj.optBoolean(KEY_LIKE);
-				UserId = obj.optLong(KEY_USER_ID);
-				PhotoId = obj.optLong(KEY_PHOTO_ID);
+			JSONObject json = obj.optJSONObject(LikeBean.KEY_LIKE);
+			if (json != null) {
+				isLike = json.optBoolean(KEY_LIKE);
+				UserId = json.optLong(KEY_USER_ID);
+				PhotoId = json.optLong(KEY_PHOTO_ID);
 			}
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block

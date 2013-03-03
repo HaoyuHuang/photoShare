@@ -80,6 +80,10 @@ public class TraceStack {
 		}
 	}
 
+	public TracePhase getCurrentPhase() {
+		return currentPhase;
+	}
+
 	public void destroy() {
 		Set<TracePhase> sets = traces.keySet();
 		for (TracePhase phase : sets) {

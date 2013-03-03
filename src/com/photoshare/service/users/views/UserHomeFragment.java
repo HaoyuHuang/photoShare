@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 
 import com.photoshare.fragments.BaseFragment;
 import com.photoshare.fragments.stacktrace.TraceConfig;
+import com.photoshare.fragments.stacktrace.TracePhase;
+import com.photoshare.fragments.stacktrace.TraceStack;
 import com.photoshare.service.photos.PhotoBean;
 import com.photoshare.service.photos.PhotoType;
 import com.photoshare.service.users.UserInfo;
@@ -147,7 +149,11 @@ public class UserHomeFragment extends BaseFragment {
 				info = bundle.getParcelable(UserInfo.KEY_USER_INFO);
 			}
 		}
-		if (!processArguments() && user.isCurrentUser(info)) {
+		// 不是返回Action, 是当前用户，并且是在最后一个phase时加入导航栏
+		if (!processArguments()
+				&& user.isCurrentUser(info)
+				&& TraceStack.getInstance().getCurrentPhase()
+						.equals(TracePhase.HOME_PAGE)) {
 			container.addView(super.onCreateView(inflater, container,
 					savedInstanceState));
 		}

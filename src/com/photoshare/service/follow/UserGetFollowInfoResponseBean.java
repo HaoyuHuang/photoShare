@@ -28,7 +28,7 @@ public class UserGetFollowInfoResponseBean extends ResponseBean {
 		super(response);
 		try {
 			JSONObject obj = new JSONObject(response);
-			JSONArray array = obj.optJSONArray(UserInfo.KEY_USER_INFO);
+			JSONArray array = obj.optJSONArray(UserInfo.KEY_USER_INFOS);
 			for (int i = 0; i < array.length(); i++) {
 				followInfos.add(new UserInfo().parse(array.optJSONObject(i)));
 			}

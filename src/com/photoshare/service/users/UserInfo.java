@@ -29,6 +29,7 @@ public class UserInfo implements Parcelable {
 	public static final String KEY_FOLLOWER_CNT = "follower";
 	public static final String KEY_FOLLOWING_CNT = "following";
 	public static final String KEY_IS_FOLLOWING = "isFollowing";
+	public static final String KEY_FOLLOW = "follow";
 	public static final String KEY_PHOTOS_CNT = "photosCnt";
 	public static final String KEY_LIKES_CNT = "likesCnt";
 	public static final String KEY_FOLLOW_TYPE = "type";
