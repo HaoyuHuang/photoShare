@@ -249,14 +249,16 @@ public class DecoratedSharingPreferencesFragment extends BaseFragment {
 
 				@Override
 				public void onComplete(PhotoUploadResponseBean bean) {
-					// TODO Auto-generated method stub
-					getActivity().runOnUiThread(new Runnable() {
+					if (getActivity() != null) {
+						// TODO Auto-generated method stub
+						getActivity().runOnUiThread(new Runnable() {
 
-						public void run() {
-							mNotificationDisplayer.displayNotification();
-							mNotificationDisplayer.cancleNotification();
-						}
-					});
+							public void run() {
+								mNotificationDisplayer.displayNotification();
+								mNotificationDisplayer.cancleNotification();
+							}
+						});
+					}
 				}
 			};
 			helper.uploadPhotoToRenRen(file, caption, listener, mRenren);
@@ -332,13 +334,15 @@ public class DecoratedSharingPreferencesFragment extends BaseFragment {
 				}
 
 				public void onComplete(String arg0) {
-					getActivity().runOnUiThread(new Runnable() {
+					if (getActivity() != null) {
+						getActivity().runOnUiThread(new Runnable() {
 
-						public void run() {
-							mNotificationDisplayer.displayNotification();
-							mNotificationDisplayer.cancleNotification();
-						}
-					});
+							public void run() {
+								mNotificationDisplayer.displayNotification();
+								mNotificationDisplayer.cancleNotification();
+							}
+						});
+					}
 				}
 			};
 

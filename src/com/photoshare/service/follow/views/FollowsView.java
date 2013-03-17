@@ -67,7 +67,7 @@ public class FollowsView {
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 			if (rowView == null) {
-				rowView = inflater.inflate(R.layout.feeds_layout, null);
+				rowView = inflater.inflate(R.layout.simple_list_item_follows, null);
 				UserInfo userInfo = getItem(position);
 				follows = new FollowItemView(userInfo, rowView, async);
 				rowView.setTag(follows);

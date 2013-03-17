@@ -28,6 +28,7 @@ public class UserGetInfoResponseBean extends ResponseBean {
 			if (json != null) {
 				user = new UserInfo();
 				user.parse(json);
+				System.out.println(user);
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();

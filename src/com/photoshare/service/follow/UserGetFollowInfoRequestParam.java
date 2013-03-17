@@ -74,7 +74,8 @@ public class UserGetFollowInfoRequestParam extends RequestParam {
 		if (fields != null) {
 			bundle.putString("fields", fields);
 		}
-		bundle.putLong(UserInfo.KEY_USER_INFO + "." + UserInfo.KEY_UID, uid);
+		bundle.putString(UserInfo.KEY_USER_INFO + "." + UserInfo.KEY_UID,
+				String.valueOf(uid));
 		if (type != null) {
 			bundle.putString("method", type.toString());
 		}

@@ -5,10 +5,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <com.photoshare.view.listview.CornerListView
+    <com.photoshare.view.listview.MyListView
         android:id="@+id/userFollowListView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
-    </com.photoshare.view.listview.CornerListView>
+    </com.photoshare.view.listview.MyListView>
 
 </LinearLayout>

@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.photoshare.command.Command;
 import com.photoshare.common.AbstractRequestListener;
 import com.photoshare.exception.NetworkError;
 import com.photoshare.exception.NetworkException;
@@ -137,13 +138,15 @@ public class NewsFragment extends BaseFragment {
 				if (bean != null) {
 					news = bean.getNews();
 				}
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						initViews();
-					}
+						public void run() {
+							initViews();
+						}
 
-				});
+					});
+				}
 			}
 
 			@Override
@@ -151,26 +154,30 @@ public class NewsFragment extends BaseFragment {
 				mExceptionHandler
 						.obtainMessage(NetworkError.ERROR_REFRESH_DATA)
 						.sendToTarget();
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
+						public void run() {
 
-					}
+						}
 
-				});
+					});
+				}
 			}
 
 			@Override
 			public void onFault(final Throwable fault) {
 				mExceptionHandler.obtainMessage(NetworkError.ERROR_NETWORK)
 						.sendToTarget();
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
+						public void run() {
 
-					}
+						}
 
-				});
+					});
+				}
 			}
 
 		};
@@ -189,13 +196,15 @@ public class NewsFragment extends BaseFragment {
 				if (bean != null) {
 					news = bean.getNews();
 				}
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						initViews();
-					}
+						public void run() {
+							initViews();
+						}
 
-				});
+					});
+				}
 			}
 
 			@Override
@@ -203,26 +212,30 @@ public class NewsFragment extends BaseFragment {
 				mExceptionHandler
 						.obtainMessage(NetworkError.ERROR_REFRESH_DATA)
 						.sendToTarget();
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
+						public void run() {
 
-					}
+						}
 
-				});
+					});
+				}
 			}
 
 			@Override
 			public void onFault(final Throwable fault) {
 				mExceptionHandler.obtainMessage(NetworkError.ERROR_NETWORK)
 						.sendToTarget();
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
+						public void run() {
 
-					}
+						}
 
-				});
+					});
+				}
 			}
 
 		};
@@ -242,26 +255,30 @@ public class NewsFragment extends BaseFragment {
 			Bundle args = new Bundle();
 			args.putParcelableArrayList(NewsBean.KEY_NEWS, news);
 			args.putParcelable(UserInfo.KEY_USER_INFO, info);
-			forward(getUserHomeFragment(), args);
+			Command.UserHome(getActivity(), args);
 		}
 
 		public void OnUserHeadLoaded(final ImageView image,
 				final Drawable drawable, String url) {
-			getActivity().runOnUiThread(new Runnable() {
+			if (getActivity() != null) {
+				getActivity().runOnUiThread(new Runnable() {
 
-				public void run() {
-					image.setImageDrawable(drawable);
-				}
-			});
+					public void run() {
+						image.setImageDrawable(drawable);
+					}
+				});
+			}
 		}
 
 		public void OnImageDefault(final ImageView image) {
-			getActivity().runOnUiThread(new Runnable() {
+			if (getActivity() != null) {
+				getActivity().runOnUiThread(new Runnable() {
 
-				public void run() {
-					image.setImageResource(R.drawable.icon);
-				}
-			});
+					public void run() {
+						image.setImageResource(R.drawable.icon);
+					}
+				});
+			}
 		}
 	};
 
@@ -308,6 +325,6 @@ public class NewsFragment extends BaseFragment {
 	@Override
 	protected void onLoginSuccess() {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

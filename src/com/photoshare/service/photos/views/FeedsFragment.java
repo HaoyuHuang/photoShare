@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.photoshare.command.Command;
 import com.photoshare.common.AbstractRequestListener;
 import com.photoshare.exception.NetworkError;
 import com.photoshare.exception.NetworkException;
@@ -79,9 +80,32 @@ public class FeedsFragment extends BaseFragment {
 			}
 		}
 		Tag = getFeedsFragment();
-		titlebarText = getFeedsText();
-		initTitleBar(leftBtnText, rightBtnText, titlebarText,
-				leftBtnVisibility, rightBtnVisibility);
+		switch (type) {
+		case MyFeeds:
+			titlebarText = getFeedsText();
+			break;
+		case MyLikedPhotos:
+			titlebarText = getMyLikedPhotoText();
+			break;
+		case MyPhotos:
+			titlebarText = getMyPhotoText();
+			break;
+		case PopularPhotos:
+			titlebarText = getPopularPhoto();
+			break;
+		default:
+			break;
+		}
+
+		if (!processArguments()) {
+			initTitleBar(leftBtnText, rightBtnText, titlebarText,
+					leftBtnVisibility, rightBtnVisibility);
+		} else {
+			leftBtnText = getBackText();
+			leftBtnVisibility = View.VISIBLE;
+			initTitleBar(leftBtnText, rightBtnText, titlebarText,
+					leftBtnVisibility, rightBtnVisibility);
+		}
 		if (photos != null && photos.size() != 0) {
 			initFeeds();
 		} else {
@@ -115,6 +139,22 @@ public class FeedsFragment extends BaseFragment {
 		return getString(R.string.feeds);
 	}
 
+	private String getMyPhotoText() {
+		return getString(R.string.myphotos);
+	}
+
+	private String getMyLikedPhotoText() {
+		return getString(R.string.mylikedphotos);
+	}
+
+	private String getBackText() {
+		return getString(R.string.back);
+	}
+
+	private String getPopularPhoto() {
+		return getString(R.string.popular);
+	}
+
 	private String getFeedsFragment() {
 		return getString(R.string.ffeedsFragment);
 	}
@@ -131,44 +171,50 @@ public class FeedsFragment extends BaseFragment {
 		PhotoLikeRequestParam param = new PhotoLikeRequestParam.LikeBuilder()
 				.UserId(user.getUserInfo().getUid()).PhotoId(photo.getPid())
 				.isLike(photo.isLike()).build();
-//		mNotificationDisplayer.displayNotification();
+		// mNotificationDisplayer.displayNotification();
 
 		LikeHelper.ICallback mCallback = new LikeHelper.ICallback() {
 
 			public void OnNetworkError(NetworkError error) {
 
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
+						public void run() {
 
-					}
+						}
 
-				});
+					});
+				}
 			}
 
 			public void OnFault(Throwable fault) {
 				mExceptionHandler.obtainMessage(NetworkError.ERROR_NETWORK)
 						.sendToTarget();
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
+						public void run() {
 
-					}
+						}
 
-				});
+					});
+				}
 			}
 
 			public void OnComplete(PhotoLikeResponseBean bean) {
 				mNotificationDisplayer.setTag(getSuccessTag());
 				mNotificationDisplayer.setTicker(getSuccessTicker());
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						mNotificationDisplayer.displayNotification();
-						mNotificationDisplayer.cancleNotification();
-					}
+						public void run() {
+							mNotificationDisplayer.displayNotification();
+							mNotificationDisplayer.cancleNotification();
+						}
 
-				});
+					});
+				}
 			}
 		};
 		async.publishLikePhoto(param, mCallback);
@@ -188,45 +234,52 @@ public class FeedsFragment extends BaseFragment {
 				mExceptionHandler
 						.obtainMessage(NetworkError.ERROR_REFRESH_DATA)
 						.sendToTarget();
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						if (feedsView != null)
-							feedsView.onRefreshComplete();
-					}
+						public void run() {
+							if (feedsView != null)
+								feedsView.onRefreshComplete();
+						}
 
-				});
+					});
+				}
 			}
 
 			@Override
 			public void onFault(Throwable fault) {
 				mExceptionHandler.obtainMessage(NetworkError.ERROR_NETWORK)
 						.sendToTarget();
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						if (feedsView != null)
-							feedsView.onRefreshComplete();
-					}
+						public void run() {
+							if (feedsView != null)
+								feedsView.onRefreshComplete();
+						}
 
-				});
+					});
+				}
 			}
 
 			@Override
 			public void onComplete(PhotosGetInfoResponseBean bean) {
 				if (bean != null) {
 					photos = bean.getPhotos();
+
 					currentPage += demandPage;
 				}
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						initFeeds();
-						if (feedsView != null)
-							feedsView.onRefreshComplete();
-					}
+						public void run() {
+							initFeeds();
+							if (feedsView != null)
+								feedsView.onRefreshComplete();
+						}
 
-				});
+					});
+				}
 			}
 		};
 		async.getPhotosInfo(param, listener);
@@ -256,7 +309,7 @@ public class FeedsFragment extends BaseFragment {
 			Bundle args = new Bundle();
 			args.putParcelableArrayList(PhotoBean.KEY_PHOTOS, photos);
 			args.putParcelable(UserInfo.KEY_USER_INFO, info);
-			forward(getUserHomeFragment(), args);
+			Command.UserHome(getActivity(), args);
 		}
 
 		public void OnLikeClick(PhotoBean photo) {
@@ -284,40 +337,48 @@ public class FeedsFragment extends BaseFragment {
 
 		public void OnUserHeadLoaded(final ImageView image,
 				final Drawable drawable, String url) {
-			getActivity().runOnUiThread(new Runnable() {
+			if (getActivity() != null) {
+				getActivity().runOnUiThread(new Runnable() {
 
-				public void run() {
-					image.setImageDrawable(drawable);
-				}
-			});
+					public void run() {
+						image.setImageDrawable(drawable);
+					}
+				});
+			}
 		}
 
 		public void OnFeedPhotoLoaded(final ImageView image,
 				final Drawable drawable, String url) {
-			getActivity().runOnUiThread(new Runnable() {
+			if (getActivity() != null) {
+				getActivity().runOnUiThread(new Runnable() {
 
-				public void run() {
-					image.setImageDrawable(drawable);
-				}
-			});
+					public void run() {
+						image.setImageDrawable(drawable);
+					}
+				});
+			}
 		}
 
 		public void OnUserHeadDefault(final ImageView image) {
-			getActivity().runOnUiThread(new Runnable() {
+			if (getActivity() != null) {
+				getActivity().runOnUiThread(new Runnable() {
 
-				public void run() {
-					image.setImageResource(R.drawable.icon);
-				}
-			});
+					public void run() {
+						image.setImageResource(R.drawable.icon);
+					}
+				});
+			}
 		}
 
 		public void OnFeedPhotoDefault(final ImageView image) {
-			getActivity().runOnUiThread(new Runnable() {
+			if (getActivity() != null) {
+				getActivity().runOnUiThread(new Runnable() {
 
-				public void run() {
-					image.setImageResource(R.drawable.icon);
-				}
-			});
+					public void run() {
+						image.setImageResource(R.drawable.icon);
+					}
+				});
+			}
 
 		}
 	};
@@ -355,7 +416,7 @@ public class FeedsFragment extends BaseFragment {
 	 */
 	@Override
 	protected void onLeftBtnClicked() {
-
+		backward(null);
 	}
 
 	private String getUserHomeFragment() {
@@ -373,7 +434,7 @@ public class FeedsFragment extends BaseFragment {
 	@Override
 	protected void onLoginSuccess() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

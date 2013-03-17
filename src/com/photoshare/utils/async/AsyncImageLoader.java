@@ -70,6 +70,7 @@ public class AsyncImageLoader {
 				try {
 					bit = getBitMapFromWeb(imageUrl);
 				} catch (RuntimeException re) {
+					re.printStackTrace();
 					mCallback.imageDefault();
 				}
 				Drawable drawable = new BitmapDrawable(bit);
@@ -107,7 +108,7 @@ public class AsyncImageLoader {
 
 	private Bitmap getBitMapFromWeb(String path) throws RuntimeException {
 		if (path == null) {
-			
+			return null;
 		}
 		try {
 			byte[] bytes = getBytes(path, null);
@@ -123,6 +124,8 @@ public class AsyncImageLoader {
 	 * 将指定的url中的数据读入字节数组
 	 * */
 	private byte[] getBytes(String url, Bundle params) {
+		
+		
 		try {
 			HttpURLConnection conn = Utils.openConn(url, "post", params);
 			ByteArrayOutputStream os = new ByteArrayOutputStream();

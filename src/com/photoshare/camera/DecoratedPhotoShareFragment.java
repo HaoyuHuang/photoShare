@@ -172,15 +172,17 @@ public class DecoratedPhotoShareFragment extends BaseFragment {
 							RequestMsg<? extends RequestParam> msg = new RequestMsg<PhotoUploadRequestParam>(
 									photoParam, MsgType.PHOTO);
 							mMsgList.add(msg);
-							getActivity().runOnUiThread(new Runnable() {
+							if (getActivity() != null) {
+								getActivity().runOnUiThread(new Runnable() {
 
-								public void run() {
-									mExceptionHandler.obtainMessage(
-											NetworkError.ERROR_PHOTO)
-											.sendToTarget();
-								}
+									public void run() {
+										mExceptionHandler.obtainMessage(
+												NetworkError.ERROR_PHOTO)
+												.sendToTarget();
+									}
 
-							});
+								});
+							}
 						}
 					}
 
@@ -190,33 +192,38 @@ public class DecoratedPhotoShareFragment extends BaseFragment {
 							RequestMsg<? extends RequestParam> msg = new RequestMsg<PhotoUploadRequestParam>(
 									photoParam, MsgType.PHOTO);
 							mMsgList.add(msg);
-							getActivity().runOnUiThread(new Runnable() {
+							if (getActivity() != null) {
+								getActivity().runOnUiThread(new Runnable() {
 
-								public void run() {
-									mExceptionHandler.obtainMessage(
-											NetworkError.ERROR_NETWORK)
-											.sendToTarget();
-								}
+									public void run() {
+										mExceptionHandler.obtainMessage(
+												NetworkError.ERROR_NETWORK)
+												.sendToTarget();
+									}
 
-							});
+								});
+							}
 						}
 					}
 
 					@Override
 					public void onComplete(final PhotoUploadResponseBean bean) {
 						if (bean != null) {
-							getActivity().runOnUiThread(new Runnable() {
+							if (getActivity() != null) {
+								getActivity().runOnUiThread(new Runnable() {
 
-								public void run() {
-									FeedsList feeds = FeedsList.getInstance();
-									PhotoBean photo = bean.get();
-									feeds.addFeed(photo);
-									// TabHostActivity
-									// .setCurrentTab(TabHostActivity.TAB_HOME);
+									public void run() {
+										FeedsList feeds = FeedsList
+												.getInstance();
+										PhotoBean photo = bean.get();
+										feeds.addFeed(photo);
+										// TabHostActivity
+										// .setCurrentTab(TabHostActivity.TAB_HOME);
 
-								}
+									}
 
-							});
+								});
+							}
 						}
 					}
 				});

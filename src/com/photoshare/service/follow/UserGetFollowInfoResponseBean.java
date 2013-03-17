@@ -33,7 +33,9 @@ public class UserGetFollowInfoResponseBean extends ResponseBean {
 				followInfos.add(new UserInfo().parse(array.optJSONObject(i)));
 			}
 		} catch (JSONException e) {
+			
 		} catch (NetworkException e) {
+			
 		}
 	}
 

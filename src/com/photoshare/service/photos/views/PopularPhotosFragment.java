@@ -178,27 +178,31 @@ public class PopularPhotosFragment extends BaseFragment {
 				if (bean != null) {
 					photos = bean.getPhotos();
 				}
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						Log.i("receivePopularPhotos", "getPhotos");
-						initView();
-					}
+						public void run() {
+							Log.i("receivePopularPhotos", "getPhotos");
+							initView();
+						}
 
-				});
+					});
+				}
 			}
 
 			@Override
 			public void onFault(final Throwable fault) {
 				mExceptionHandler.obtainMessage(NetworkError.ERROR_NETWORK)
 						.sendToTarget();
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
+						public void run() {
 
-					}
+						}
 
-				});
+					});
+				}
 			}
 
 			@Override
@@ -206,13 +210,15 @@ public class PopularPhotosFragment extends BaseFragment {
 				mExceptionHandler
 						.obtainMessage(NetworkError.ERROR_REFRESH_DATA)
 						.sendToTarget();
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
+						public void run() {
 
-					}
+						}
 
-				});
+					});
+				}
 			}
 
 		};
@@ -222,28 +228,34 @@ public class PopularPhotosFragment extends BaseFragment {
 	private PopularPhotosView.ICallback mCallback = new PopularPhotosView.ICallback() {
 
 		public void OnImageClick(PhotoBean photo) {
-			forward(getFeedsItemFragment(), photo.params());
+			Bundle params = (Bundle) getArguments().clone();
+			params.putParcelable(PhotoBean.KEY_PHOTO, photo);
+			forward(getFeedsItemFragment(), params);
 		}
 
 		public void OnImageLoaded(final ImageView image,
 				final Drawable drawable, final String url) {
-			getActivity().runOnUiThread(new Runnable() {
+			if (getActivity() != null) {
+				getActivity().runOnUiThread(new Runnable() {
 
-				public void run() {
-					Log.i("displayImage", url);
-					image.setImageDrawable(drawable);
-				}
-			});
+					public void run() {
+						Log.i("displayImage", url);
+						image.setImageDrawable(drawable);
+					}
+				});
+			}
 		}
 
 		public void OnImageDefaule(final ImageView image) {
-			getActivity().runOnUiThread(new Runnable() {
+			if (getActivity() != null) {
+				getActivity().runOnUiThread(new Runnable() {
 
-				public void run() {
-					Log.i("displayImage", "default");
-					image.setImageResource(R.drawable.icon);
-				}
-			});
+					public void run() {
+						Log.i("displayImage", "default");
+						image.setImageResource(R.drawable.icon);
+					}
+				});
+			}
 		}
 	};
 

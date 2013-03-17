@@ -90,13 +90,15 @@ public class PersonalProfileFragment extends BaseFragment {
 					user.setUserInfo(bean.getUserInfo());
 					user.setLogging(true);
 				}
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
+						public void run() {
 
-					}
+						}
 
-				});
+					});
+				}
 			}
 
 			@Override
@@ -104,26 +106,30 @@ public class PersonalProfileFragment extends BaseFragment {
 				mExceptionHandler
 						.obtainMessage(NetworkError.ERROR_EDIT_PROFILE)
 						.sendToTarget();
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
+						public void run() {
 
-					}
+						}
 
-				});
+					});
+				}
 			}
 
 			@Override
 			public void onFault(Throwable fault) {
 				mExceptionHandler.obtainMessage(NetworkError.ERROR_NETWORK)
 						.sendToTarget();
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
+						public void run() {
 
-					}
+						}
 
-				});
+					});
+				}
 			}
 
 		};

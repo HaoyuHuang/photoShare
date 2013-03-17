@@ -117,39 +117,45 @@ public class SignUpFragment extends BaseFragment {
 					user.setUserInfo(bean.getSignupInfo());
 					user.setLogging(true);
 				}
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						Command.TabHost(getActivity());
-					}
+						public void run() {
+							Command.TabHost(getActivity());
+						}
 
-				});
+					});
+				}
 			}
 
 			@Override
 			public void onNetworkError(final NetworkError networkError) {
 
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						mExceptionHandler.obtainMessage(
-								NetworkError.ERROR_SIGN_UP).sendToTarget();
-					}
+						public void run() {
+							mExceptionHandler.obtainMessage(
+									NetworkError.ERROR_SIGN_UP).sendToTarget();
+						}
 
-				});
+					});
+				}
 			}
 
 			@Override
 			public void onFault(Throwable fault) {
 
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						mExceptionHandler.obtainMessage(
-								NetworkError.ERROR_NETWORK).sendToTarget();
-					}
+						public void run() {
+							mExceptionHandler.obtainMessage(
+									NetworkError.ERROR_NETWORK).sendToTarget();
+						}
 
-				});
+					});
+				}
 			}
 
 		};

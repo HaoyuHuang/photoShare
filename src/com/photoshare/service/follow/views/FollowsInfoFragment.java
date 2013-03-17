@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.photoshare.command.Command;
 import com.photoshare.common.AbstractRequestListener;
 import com.photoshare.common.IObserver;
 import com.photoshare.exception.NetworkError;
@@ -43,7 +44,8 @@ public class FollowsInfoFragment extends BaseFragment {
 	private String titlebarText = "";
 	private int leftBtnVisibility = View.VISIBLE;
 	private int rightBtnVisibility = View.GONE;
-	private NotificationDisplayer mNotificationDisplayer;
+
+	// private NotificationDisplayer mNotificationDisplayer;
 
 	public static FollowsInfoFragment newInstance(int fragmentViewId) {
 		FollowsInfoFragment fi = new FollowsInfoFragment();
@@ -66,20 +68,6 @@ public class FollowsInfoFragment extends BaseFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		leftBtnText = getBackText();
-		if (savedInstanceState != null) {
-			if (savedInstanceState.containsKey(UserInfo.KEY_USER_INFOS)) {
-				userInfos = savedInstanceState
-						.getParcelableArrayList(UserInfo.KEY_USER_INFOS);
-			}
-			if (savedInstanceState.containsKey(AppTitleBarView.LEFT_BTN_TEXT)) {
-				leftBtnText = savedInstanceState
-						.getString(AppTitleBarView.LEFT_BTN_TEXT);
-			}
-			if (savedInstanceState.containsKey(AppTitleBarView.TITLE_BAR_TEXT)) {
-				titlebarText = savedInstanceState
-						.getString(AppTitleBarView.TITLE_BAR_TEXT);
-			}
-		}
 		super.onActivityCreated(savedInstanceState);
 		Bundle bundle = getArguments();
 		if (bundle != null) {
@@ -89,15 +77,22 @@ public class FollowsInfoFragment extends BaseFragment {
 			if (bundle.containsKey(UserInfo.KEY_FOLLOW_TYPE)) {
 				type = FollowType.SWITCH(bundle
 						.getString(UserInfo.KEY_FOLLOW_TYPE));
-				titlebarText = type.toString();
+				switch (type) {
+				case FOLLOWER:
+					titlebarText = getFollowerText();
+					break;
+				case FOLLOWING:
+					titlebarText = getFollowingText();
+					break;
+				default:
+					break;
+				}
 			}
 		}
 		try {
 			AsyncGetFollowInfo();
 		} catch (NetworkException e) {
 			AsyncSignIn();
-		} catch (Exception e) {
-
 		}
 	}
 
@@ -125,9 +120,10 @@ public class FollowsInfoFragment extends BaseFragment {
 				R.id.userFollowListLayoutId), userInfos, getActivity(), async);
 		followsView.registerCallback(followListener);
 		followsView.applyView();
-		mNotificationDisplayer = new NotificationDisplayer.NotificationBuilder()
-				.Context(getActivity()).Tag(getFollowTag())
-				.Ticker(getFollowTicker()).build();
+		// mNotificationDisplayer = new
+		// NotificationDisplayer.NotificationBuilder()
+		// .Context(getActivity()).Tag(getFollowTag())
+		// .Ticker(getFollowTicker()).build();
 
 	}
 
@@ -147,6 +143,14 @@ public class FollowsInfoFragment extends BaseFragment {
 		return getString(R.string.fuserHomeFragment);
 	}
 
+	private String getFollowingText() {
+		return getString(R.string.following);
+	}
+
+	private String getFollowerText() {
+		return getString(R.string.follower);
+	}
+
 	private void AsyncGetFollowInfo() throws NetworkException {
 		UserGetFollowInfoRequestParam param = null;
 		switch (type) {
@@ -162,24 +166,29 @@ public class FollowsInfoFragment extends BaseFragment {
 
 			@Override
 			public void onNetworkError(final NetworkError networkError) {
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						mExceptionHandler.obtainMessage(
-								NetworkError.ERROR_REFRESH_DATA).sendToTarget();
-					}
-				});
+						public void run() {
+							mExceptionHandler.obtainMessage(
+									NetworkError.ERROR_REFRESH_DATA)
+									.sendToTarget();
+						}
+					});
+				}
 			}
 
 			@Override
 			public void onFault(final Throwable fault) {
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						mExceptionHandler.obtainMessage(
-								NetworkError.ERROR_NETWORK).sendToTarget();
-					}
-				});
+						public void run() {
+							mExceptionHandler.obtainMessage(
+									NetworkError.ERROR_NETWORK).sendToTarget();
+						}
+					});
+				}
 			}
 
 			@Override
@@ -187,14 +196,16 @@ public class FollowsInfoFragment extends BaseFragment {
 				if (bean != null) {
 					userInfos = bean.getFollowInfos();
 				}
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						if (bean != null) {
-							initView();
+						public void run() {
+							if (bean != null) {
+								initView();
+							}
 						}
-					}
-				});
+					});
+				}
 			}
 		};
 		async.getFollowsInfo(param, listener);
@@ -206,47 +217,53 @@ public class FollowsInfoFragment extends BaseFragment {
 				.FollowId(userInfo.getUid())
 				.UserId(user.getUserInfo().getUid())
 				.isFollowing(userInfo.isFollowing()).build();
-		mNotificationDisplayer.displayNotification();
+		// mNotificationDisplayer.displayNotification();
 
 		FollowHelper.ICallback mCallback = new FollowHelper.ICallback() {
 
 			public void OnNetworkError(final NetworkError error) {
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
+						public void run() {
 
-					}
-				});
+						}
+					});
+				}
 			}
 
 			public void OnFault(final Throwable fault) {
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
+						public void run() {
 
-					}
-				});
+						}
+					});
+				}
 			}
 
 			public void OnComplete(final UserFollowResponseBean bean) {
 				final boolean isChecked = checkFollowingResponseBean(bean);
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						if (isChecked) {
-							mNotificationDisplayer.setTag(getSuccessTag());
-							mNotificationDisplayer
-									.setTicker(getSuccessTicker());
-							mNotificationDisplayer.displayNotification();
-							observer.update(userInfo.isFollowing());
-							mNotificationDisplayer.cancleNotification();
+						public void run() {
+							if (isChecked) {
+								// mNotificationDisplayer.setTag(getSuccessTag());
+								// mNotificationDisplayer
+								// .setTicker(getSuccessTicker());
+								// mNotificationDisplayer.displayNotification();
+								observer.update(userInfo.isFollowing());
+								// mNotificationDisplayer.cancleNotification();
+							}
 						}
-					}
-				});
+					});
+				}
 			}
 		};
 		async.publishFollow(param, mCallback);
-		mNotificationDisplayer.cancleNotification();
+		// mNotificationDisplayer.cancleNotification();
 	}
 
 	private boolean checkFollowingResponseBean(UserFollowResponseBean bean) {
@@ -268,7 +285,7 @@ public class FollowsInfoFragment extends BaseFragment {
 	private FollowsView.OnFollowActionListener followListener = new FollowsView.OnFollowActionListener() {
 
 		public void OnUserNameClick(UserInfo info) {
-			forward(getUserHomeFragment(), info.params());
+			Command.UserHome(getActivity(), info.params());
 		}
 
 		public void OnFollowClick(UserInfo info, IObserver<Boolean> observer) {
@@ -281,21 +298,25 @@ public class FollowsInfoFragment extends BaseFragment {
 
 		public void OnUserHeadLoaded(final ImageView image,
 				final Drawable drawable, String url) {
-			getActivity().runOnUiThread(new Runnable() {
+			if (getActivity() != null) {
+				getActivity().runOnUiThread(new Runnable() {
 
-				public void run() {
-					image.setImageDrawable(drawable);
-				}
-			});
+					public void run() {
+						image.setImageDrawable(drawable);
+					}
+				});
+			}
 		}
 
 		public void OnImageDefault(final ImageView image) {
-			getActivity().runOnUiThread(new Runnable() {
+			if (getActivity() != null) {
+				getActivity().runOnUiThread(new Runnable() {
 
-				public void run() {
-					image.setImageResource(R.drawable.icon);
-				}
-			});
+					public void run() {
+						image.setImageResource(R.drawable.icon);
+					}
+				});
+			}
 
 		}
 	};
@@ -323,6 +344,6 @@ public class FollowsInfoFragment extends BaseFragment {
 	@Override
 	protected void onLoginSuccess() {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

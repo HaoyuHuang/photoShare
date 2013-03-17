@@ -144,41 +144,48 @@ public class MessageFragment extends BaseFragment {
 		async.publishComments(param, new CommentHelper.ICallback() {
 
 			public void OnNetworkError(NetworkError networkError) {
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						mExceptionHandler.obtainMessage(
-								NetworkError.ERROR_COMMENT).sendToTarget();
-						observer.update(false);
-					}
+						public void run() {
+							mExceptionHandler.obtainMessage(
+									NetworkError.ERROR_COMMENT).sendToTarget();
+							observer.update(false);
+						}
 
-				});
+					});
+				}
 			}
 
 			public void OnFault(Throwable fault) {
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						mExceptionHandler.obtainMessage(
-								NetworkError.ERROR_NETWORK).sendToTarget();
-						observer.update(false);
-					}
+						public void run() {
+							mExceptionHandler.obtainMessage(
+									NetworkError.ERROR_NETWORK).sendToTarget();
+							observer.update(false);
+						}
 
-				});
+					});
+				}
 			}
 
 			public void OnComplete(PutCommentResponseBean comment) {
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						mNotificationDisplayer.setTicker(getSuccessTicker());
-						mNotificationDisplayer.displayNotification();
-						observer.update(false);
-						messageList.remove(message);
-						mNotificationDisplayer.cancleNotification();
-					}
+						public void run() {
+							mNotificationDisplayer
+									.setTicker(getSuccessTicker());
+							mNotificationDisplayer.displayNotification();
+							observer.update(false);
+							messageList.remove(message);
+							mNotificationDisplayer.cancleNotification();
+						}
 
-				});
+					});
+				}
 			}
 		});
 		mNotificationDisplayer.cancleNotification();
@@ -196,42 +203,48 @@ public class MessageFragment extends BaseFragment {
 		async.publishLikePhoto(param, new LikeHelper.ICallback() {
 
 			public void OnNetworkError(NetworkError error) {
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						mExceptionHandler
-								.obtainMessage(NetworkError.ERROR_LIKE)
-								.sendToTarget();
-						observer.update(false);
-					}
+						public void run() {
+							mExceptionHandler.obtainMessage(
+									NetworkError.ERROR_LIKE).sendToTarget();
+							observer.update(false);
+						}
 
-				});
+					});
+				}
 			}
 
 			public void OnFault(Throwable fault) {
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						mExceptionHandler.obtainMessage(
-								NetworkError.ERROR_NETWORK).sendToTarget();
-						observer.update(false);
-					}
+						public void run() {
+							mExceptionHandler.obtainMessage(
+									NetworkError.ERROR_NETWORK).sendToTarget();
+							observer.update(false);
+						}
 
-				});
+					});
+				}
 			}
 
 			public void OnComplete(PhotoLikeResponseBean bean) {
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						mNotificationDisplayer.setTicker(getSuccessTicker());
-						mNotificationDisplayer.displayNotification();
-						observer.update(false);
-						messageList.remove(message);
-						mNotificationDisplayer.cancleNotification();
-					}
+						public void run() {
+							mNotificationDisplayer
+									.setTicker(getSuccessTicker());
+							mNotificationDisplayer.displayNotification();
+							observer.update(false);
+							messageList.remove(message);
+							mNotificationDisplayer.cancleNotification();
+						}
 
-				});
+					});
+				}
 			}
 		});
 		mNotificationDisplayer.cancleNotification();
@@ -250,41 +263,48 @@ public class MessageFragment extends BaseFragment {
 		async.publishFollow(param, new FollowHelper.ICallback() {
 
 			public void OnNetworkError(NetworkError error) {
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						mExceptionHandler.obtainMessage(
-								NetworkError.ERROR_FOLLOW).sendToTarget();
-						observer.update(false);
-					}
+						public void run() {
+							mExceptionHandler.obtainMessage(
+									NetworkError.ERROR_FOLLOW).sendToTarget();
+							observer.update(false);
+						}
 
-				});
+					});
+				}
 			}
 
 			public void OnFault(Throwable fault) {
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						mExceptionHandler.obtainMessage(
-								NetworkError.ERROR_NETWORK).sendToTarget();
-						observer.update(false);
-					}
+						public void run() {
+							mExceptionHandler.obtainMessage(
+									NetworkError.ERROR_NETWORK).sendToTarget();
+							observer.update(false);
+						}
 
-				});
+					});
+				}
 			}
 
 			public void OnComplete(UserFollowResponseBean bean) {
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						mNotificationDisplayer.setTicker(getSuccessTicker());
-						mNotificationDisplayer.displayNotification();
-						observer.update(false);
-						messageList.remove(message);
-						mNotificationDisplayer.cancleNotification();
-					}
+						public void run() {
+							mNotificationDisplayer
+									.setTicker(getSuccessTicker());
+							mNotificationDisplayer.displayNotification();
+							observer.update(false);
+							messageList.remove(message);
+							mNotificationDisplayer.cancleNotification();
+						}
 
-				});
+					});
+				}
 			}
 
 		});
@@ -305,44 +325,51 @@ public class MessageFragment extends BaseFragment {
 
 			@Override
 			public void onNetworkError(NetworkError networkError) {
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						mExceptionHandler.obtainMessage(
-								NetworkError.ERROR_PHOTO).sendToTarget();
-						observer.update(false);
-					}
+						public void run() {
+							mExceptionHandler.obtainMessage(
+									NetworkError.ERROR_PHOTO).sendToTarget();
+							observer.update(false);
+						}
 
-				});
+					});
+				}
 			}
 
 			@Override
 			public void onFault(Throwable fault) {
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						mExceptionHandler.obtainMessage(
-								NetworkError.ERROR_NETWORK).sendToTarget();
-						observer.update(false);
-					}
+						public void run() {
+							mExceptionHandler.obtainMessage(
+									NetworkError.ERROR_NETWORK).sendToTarget();
+							observer.update(false);
+						}
 
-				});
+					});
+				}
 
 			}
 
 			@Override
 			public void onComplete(PhotoUploadResponseBean bean) {
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						mNotificationDisplayer.setTicker(getSuccessTicker());
-						mNotificationDisplayer.displayNotification();
-						observer.update(false);
-						messageList.remove(message);
-						mNotificationDisplayer.cancleNotification();
-					}
+						public void run() {
+							mNotificationDisplayer
+									.setTicker(getSuccessTicker());
+							mNotificationDisplayer.displayNotification();
+							observer.update(false);
+							messageList.remove(message);
+							mNotificationDisplayer.cancleNotification();
+						}
 
-				});
+					});
+				}
 
 			}
 		};
@@ -381,23 +408,27 @@ public class MessageFragment extends BaseFragment {
 
 		public void OnImageLoaded(final ImageView image,
 				final Drawable drawable, String url) {
-			getActivity().runOnUiThread(new Runnable() {
+			if (getActivity() != null) {
+				getActivity().runOnUiThread(new Runnable() {
 
-				public void run() {
-					image.setImageDrawable(drawable);
-				}
+					public void run() {
+						image.setImageDrawable(drawable);
+					}
 
-			});
+				});
+			}
 		}
 
 		public void OnImageDefault(final ImageView image) {
-			getActivity().runOnUiThread(new Runnable() {
+			if (getActivity() != null) {
+				getActivity().runOnUiThread(new Runnable() {
 
-				public void run() {
-					image.setImageResource(R.drawable.icon);
-				}
+					public void run() {
+						image.setImageResource(R.drawable.icon);
+					}
 
-			});
+				});
+			}
 
 		}
 
@@ -426,7 +457,7 @@ public class MessageFragment extends BaseFragment {
 	@Override
 	protected void onLoginSuccess() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

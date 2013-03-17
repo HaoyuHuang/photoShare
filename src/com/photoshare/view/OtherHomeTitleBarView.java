@@ -55,7 +55,7 @@ public class OtherHomeTitleBarView {
 	}
 
 	public void applyView() {
-		mUserBioView = (TextView) baseView.findViewById(R.id.otherHomeBio);
+
 		mUserFollowBtn = new UserBooleanBtn(baseView, R.id.otherHomeFollowBtn,
 				userInfo.isFollowing(), MsgType.FOLLOW.getEnabledString(),
 				MsgType.FOLLOW.getIntermediateString(),
@@ -67,11 +67,13 @@ public class OtherHomeTitleBarView {
 				(TextView) baseView.findViewById(R.id.otherHomeFollowerCnt),
 				userInfo, userInfo.getFollowersCnt() + "\r\n 跟随者");
 		mUserHomeFollowersCntView.registerListener(followerCntListener);
+		mUserHomeFollowersCntView.apply();
 
 		mUserHomeFollowingCntView = new UserTextView(
 				(TextView) baseView.findViewById(R.id.otherHomeFollowingCnt),
-				userInfo, userInfo.getFollowingCnt() + "\r\n 跟随");
+				userInfo, userInfo.getFollowingCnt() + "\r\n 跟随他");
 		mUserHomeFollowingCntView.registerListener(followingCntListener);
+		mUserHomeFollowingCntView.apply();
 
 		mUserHomeHeadView = (ImageView) baseView
 				.findViewById(R.id.otherHomeHead);
@@ -80,39 +82,46 @@ public class OtherHomeTitleBarView {
 				(TextView) baseView.findViewById(R.id.otherHomeLikesCnt),
 				userInfo, userInfo.getLikesCnt() + "\r\n 喜欢");
 		mUserHomeLikesCntView.registerListener(likeCntListener);
+		mUserHomeLikesCntView.apply();
 
 		mUserHomePhotosCntView = (TextView) baseView
 				.findViewById(R.id.otherHomePhotoCnt);
-
-		mUserWebsiteView = new UserTextView(
-				(TextView) baseView.findViewById(R.id.otherHomeWebsite),
-				userInfo, userInfo.getWebsite());
-
-		mUserWebsiteView.registerListener(websiteListener);
+		mUserHomePhotosCntView.setText(userInfo.getPhotosCnt() + "\r\n 照片");
 
 		mUserNameView = new UserTextView(
 				(TextView) baseView.findViewById(R.id.otherHomeName), userInfo,
 				userInfo.getName());
 		mUserNameView.registerListener(nameListener);
+		mUserNameView.apply();
 
-		mUserBioView.setText(userInfo.getBio());
-		mUserHomePhotosCntView.setText(userInfo.getPhotosCnt() + "\r\n 鐓х墖");
+		mUserBioView = (TextView) baseView.findViewById(R.id.otherHomeBio);
+		mUserBioView.setText("简介:" + userInfo.getBio());
 
-		async.loadDrawableFromWeb(userInfo.getTinyurl(), new ImageCallback() {
+		mUserWebsiteView = new UserTextView(
+				(TextView) baseView.findViewById(R.id.otherHomeWebsite),
+				userInfo, userInfo.getWebsite());
+		mUserWebsiteView.registerListener(websiteListener);
+		mUserWebsiteView.apply();
 
-			public void imageLoaded(Drawable imageDrawable, String imageUrl) {
-				if (mCallback != null) {
-					mCallback.OnUserHeadLoaded(mUserHomeHeadView,
-							imageDrawable, imageUrl);
-				}
-			}
+		if (userInfo.getTinyurl() != null) {
+			async.loadDrawableFromWeb(userInfo.getTinyurl(),
+					new ImageCallback() {
 
-			public void imageDefault() {
-				if (mCallback != null) {
-					mCallback.OnDefault(mUserHomeHeadView);
-				}
-			}
-		});
+						public void imageLoaded(Drawable imageDrawable,
+								String imageUrl) {
+							if (mCallback != null) {
+								mCallback.OnUserHeadLoaded(mUserHomeHeadView,
+										imageDrawable, imageUrl);
+							}
+						}
+
+						public void imageDefault() {
+							if (mCallback != null) {
+								mCallback.OnDefault(mUserHomeHeadView);
+							}
+						}
+					});
+		}
 
 	}
 

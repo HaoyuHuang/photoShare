@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.photoshare.command.Command;
 import com.photoshare.common.AbstractRequestListener;
 import com.photoshare.exception.NetworkError;
 import com.photoshare.exception.NetworkException;
@@ -75,16 +76,6 @@ public class LikesFragment extends BaseFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		leftBtnText = getBackText();
-		if (savedInstanceState != null) {
-			if (savedInstanceState.containsKey(LikeBean.KEY_LIKES)) {
-				beans = savedInstanceState
-						.getParcelableArrayList(LikeBean.KEY_LIKES);
-			}
-			if (savedInstanceState.containsKey(AppTitleBarView.LEFT_BTN_TEXT)) {
-				leftBtnText = savedInstanceState
-						.getString(AppTitleBarView.LEFT_BTN_TEXT);
-			}
-		}
 		super.onActivityCreated(savedInstanceState);
 		Bundle bundle = getArguments();
 		if (bundle != null) {
@@ -129,26 +120,31 @@ public class LikesFragment extends BaseFragment {
 
 			@Override
 			public void onNetworkError(NetworkError networkError) {
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						mExceptionHandler.obtainMessage(
-								NetworkError.ERROR_REFRESH_DATA).sendToTarget();
-					}
+						public void run() {
+							mExceptionHandler.obtainMessage(
+									NetworkError.ERROR_REFRESH_DATA)
+									.sendToTarget();
+						}
 
-				});
+					});
+				}
 			}
 
 			@Override
 			public void onFault(Throwable fault) {
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						mExceptionHandler.obtainMessage(
-								NetworkError.ERROR_NETWORK).sendToTarget();
-					}
+						public void run() {
+							mExceptionHandler.obtainMessage(
+									NetworkError.ERROR_NETWORK).sendToTarget();
+						}
 
-				});
+					});
+				}
 			}
 
 			@Override
@@ -156,13 +152,15 @@ public class LikesFragment extends BaseFragment {
 				if (bean != null) {
 					beans = bean.getLikesBean();
 				}
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						initViews();
-					}
+						public void run() {
+							initViews();
+						}
 
-				});
+					});
+				}
 			}
 		};
 		async.getLikesInfo(param, listener);
@@ -171,26 +169,30 @@ public class LikesFragment extends BaseFragment {
 	private LikesView.ICallback mCallback = new LikesView.ICallback() {
 
 		public void OnLikeNameClick(UserInfo info) {
-			forward(getUserHomeFragment(), info.params());
+			Command.UserHome(getActivity(), info.params());
 		}
 
 		public void OnUserHeadLoaded(final ImageView image,
 				final Drawable drawable, String url) {
-			getActivity().runOnUiThread(new Runnable() {
+			if (getActivity() != null) {
+				getActivity().runOnUiThread(new Runnable() {
 
-				public void run() {
-					image.setImageDrawable(drawable);
-				}
-			});
+					public void run() {
+						image.setImageDrawable(drawable);
+					}
+				});
+			}
 		}
 
 		public void OnImageDefault(final ImageView image) {
-			getActivity().runOnUiThread(new Runnable() {
+			if (getActivity() != null) {
+				getActivity().runOnUiThread(new Runnable() {
 
-				public void run() {
-					image.setImageResource(R.drawable.icon);
-				}
-			});
+					public void run() {
+						image.setImageResource(R.drawable.icon);
+					}
+				});
+			}
 		}
 	};
 
@@ -221,6 +223,6 @@ public class LikesFragment extends BaseFragment {
 	@Override
 	protected void onLoginSuccess() {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

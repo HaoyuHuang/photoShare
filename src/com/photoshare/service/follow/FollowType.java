@@ -30,7 +30,7 @@ public enum FollowType {
 	}
 
 	public abstract String getTag();
-
+	
 	public static FollowType SWITCH(String str) {
 		if (str.equals("FOLLOWER")) {
 			return FOLLOWER;

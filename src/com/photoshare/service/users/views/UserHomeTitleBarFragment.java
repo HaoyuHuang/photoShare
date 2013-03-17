@@ -54,13 +54,6 @@ public class UserHomeTitleBarFragment extends BaseFragment {
 
 	private Bundle generate() {
 		Bundle args = new Bundle();
-		Bundle bundle = getArguments();
-		if (bundle.containsKey(KEY_WRAPPER_ID)) {
-			args.putInt(KEY_WRAPPER_ID, bundle.getInt(KEY_WRAPPER_ID));
-		}
-		if (bundle.containsKey(KEY_WRAPPED_ID)) {
-			args.putIntArray(KEY_WRAPPED_ID, bundle.getIntArray(KEY_WRAPPED_ID));
-		}
 		return args;
 	}
 
@@ -92,21 +85,25 @@ public class UserHomeTitleBarFragment extends BaseFragment {
 
 		public void OnUserHeadLoaded(final ImageView imageView,
 				final Drawable photo, String url) {
-			getActivity().runOnUiThread(new Runnable() {
+			if (getActivity() != null) {
+				getActivity().runOnUiThread(new Runnable() {
 
-				public void run() {
-					imageView.setImageDrawable(photo);
-				}
-			});
+					public void run() {
+						imageView.setImageDrawable(photo);
+					}
+				});
+			}
 		}
 
 		public void OnDefault(final ImageView imageView) {
-			getActivity().runOnUiThread(new Runnable() {
+			if (getActivity() != null) {
+				getActivity().runOnUiThread(new Runnable() {
 
-				public void run() {
-					imageView.setImageResource(R.drawable.icon);
-				}
-			});
+					public void run() {
+						imageView.setImageResource(R.drawable.icon);
+					}
+				});
+			}
 		}
 	};
 

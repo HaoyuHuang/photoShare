@@ -73,7 +73,7 @@ public class LikesView {
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 			if (rowView == null) {
-				rowView = inflater.inflate(R.layout.feeds_layout, null);
+				rowView = inflater.inflate(R.layout.simple_list_item_likes, null);
 				LikeBean feed = getItem(position);
 				likes = new LikeItemView(rowView, async, feed);
 				rowView.setTag(likes);

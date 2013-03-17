@@ -167,12 +167,14 @@ public class CameraFragment extends BaseFragment {
 	private AsyncImageLoader.ImageCallback mCallback = new AsyncImageLoader.ImageCallback() {
 
 		public void imageLoaded(final Drawable imageDrawable, String imageUrl) {
-			getActivity().runOnUiThread(new Runnable() {
+			if (getActivity() != null) {
+				getActivity().runOnUiThread(new Runnable() {
 
-				public void run() {
-					mCameraView.setDecoratedPhoto(imageDrawable);
-				}
-			});
+					public void run() {
+						mCameraView.setDecoratedPhoto(imageDrawable);
+					}
+				});
+			}
 		}
 
 		/*
@@ -185,12 +187,14 @@ public class CameraFragment extends BaseFragment {
 		 * Do nothing, just preserve the original one.
 		 */
 		public void imageDefault() {
-			getActivity().runOnUiThread(new Runnable() {
+			if (getActivity() != null) {
+				getActivity().runOnUiThread(new Runnable() {
 
-				public void run() {
+					public void run() {
 
-				}
-			});
+					}
+				});
+			}
 		}
 	};
 
@@ -220,8 +224,10 @@ public class CameraFragment extends BaseFragment {
 		default:
 			break;
 		}
-		getActivity().getParent().startActivityForResult(takePictureIntent,
-				actionCode);
+		if (getActivity() != null && getActivity().getParent() != null) {
+			getActivity().getParent().startActivityForResult(takePictureIntent,
+					actionCode);
+		}
 	}
 
 	private void handleSmallCameraPhoto(Intent data) {
@@ -329,7 +335,7 @@ public class CameraFragment extends BaseFragment {
 	@Override
 	protected void onLoginSuccess() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

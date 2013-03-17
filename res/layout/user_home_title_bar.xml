@@ -5,7 +5,6 @@
     android:layout_height="wrap_content"
     android:layout_weight="1.03"
     android:background="@drawable/shape_bg_listview" >
-
     <ImageView
         android:id="@+id/userHomeTitleBarHead"
         android:layout_width="@dimen/tinyImageWidth"

@@ -40,8 +40,8 @@ import com.photoshare.view.AppTitleBarView;
 public abstract class BaseFragment extends Fragment {
 	public static final String KEY_FRAGMENT_VIEW_ID = "fragmentViewId";
 	public static final String KEY_TAG = "tag";
-	public static final String KEY_WRAPPER_ID = "wrapperId";
-	public static final String KEY_WRAPPED_ID = "wrappedId";
+
+	protected static final String KEY_IGNORE_TITLE_VIEW = "ignore_title_view";
 
 	protected int fragmentViewId;
 	protected AsyncUtils async = AsyncUtils.getInstance();
@@ -120,27 +120,31 @@ public abstract class BaseFragment extends Fragment {
 
 			@Override
 			public void onNetworkError(NetworkError networkError) {
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						mExceptionHandler.obtainMessage(
-								NetworkError.ERROR_SIGN_IN).sendToTarget();
-						User.UserAccessToken.clear(getActivity());
-					}
+						public void run() {
+							mExceptionHandler.obtainMessage(
+									NetworkError.ERROR_SIGN_IN).sendToTarget();
+							User.UserAccessToken.clear(getActivity());
+						}
 
-				});
+					});
+				}
 			}
 
 			@Override
 			public void onFault(Throwable fault) {
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						mExceptionHandler.obtainMessage(
-								NetworkError.ERROR_NETWORK).sendToTarget();
-					}
+						public void run() {
+							mExceptionHandler.obtainMessage(
+									NetworkError.ERROR_NETWORK).sendToTarget();
+						}
 
-				});
+					});
+				}
 			}
 
 			@Override
@@ -154,13 +158,15 @@ public abstract class BaseFragment extends Fragment {
 								user);
 					}
 				}
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						onLoginSuccess();
-					}
+						public void run() {
+							onLoginSuccess();
+						}
 
-				});
+					});
+				}
 			}
 		};
 		async.SignIn(param, listener);
@@ -172,28 +178,32 @@ public abstract class BaseFragment extends Fragment {
 
 			@Override
 			public void onNetworkError(NetworkError networkError) {
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						mExceptionHandler.obtainMessage(
-								NetworkError.ERROR_SIGN_IN).sendToTarget();
-						User.UserAccessToken.clear(getActivity());
-					}
+						public void run() {
+							mExceptionHandler.obtainMessage(
+									NetworkError.ERROR_SIGN_IN).sendToTarget();
+							User.UserAccessToken.clear(getActivity());
+						}
 
-				});
+					});
+				}
 			}
 
 			@Override
 			public void onFault(Throwable fault) {
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						mExceptionHandler.obtainMessage(
-								NetworkError.ERROR_NETWORK).sendToTarget();
+						public void run() {
+							mExceptionHandler.obtainMessage(
+									NetworkError.ERROR_NETWORK).sendToTarget();
 
-					}
+						}
 
-				});
+					});
+				}
 			}
 
 			@Override
@@ -209,13 +219,15 @@ public abstract class BaseFragment extends Fragment {
 								user);
 					}
 				}
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						onLoginSuccess();
-					}
+						public void run() {
+							onLoginSuccess();
+						}
 
-				});
+					});
+				}
 			}
 		};
 		async.SignIn(param, listener);
@@ -429,14 +441,16 @@ public abstract class BaseFragment extends Fragment {
 	}
 
 	private void displayErrorMsg(final String error) {
-		getActivity().runOnUiThread(new Runnable() {
+		if (getActivity() != null) {
+			getActivity().runOnUiThread(new Runnable() {
 
-			public void run() {
-				if (titleView != null) {
-					titleView.displayErrorView(error);
+				public void run() {
+					if (titleView != null) {
+						titleView.displayErrorView(error);
+					}
 				}
-			}
-		});
+			});
+		}
 	}
 
 	public String getCanonicalTag() {
@@ -497,21 +511,21 @@ public abstract class BaseFragment extends Fragment {
 
 	/**
 	 * Process arguments. Set the result to be true if the arguments contains
-	 * backwards action; otherwise, set it false.
+	 * backwards action or forwards actions with user explicitly added ignoring
+	 * title view key; otherwise, set it false.
 	 * {@link TraceConfig#getTrackBackward()}
+	 * {@link BaseFragment#KEY_IGNORE_TITLE_VIEW}
 	 * 
 	 * @return result
 	 */
 	protected boolean processArguments() {
 		Bundle params = getArguments();
 		if (params != null) {
-			Utils.logger("Fragment ----------- backward"
-					+ params.getBoolean(TraceConfig.getTrackBackward()));
+			if (params.containsKey(KEY_IGNORE_TITLE_VIEW)) {
+				return params.getBoolean(KEY_IGNORE_TITLE_VIEW);
+			}
 			if (params.containsKey(TraceConfig.getTrackBackward())) {
-				Utils.logger("Fragment ----------- backward"
-						+ params.getBoolean(TraceConfig.getTrackBackward()));
-				return params.getBoolean(TraceConfig.getTrackBackward())
-						|| params.containsKey(KEY_WRAPPER_ID);
+				return params.getBoolean(TraceConfig.getTrackBackward());
 			}
 		}
 		return false;

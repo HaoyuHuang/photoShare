@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/likeItemLayoutId"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+     >
 
     <ImageView
         android:id="@+id/likeUserHead"
         android:layout_width="@dimen/tinyImageWidth"
         android:layout_height="@dimen/tinyImageHeight"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
         android:layout_marginLeft="23dp"
         android:contentDescription="@string/photos"
         android:src="@drawable/app_list_corner_round" />
@@ -18,9 +18,7 @@
         android:id="@+id/likeItemUserName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/likeUserHead"
         android:layout_marginLeft="23dp"
-        android:layout_toRightOf="@+id/likeUserHead"
         android:text="@string/name"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -28,9 +26,7 @@
         android:id="@+id/likeItemDesc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/likeItemUserName"
         android:layout_marginLeft="16dp"
-        android:layout_toRightOf="@+id/likeItemUserName"
         android:text="@string/defaultDesc"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -38,9 +34,8 @@
         android:id="@+id/likeItemDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/likeItemDesc"
-        android:layout_alignParentRight="true"
+        android:layout_marginLeft="50dp"
         android:text="@string/date"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
-</RelativeLayout>
+</LinearLayout>

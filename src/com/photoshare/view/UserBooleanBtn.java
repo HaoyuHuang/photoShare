@@ -39,6 +39,8 @@ public class UserBooleanBtn implements IObserver<Boolean> {
 		this.enabledStr = enabledStr;
 		this.intermediateStr = intermediateStr;
 		this.disabledStr = disabledStr;
+		System.out.println(intermediateStr);
+		System.out.println(disabledStr);
 	}
 
 	public void applyView() {

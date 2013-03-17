@@ -68,7 +68,12 @@ public class PreferenceSettingsView {
 					break;
 				case 2:
 					if (mCallback != null) {
-						mCallback.OnLikedPhotosClicked();
+						mCallback.OnMyFollowersClicked();
+					}
+					break;
+				case 3:
+					if (mCallback != null) {
+						mCallback.OnMyFollowingClicked();
 					}
 					break;
 				}
@@ -88,12 +93,12 @@ public class PreferenceSettingsView {
 				switch (position) {
 				case 0:
 					if (mCallback != null) {
-						mCallback.OnEditProfileClicked();
+						mCallback.OnLikedPhotosClicked();
 					}
 					break;
 				case 1:
 					if (mCallback != null) {
-						mCallback.OnMessagesClicked();
+						mCallback.OnMyPhotosClicked();
 					}
 					break;
 				}
@@ -114,7 +119,7 @@ public class PreferenceSettingsView {
 				switch (position) {
 				case 0:
 					if (mCallback != null) {
-						mCallback.OnLogoutClicked();
+						mCallback.OnEditProfileClicked();
 					}
 					break;
 				case 1:
@@ -132,6 +137,11 @@ public class PreferenceSettingsView {
 						mCallback.OnUserPrivacyClicked();
 					}
 					break;
+				case 4:
+					if (mCallback != null) {
+						mCallback.OnLogoutClicked();
+					}
+					break;
 				}
 			}
 		});
@@ -144,14 +154,17 @@ public class PreferenceSettingsView {
 		HashMap<String, String> map1 = new HashMap<String, String>();
 		HashMap<String, String> map2 = new HashMap<String, String>();
 		HashMap<String, String> map3 = new HashMap<String, String>();
-
+		HashMap<String, String> map4 = new HashMap<String, String>();
+		
 		map1.put("friendItem", "寻找朋友");
 		map2.put("friendItem", "邀请朋友");
-		map3.put("friendItem", "喜欢的照片");
+		map3.put("friendItem", "跟随的人");
+		map4.put("friendItem", "跟随我的人");
 
 		FriendsList.add(map1);
 		FriendsList.add(map2);
 		FriendsList.add(map3);
+		FriendsList.add(map4);
 
 		return FriendsList;
 	}
@@ -163,16 +176,19 @@ public class PreferenceSettingsView {
 		HashMap<String, String> map2 = new HashMap<String, String>();
 		HashMap<String, String> map3 = new HashMap<String, String>();
 		HashMap<String, String> map4 = new HashMap<String, String>();
+		HashMap<String, String> map5 = new HashMap<String, String>();
 
-		map1.put("actionItem", "下线");
+		map1.put("actionItem", "修改资料");
 		map2.put("actionItem", "分享设置");
 		map3.put("actionItem", "清空歷史");
 		map4.put("actionItem", "私有设置");
+		map5.put("actionItem", "下线");
 
 		ActionList.add(map1);
 		ActionList.add(map2);
 		ActionList.add(map3);
 		ActionList.add(map4);
+		ActionList.add(map5);
 
 		return ActionList;
 	}
@@ -182,8 +198,8 @@ public class PreferenceSettingsView {
 		ProfileList = new ArrayList<HashMap<String, String>>();
 		HashMap<String, String> map1 = new HashMap<String, String>();
 		HashMap<String, String> map2 = new HashMap<String, String>();
-		map1.put("profileItem", "修改资料");
-		map2.put("profileItem", "未发送消息");
+		map1.put("profileItem", "我喜欢的照片");
+		map2.put("profileItem", "我的照片");
 		ProfileList.add(map1);
 		ProfileList.add(map2);
 		return ProfileList;
@@ -200,18 +216,22 @@ public class PreferenceSettingsView {
 
 		public void OnInviteFriendClicked();
 
+		public void OnMyFollowersClicked();
+
+		public void OnMyFollowingClicked();
+
 		public void OnLikedPhotosClicked();
 
+		public void OnMyPhotosClicked();
+
 		public void OnEditProfileClicked();
-
-		public void OnMessagesClicked();
-
-		public void OnLogoutClicked();
 
 		public void OnSharePreferenceClicked();
 
 		public void OnClearHistoryClicked();
 
 		public void OnUserPrivacyClicked();
+
+		public void OnLogoutClicked();
 	}
 }

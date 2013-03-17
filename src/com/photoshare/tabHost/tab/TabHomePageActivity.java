@@ -13,6 +13,7 @@ import com.photoshare.fragments.stacktrace.TraceElement;
 import com.photoshare.fragments.stacktrace.TracePhase;
 import com.photoshare.service.photos.PhotoBean;
 import com.photoshare.service.photos.PhotoType;
+import com.photoshare.service.share.views.PreferenceSettingsFragment;
 import com.photoshare.service.users.UserInfo;
 import com.photoshare.service.users.views.UserHomeFragment;
 import com.photoshare.tabHost.BaseActivity;
@@ -24,7 +25,7 @@ import com.photoshare.tabHost.R;
  */
 public class TabHomePageActivity extends BaseActivity {
 
-	private UserHomeFragment uhf;
+	private PreferenceSettingsFragment uhf;
 	private MyPhotoList photos = MyPhotoList.getInstance();
 	private boolean onPause;
 
@@ -56,7 +57,7 @@ public class TabHomePageActivity extends BaseActivity {
 					PhotoType.MyPhotos.toString());
 			Command.forwardTab((BaseFragment) getFragmentManager()
 					.findFragmentById(R.id.TabHomePageLayoutHolderId2),
-					getUserHomeFragment(), args);
+					getPreferenceSettingsFragment(), args);
 		}
 	}
 
@@ -68,16 +69,18 @@ public class TabHomePageActivity extends BaseActivity {
 
 	private void initFragments() {
 
-		uhf = (UserHomeFragment) getFragmentManager().findFragmentById(
-				R.id.TabHomePageLayoutHolderId2);
-		uhf = UserHomeFragment.newInstance(R.id.TabHomePageLayoutHolderId2);
-		uhf.setCanonicalTag(getUserHomeFragment());
+		uhf = (PreferenceSettingsFragment) getFragmentManager()
+				.findFragmentById(R.id.TabHomePageLayoutHolderId2);
+		uhf = PreferenceSettingsFragment
+				.newInstance(R.id.TabHomePageLayoutHolderId2);
+		uhf.setCanonicalTag(getPreferenceSettingsFragment());
 		Bundle args = new Bundle();
 		args.putParcelable(UserInfo.KEY_USER_INFO, user.getUserInfo());
 		args.putParcelableArrayList(PhotoBean.KEY_PHOTOS, photos.getPhotos());
 		args.putString(PhotoBean.KEY_PHOTO_TYPE, PhotoType.MyPhotos.toString());
 		uhf.setArguments(args);
-		TraceElement element = new TraceElement(getUserHomeFragment(), args);
+		TraceElement element = new TraceElement(
+				getPreferenceSettingsFragment(), args);
 		stack.setCurrentPhase(TracePhase.HOME_PAGE);
 		stack.forward(element);
 		// Execute a transaction, replacing any existing fragment
@@ -89,7 +92,7 @@ public class TabHomePageActivity extends BaseActivity {
 		ft.commit();
 	}
 
-	private String getUserHomeFragment() {
-		return getString(R.string.fuserHomeFragment);
+	private String getPreferenceSettingsFragment() {
+		return getString(R.string.fpreferenceSettingsFragment);
 	}
 }

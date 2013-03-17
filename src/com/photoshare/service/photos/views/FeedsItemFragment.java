@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.photoshare.command.Command;
 import com.photoshare.common.AbstractRequestListener;
 import com.photoshare.exception.NetworkError;
 import com.photoshare.exception.NetworkException;
@@ -140,36 +141,42 @@ public class FeedsItemFragment extends BaseFragment {
 
 			public void OnNetworkError(NetworkError error) {
 
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
+						public void run() {
 
-					}
+						}
 
-				});
+					});
+				}
 			}
 
 			public void OnFault(Throwable fault) {
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
+						public void run() {
 
-					}
+						}
 
-				});
+					});
+				}
 			}
 
 			public void OnComplete(PhotoLikeResponseBean bean) {
 				mNotificationDisplayer.setTag(getSuccessTag());
 				mNotificationDisplayer.setTicker(getSuccessTicker());
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						mNotificationDisplayer.displayNotification();
-						mNotificationDisplayer.cancleNotification();
-					}
+						public void run() {
+							mNotificationDisplayer.displayNotification();
+							mNotificationDisplayer.cancleNotification();
+						}
 
-				});
+					});
+				}
 			}
 		};
 		async.publishLikePhoto(param, mCallback);
@@ -187,26 +194,30 @@ public class FeedsItemFragment extends BaseFragment {
 				mExceptionHandler
 						.obtainMessage(NetworkError.ERROR_REFRESH_DATA)
 						.sendToTarget();
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
+						public void run() {
 
-					}
+						}
 
-				});
+					});
+				}
 			}
 
 			@Override
 			public void onFault(Throwable fault) {
 				mExceptionHandler.obtainMessage(NetworkError.ERROR_NETWORK)
 						.sendToTarget();
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
+						public void run() {
 
-					}
+						}
 
-				});
+					});
+				}
 			}
 
 			@Override
@@ -215,13 +226,15 @@ public class FeedsItemFragment extends BaseFragment {
 					photo = bean.getPhoto();
 					Utils.logger(photo.toString());
 				}
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						initViews();
-					}
+						public void run() {
+							initViews();
+						}
 
-				});
+					});
+				}
 			}
 		};
 		async.getPhotoInfo(param, listener);
@@ -249,7 +262,7 @@ public class FeedsItemFragment extends BaseFragment {
 			Bundle args = new Bundle();
 			args.putParcelable(PhotoBean.KEY_PHOTO, photo);
 			args.putParcelable(UserInfo.KEY_USER_INFO, info);
-			forward(getUserHomeFragment(), args);
+			Command.UserHome(getActivity(), args);
 		}
 
 		public void OnLikeListClick(PhotoBean like) {
@@ -274,41 +287,49 @@ public class FeedsItemFragment extends BaseFragment {
 
 		public void OnUserHeadLoaded(final ImageView image,
 				final Drawable drawable, String url) {
-			getActivity().runOnUiThread(new Runnable() {
+			if (getActivity() != null) {
+				getActivity().runOnUiThread(new Runnable() {
 
-				public void run() {
-					image.setImageDrawable(drawable);
-				}
-			});
+					public void run() {
+						image.setImageDrawable(drawable);
+					}
+				});
+			}
 		}
 
 		public void OnFeedPhotoLoaded(final ImageView image,
 				final Drawable drawable, String url) {
-			getActivity().runOnUiThread(new Runnable() {
+			if (getActivity() != null) {
+				getActivity().runOnUiThread(new Runnable() {
 
-				public void run() {
-					image.setImageDrawable(drawable);
-				}
-			});
+					public void run() {
+						image.setImageDrawable(drawable);
+					}
+				});
+			}
 
 		}
 
 		public void OnUserHeadDefault(final ImageView image) {
-			getActivity().runOnUiThread(new Runnable() {
+			if (getActivity() != null) {
+				getActivity().runOnUiThread(new Runnable() {
 
-				public void run() {
-					image.setImageResource(R.drawable.icon);
-				}
-			});
+					public void run() {
+						image.setImageResource(R.drawable.icon);
+					}
+				});
+			}
 		}
 
 		public void OnFeedPhotoDefault(final ImageView image) {
-			getActivity().runOnUiThread(new Runnable() {
+			if (getActivity() != null) {
+				getActivity().runOnUiThread(new Runnable() {
 
-				public void run() {
-					image.setImageResource(R.drawable.icon);
-				}
-			});
+					public void run() {
+						image.setImageResource(R.drawable.icon);
+					}
+				});
+			}
 		}
 	};
 

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.photoshare.command.Command;
 import com.photoshare.common.AbstractRequestListener;
 import com.photoshare.exception.NetworkError;
 import com.photoshare.exception.NetworkException;
@@ -125,44 +126,52 @@ public class CommentsFragment extends BaseFragment {
 		async.publishComments(param, new CommentHelper.ICallback() {
 
 			public void OnNetworkError(NetworkError networkError) {
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						mExceptionHandler.obtainMessage(
-								NetworkError.ERROR_COMMENT).sendToTarget();
-					}
-				});
+						public void run() {
+							mExceptionHandler.obtainMessage(
+									NetworkError.ERROR_COMMENT).sendToTarget();
+						}
+					});
+				}
 			}
 
 			public void OnFault(Throwable fault) {
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						mExceptionHandler.obtainMessage(
-								NetworkError.ERROR_NETWORK).sendToTarget();
-					}
+						public void run() {
+							mExceptionHandler.obtainMessage(
+									NetworkError.ERROR_NETWORK).sendToTarget();
+						}
 
-				});
+					});
+				}
 
 			}
 
 			public void OnComplete(final PutCommentResponseBean comment) {
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						if (comment != null) {
-							if (comment.getComment() != null) {
-								mNotificationDisplayer
-										.setTicker(getSuccessTicker());
-								mNotificationDisplayer.setTag(getSuccessTag());
-								mNotificationDisplayer.displayNotification();
-								commentView.addComment(comment.getComment());
-								mNotificationDisplayer.cancleNotification();
+						public void run() {
+							if (comment != null) {
+								if (comment.getComment() != null) {
+									mNotificationDisplayer
+											.setTicker(getSuccessTicker());
+									mNotificationDisplayer
+											.setTag(getSuccessTag());
+									mNotificationDisplayer
+											.displayNotification();
+									commentView.addComment(comment.getComment());
+									mNotificationDisplayer.cancleNotification();
+								}
 							}
 						}
-					}
 
-				});
+					});
+				}
 
 			}
 		});
@@ -184,40 +193,47 @@ public class CommentsFragment extends BaseFragment {
 
 			@Override
 			public void onComplete(final CommentsGetInfoResponseBean bean) {
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						if (bean.getComments() != null) {
-							if (bean.getComments().size() != 0) {
-								commentView.addComments(bean.getComments());
+						public void run() {
+							if (bean.getComments() != null) {
+								if (bean.getComments().size() != 0) {
+									commentView.addComments(bean.getComments());
+								}
 							}
 						}
-					}
-				});
+					});
+				}
 			}
 
 			@Override
 			public void onFault(final Throwable fault) {
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						mExceptionHandler.obtainMessage(
-								NetworkError.ERROR_NETWORK).sendToTarget();
-					}
+						public void run() {
+							mExceptionHandler.obtainMessage(
+									NetworkError.ERROR_NETWORK).sendToTarget();
+						}
 
-				});
+					});
+				}
 			}
 
 			@Override
 			public void onNetworkError(final NetworkError networkError) {
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						mExceptionHandler.obtainMessage(
-								NetworkError.ERROR_REFRESH_DATA).sendToTarget();
-					}
+						public void run() {
+							mExceptionHandler.obtainMessage(
+									NetworkError.ERROR_REFRESH_DATA)
+									.sendToTarget();
+						}
 
-				});
+					});
+				}
 			}
 
 		};
@@ -296,28 +312,34 @@ public class CommentsFragment extends BaseFragment {
 		}
 
 		public void OnNameClicked(UserInfo info) {
-
+			Bundle args = new Bundle();
+			args.putParcelable(UserInfo.KEY_USER_INFO, info);
+			Command.UserHome(getActivity(), args);
 		}
 
 		public void OnUserHeadLoaded(final ImageView image,
 				final Drawable drawable, String url) {
-			getActivity().runOnUiThread(new Runnable() {
+			if (getActivity() != null) {
+				getActivity().runOnUiThread(new Runnable() {
 
-				public void run() {
-					image.setImageDrawable(drawable);
-				}
+					public void run() {
+						image.setImageDrawable(drawable);
+					}
 
-			});
+				});
+			}
 		}
 
 		public void OnImageDefault(final ImageView image) {
-			getActivity().runOnUiThread(new Runnable() {
+			if (getActivity() != null) {
+				getActivity().runOnUiThread(new Runnable() {
 
-				public void run() {
-					image.setImageResource(R.drawable.icon);
-				}
+					public void run() {
+						image.setImageResource(R.drawable.icon);
+					}
 
-			});
+				});
+			}
 		}
 	};
 

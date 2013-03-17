@@ -182,37 +182,43 @@ public class OtherHomeTitleBarFragment extends BaseFragment {
 
 			public void OnNetworkError(final NetworkError error) {
 
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						mExceptionHandler.obtainMessage(
-								NetworkError.ERROR_FOLLOW).sendToTarget();
-					}
-				});
+						public void run() {
+							mExceptionHandler.obtainMessage(
+									NetworkError.ERROR_FOLLOW).sendToTarget();
+						}
+					});
+				}
 			}
 
 			public void OnFault(final Throwable fault) {
 
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						mExceptionHandler.obtainMessage(
-								NetworkError.ERROR_NETWORK).sendToTarget();
-					}
-				});
+						public void run() {
+							mExceptionHandler.obtainMessage(
+									NetworkError.ERROR_NETWORK).sendToTarget();
+						}
+					});
+				}
 			}
 
 			public void OnComplete(final UserFollowResponseBean bean) {
 
 				final boolean isChecked = checkFollowingResponseBean(bean);
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						if (isChecked) {
-							notification.displayNotification();
+						public void run() {
+							if (isChecked) {
+								notification.displayNotification();
+							}
 						}
-					}
-				});
+					});
+				}
 			}
 		};
 		async.publishFollow(param, mCallback);
@@ -225,41 +231,48 @@ public class OtherHomeTitleBarFragment extends BaseFragment {
 
 			@Override
 			public void onNetworkError(NetworkError networkError) {
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						mExceptionHandler.obtainMessage(
-								NetworkError.ERROR_REFRESH_DATA).sendToTarget();
-					}
+						public void run() {
+							mExceptionHandler.obtainMessage(
+									NetworkError.ERROR_REFRESH_DATA)
+									.sendToTarget();
+						}
 
-				});
+					});
+				}
 			}
 
 			@Override
 			public void onFault(Throwable fault) {
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						mExceptionHandler.obtainMessage(
-								NetworkError.ERROR_NETWORK).sendToTarget();
-					}
+						public void run() {
+							mExceptionHandler.obtainMessage(
+									NetworkError.ERROR_NETWORK).sendToTarget();
+						}
 
-				});
+					});
+				}
 
 			}
 
 			@Override
 			public void onComplete(UserGetInfoResponseBean bean) {
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						if (homeTitle != null) {
+						public void run() {
+							if (homeTitle != null) {
 
-							homeTitle.applyView();
+								homeTitle.applyView();
+							}
 						}
-					}
 
-				});
+					});
+				}
 
 			}
 		};
@@ -312,21 +325,25 @@ public class OtherHomeTitleBarFragment extends BaseFragment {
 
 		public void OnUserHeadLoaded(final ImageView imageView,
 				final Drawable photo, String url) {
-			getActivity().runOnUiThread(new Runnable() {
+			if (getActivity() != null) {
+				getActivity().runOnUiThread(new Runnable() {
 
-				public void run() {
-					imageView.setImageDrawable(photo);
-				}
-			});
+					public void run() {
+						imageView.setImageDrawable(photo);
+					}
+				});
+			}
 		}
 
 		public void OnDefault(final ImageView imageView) {
-			getActivity().runOnUiThread(new Runnable() {
+			if (getActivity() != null) {
+				getActivity().runOnUiThread(new Runnable() {
 
-				public void run() {
-					imageView.setImageResource(R.drawable.icon);
-				}
-			});
+					public void run() {
+						imageView.setImageResource(R.drawable.icon);
+					}
+				});
+			}
 		}
 	};
 

@@ -40,6 +40,7 @@ import com.photoshare.service.users.views.UserProfileFragment;
 import com.photoshare.tabHost.MainActivity;
 import com.photoshare.tabHost.R;
 import com.photoshare.tabHost.TabHostActivity;
+import com.photoshare.tabHost.UserHomeActivity;
 import com.photoshare.utils.Utils;
 
 /**
@@ -55,6 +56,16 @@ public final class Command {
 
 	}
 
+	public static void UserHome(Context orig, Bundle args) {
+		Intent intent = new Intent(orig, UserHomeActivity.class);
+		intent.putExtra(UserHomeActivity.KEY_USER_HOME_BUNDLES, args);
+		orig.startActivity(intent);
+	}
+	
+	public static void MsgList(Context orig) {
+		
+	}
+
 	public static void TabHost(Context orig) {
 		orig.startActivity(new Intent(orig, TabHostActivity.class));
 	}
@@ -67,6 +78,13 @@ public final class Command {
 
 	}
 
+	/**
+	 * This method used in the tab host
+	 * 
+	 * @param base
+	 * @param invokeName
+	 * @param args
+	 */
 	public static void forwardTab(BaseFragment base, String invokeName,
 			Bundle args) {
 		int fragmentViewId = base.getFragmentViewId();
@@ -91,16 +109,16 @@ public final class Command {
 		Utils.logger(invokeName);
 	}
 
+	/**
+	 * 
+	 * This method used in the fragments
+	 * 
+	 * @param base
+	 * @param invokeName
+	 * @param args
+	 */
 	public static void forward(BaseFragment base, String invokeName, Bundle args) {
-		int fragmentViewId;
-		// 如果有Wrapper Id的话，替换Wrapper Id
-		if (args != null && args.containsKey(BaseFragment.KEY_WRAPPER_ID)) {
-			fragmentViewId = args.getInt(BaseFragment.KEY_WRAPPER_ID);
-			args.remove(BaseFragment.KEY_WRAPPER_ID);
-		} else {
-			fragmentViewId = base.getFragmentViewId();
-		}
-
+		int fragmentViewId = base.getFragmentViewId();
 		BaseFragment target = invoke(base, invokeName, args);
 		TraceStack stack = TraceStack.getInstance();
 		if (target != null) {
@@ -114,15 +132,6 @@ public final class Command {
 					args, invokeName);
 			stack.forward(element);
 			target.setArguments(args);
-			if (args.containsKey(BaseFragment.KEY_WRAPPED_ID)) {
-				int[] wrappedIds = args
-						.getIntArray(BaseFragment.KEY_WRAPPED_ID);
-				for (int wrappedId : wrappedIds) {
-					ft.remove(base.getFragmentManager().findFragmentById(
-							wrappedId));
-				}
-				args.remove(BaseFragment.KEY_WRAPPED_ID);
-			}
 			ft.replace(fragmentViewId, target);
 			ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 			ft.commit();
@@ -134,7 +143,9 @@ public final class Command {
 		int fragmentViewId = base.getFragmentViewId();
 		TraceStack stack = TraceStack.getInstance();
 		TraceElement element = stack.backward();
-		BaseFragment target = invoke(base, element.getOriginFragment(), args);
+		String originFragment = element.getOriginFragment();
+		System.out.println(originFragment);
+		BaseFragment target = invoke(base, originFragment, args);
 		if (target != null) {
 			FragmentTransaction ft = base.getFragmentManager()
 					.beginTransaction();

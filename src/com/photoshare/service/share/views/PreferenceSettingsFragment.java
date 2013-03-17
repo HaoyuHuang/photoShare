@@ -14,6 +14,7 @@ import com.photoshare.exception.NetworkException;
 import com.photoshare.fragments.BaseFragment;
 import com.photoshare.fragments.stacktrace.TraceConfig;
 import com.photoshare.history.SearchHistory;
+import com.photoshare.service.follow.FollowType;
 import com.photoshare.service.photos.PhotoBean;
 import com.photoshare.service.photos.PhotoType;
 import com.photoshare.service.users.UserInfo;
@@ -33,7 +34,7 @@ public class PreferenceSettingsFragment extends BaseFragment {
 	private String rightBtnText = "";
 	private String titlebarText = "";
 	private int leftBtnVisibility = View.VISIBLE;
-	private int rightBtnVisibility = View.GONE;
+	private int rightBtnVisibility = View.VISIBLE;
 	private ArrayList<PhotoBean> likesPhoto;
 
 	public static PreferenceSettingsFragment newInstance(int fragmentViewId) {
@@ -45,8 +46,11 @@ public class PreferenceSettingsFragment extends BaseFragment {
 	private void initViews() {
 		leftBtnText = getHomeText();
 		titlebarText = getPreferencesText();
+		rightBtnText = getMsgText();
 		initTitleBar(leftBtnText, rightBtnText, titlebarText,
 				leftBtnVisibility, rightBtnVisibility);
+		setTitleBarDrawable(R.drawable.titlebar_right_button,
+				R.drawable.titlebar_right_button);
 		view = new PreferenceSettingsView(getActivity().findViewById(
 				R.id.preferenceSettingsLayoutId), getActivity());
 		view.registerCallback(mCallback);
@@ -56,18 +60,16 @@ public class PreferenceSettingsFragment extends BaseFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		if (savedInstanceState != null) {
-			if (savedInstanceState.containsKey(PhotoBean.KEY_PHOTOS)) {
-				likesPhoto = savedInstanceState
-						.getParcelableArrayList(PhotoBean.KEY_PHOTOS);
-			}
-		}
 		initViews();
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		if (!processArguments()) {
+			container.addView(super.onCreateView(inflater, container,
+					savedInstanceState));
+		}
 		return inflater.inflate(R.layout.preference_settings_layout, container,
 				false);
 	}
@@ -82,6 +84,10 @@ public class PreferenceSettingsFragment extends BaseFragment {
 
 	private String getPreferencesText() {
 		return getString(R.string.preferences);
+	}
+
+	private String getMsgText() {
+		return getString(R.string.messages);
 	}
 
 	private String getHomeText() {
@@ -100,37 +106,48 @@ public class PreferenceSettingsFragment extends BaseFragment {
 				mExceptionHandler
 						.obtainMessage(NetworkError.ERROR_REFRESH_DATA)
 						.sendToTarget();
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
+						public void run() {
 
-					}
-				});
+						}
+					});
+				}
 			}
 
 			@Override
 			public void onFault(Throwable fault) {
 				mExceptionHandler.obtainMessage(NetworkError.ERROR_NETWORK)
 						.sendToTarget();
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
+						public void run() {
 
-					}
-				});
+						}
+					});
+				}
 			}
 
 			@Override
 			public void onComplete(UserPrivacyResponseBean bean) {
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
+						public void run() {
 
-					}
-				});
+						}
+					});
+				}
 			}
 		};
 		async.setPrivacy(param, listener);
+	}
+
+	private void titleBarBtnDrawable() {
+		setTitleBarDrawable(R.drawable.titlebar_left_button,
+				R.drawable.titlebar_right_button);
 	}
 
 	private PreferenceSettingsView.ICallback mCallback = new PreferenceSettingsView.ICallback() {
@@ -154,6 +171,7 @@ public class PreferenceSettingsFragment extends BaseFragment {
 		}
 
 		public void OnSharePreferenceClicked() {
+			titleBarBtnDrawable();
 			forward(getPreferencesText(), null);
 		}
 
@@ -173,16 +191,17 @@ public class PreferenceSettingsFragment extends BaseFragment {
 		}
 
 		public void OnLikedPhotosClicked() {
+			titleBarBtnDrawable();
 			Bundle param = new Bundle();
 			param.putString(PhotoBean.KEY_PHOTO_TYPE,
 					PhotoType.MyLikedPhotos.toString());
 			param.putParcelable(UserInfo.KEY_USER_INFO, user.getUserInfo());
-			param.putParcelableArrayList(PhotoBean.KEY_PHOTOS, likesPhoto);
-			param.putBoolean(TraceConfig.getTrackBackward(), true);
+			param.putBoolean(KEY_IGNORE_TITLE_VIEW, true);
 			forward(getFeedFragment(), param);
 		}
 
 		public void OnFindFriendClicked() {
+			titleBarBtnDrawable();
 			forward(getFindFriendsFragment(), null);
 		}
 
@@ -203,22 +222,47 @@ public class PreferenceSettingsFragment extends BaseFragment {
 
 		public void OnInviteFriendClicked() {
 			// TODO Auto-generated method stub
-
+			titleBarBtnDrawable();
 		}
 
 		public void OnEditProfileClicked() {
 			forward(getProfileFragment(), null);
 		}
 
-		public void OnMessagesClicked() {
+		public void OnMyFollowersClicked() {
 			// TODO Auto-generated method stub
+			titleBarBtnDrawable();
+			Bundle args = new Bundle();
+			args.putParcelable(UserInfo.KEY_USER_INFO, user.getUserInfo());
+			args.putString(UserInfo.KEY_FOLLOW_TYPE,
+					FollowType.FOLLOWER.toString());
+			forward(getFollowFragment(), args);
+		}
 
+		public void OnMyFollowingClicked() {
+			// TODO Auto-generated method stub
+			titleBarBtnDrawable();
+			Bundle args = new Bundle();
+			args.putParcelable(UserInfo.KEY_USER_INFO, user.getUserInfo());
+			args.putString(UserInfo.KEY_FOLLOW_TYPE,
+					FollowType.FOLLOWING.toString());
+			forward(getFollowFragment(), args);
+		}
+
+		public void OnMyPhotosClicked() {
+			titleBarBtnDrawable();
+			Bundle param = new Bundle();
+			param.putString(PhotoBean.KEY_PHOTO_TYPE,
+					PhotoType.MyPhotos.toString());
+			param.putParcelable(UserInfo.KEY_USER_INFO, user.getUserInfo());
+			param.putBoolean(KEY_IGNORE_TITLE_VIEW, true);
+			forward(getFeedFragment(), param);
 		}
 	};
 
-	// private String getUserHomeFragment() {
-	// return getString(R.string.fuserHomeFragment);
-	// }
+	private String getFollowFragment() {
+		return getString(R.string.ffollowInfoFragment);
+	}
 
 	private String getProfileFragment() {
 		return getString(R.string.fpersonalProfileFragment);
@@ -243,7 +287,7 @@ public class PreferenceSettingsFragment extends BaseFragment {
 	 */
 	@Override
 	protected void onRightBtnClicked() {
-
+		Command.MsgList(getActivity());
 	}
 
 	/*
@@ -253,7 +297,7 @@ public class PreferenceSettingsFragment extends BaseFragment {
 	 */
 	@Override
 	protected void onLeftBtnClicked() {
-		backward(null);
+		Command.UserHome(getActivity(), user.getUserInfo().params());
 	}
 
 	@Override

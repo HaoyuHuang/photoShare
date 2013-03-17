@@ -69,6 +69,11 @@
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name=".UserHomeActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+
         <!-- RenRen sdk -->
         <!-- SSO, Oauth -->
         <activity

@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.photoshare.command.Command;
 import com.photoshare.common.AbstractRequestListener;
 import com.photoshare.exception.NetworkError;
 import com.photoshare.exception.NetworkException;
@@ -22,6 +23,7 @@ import com.photoshare.service.findfriends.FindFriendsResponseBean;
 import com.photoshare.service.findfriends.FriendsBean;
 import com.photoshare.service.users.UserInfo;
 import com.photoshare.tabHost.R;
+import com.photoshare.tabHost.UserHomeActivity;
 import com.photoshare.utils.async.AsyncUtils;
 
 /**
@@ -128,24 +130,29 @@ public class FindFriendsFragment extends BaseFragment {
 
 			@Override
 			public void onNetworkError(NetworkError networkError) {
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						mExceptionHandler.obtainMessage(
-								NetworkError.ERROR_REFRESH_DATA).sendToTarget();
-					}
-				});
+						public void run() {
+							mExceptionHandler.obtainMessage(
+									NetworkError.ERROR_REFRESH_DATA)
+									.sendToTarget();
+						}
+					});
+				}
 			}
 
 			@Override
 			public void onFault(Throwable fault) {
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						mExceptionHandler.obtainMessage(
-								NetworkError.ERROR_NETWORK).sendToTarget();
-					}
-				});
+						public void run() {
+							mExceptionHandler.obtainMessage(
+									NetworkError.ERROR_NETWORK).sendToTarget();
+						}
+					});
+				}
 
 			}
 
@@ -154,14 +161,16 @@ public class FindFriendsFragment extends BaseFragment {
 				if (bean != null) {
 					searchHistory.put(name, bean.getFriends());
 				}
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						if (bean != null) {
-							mFriendsView.setmFriendsList(bean.getFriends());
+						public void run() {
+							if (bean != null) {
+								mFriendsView.setmFriendsList(bean.getFriends());
+							}
 						}
-					}
-				});
+					});
+				}
 
 			}
 		};
@@ -188,26 +197,32 @@ public class FindFriendsFragment extends BaseFragment {
 		}
 
 		public void OnItemClicked(UserInfo info) {
-			forward(getUserHomeFragment(), info.params());
+			Bundle args = new Bundle();
+			args.putParcelable(UserInfo.KEY_USER_INFO, info);
+			Command.UserHome(getActivity(), args);
 		}
 
 		public void OnDisplay(final ImageView view, final Drawable drawable,
 				String url) {
-			getActivity().runOnUiThread(new Runnable() {
+			if (getActivity() != null) {
+				getActivity().runOnUiThread(new Runnable() {
 
-				public void run() {
-					view.setImageDrawable(drawable);
-				}
-			});
+					public void run() {
+						view.setImageDrawable(drawable);
+					}
+				});
+			}
 		}
 
 		public void OnDefault(final ImageView view) {
-			getActivity().runOnUiThread(new Runnable() {
+			if (getActivity() != null) {
+				getActivity().runOnUiThread(new Runnable() {
 
-				public void run() {
-					view.setImageResource(R.drawable.icon);
-				}
-			});
+					public void run() {
+						view.setImageResource(R.drawable.icon);
+					}
+				});
+			}
 		}
 	};
 
@@ -218,7 +233,7 @@ public class FindFriendsFragment extends BaseFragment {
 	@Override
 	protected void onLoginSuccess() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

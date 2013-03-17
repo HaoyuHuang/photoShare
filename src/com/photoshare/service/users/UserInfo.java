@@ -44,13 +44,13 @@ public class UserInfo implements Parcelable {
 
 	private String mail;
 
-	private String birthday;
+	private String birthday = "未填写";
 
-	private String website;
+	private String website = "未填写";
 
-	private String bio;
+	private String bio = "未填写";
 
-	private String phoneNumber;
+	private String phoneNumber = "未填写";
 	// 0表示禁止跟随，1表示允许跟随
 	private boolean privacy;
 
@@ -304,7 +304,13 @@ public class UserInfo implements Parcelable {
 				.append("\r\n");
 		sb.append(KEY_LARGE_HEAD_URL).append(" = ").append(largeurl)
 				.append("\r\n");
-
+		sb.append(KEY_FOLLOWER_CNT).append(" = ").append(followersCnt)
+				.append("\r\n");
+		sb.append(KEY_FOLLOWING_CNT).append(" = ").append(followingCnt)
+				.append("\r\n");
+		sb.append(KEY_LIKES_CNT).append(" = ").append(likesCnt).append("\r\n");
+		sb.append(KEY_PHOTOS_CNT).append(" = ").append(photosCnt)
+				.append("\r\n");
 		return sb.toString();
 
 	}

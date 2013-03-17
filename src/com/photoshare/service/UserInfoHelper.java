@@ -231,9 +231,11 @@ public class UserInfoHelper {
 				} catch (NetworkException e) {
 					Utils.logger("network exception " + e.getMessage());
 					if (listener != null) {
+						e.printStackTrace();
 						listener.onNetworkError(new NetworkError(e.getMessage()));
 					}
 				} catch (Throwable e) {
+					e.printStackTrace();
 					Utils.logger("on fault " + e.getMessage());
 					if (listener != null) {
 						listener.onFault(e);

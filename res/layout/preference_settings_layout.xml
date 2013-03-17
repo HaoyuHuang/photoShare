@@ -30,7 +30,7 @@
         <com.photoshare.view.listview.CornerListView
             android:id="@+id/personalSettingFriend"
             android:layout_width="fill_parent"
-            android:layout_height="125dip"
+            android:layout_height="160dip"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:background="@drawable/shape_bg_listview"
@@ -76,7 +76,7 @@
         <com.photoshare.view.listview.CornerListView
             android:id="@+id/personalSettingAccounts"
             android:layout_width="fill_parent"
-            android:layout_height="160dip"
+            android:layout_height="220dip"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:background="@drawable/shape_bg_listview"

@@ -110,17 +110,18 @@ public class UserProfileFragment extends BaseFragment {
 			@Override
 			public void onComplete(final UserGetInfoResponseBean bean) {
 				userInfo = bean.getUserInfo();
-				getActivity().runOnUiThread(new Runnable() {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
 
-					public void run() {
-						userInfoView = new UserInfoView(getActivity(),
-								getActivity()
-										.findViewById(R.id.userProfileView),
-								userInfo);
-						userInfoView.applyView();
-					}
+						public void run() {
+							userInfoView = new UserInfoView(getActivity(),
+									getActivity().findViewById(
+											R.id.userProfileView), userInfo);
+							userInfoView.applyView();
+						}
 
-				});
+					});
+				}
 			}
 		};
 		async.getUsersInfo(param, listener);
