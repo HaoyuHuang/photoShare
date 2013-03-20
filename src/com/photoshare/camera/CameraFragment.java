@@ -23,7 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.photoshare.fragments.BaseFragment;
-import com.photoshare.service.photos.EditPhotoType;
+import com.photoshare.service.photos.DecoratePhotoType;
 import com.photoshare.service.photos.PhotoBean;
 import com.photoshare.tabHost.R;
 import com.photoshare.utils.Utils;
@@ -313,7 +313,7 @@ public class CameraFragment extends BaseFragment {
 
 	private CameraView.OnCameraViewClick listener = new CameraView.OnCameraViewClick() {
 
-		public void OnToolsClick(EditPhotoType type, Bitmap map) {
+		public void OnToolsClick(DecoratePhotoType type, Bitmap map) {
 			async.decorateImage(type, map, mCallback);
 		}
 

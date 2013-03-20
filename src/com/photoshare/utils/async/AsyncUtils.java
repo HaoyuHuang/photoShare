@@ -35,7 +35,7 @@ import com.photoshare.service.news.FollowGetNewsRequestParam;
 import com.photoshare.service.news.FollowGetNewsResponseBean;
 import com.photoshare.service.news.UserGetNewsRequestParam;
 import com.photoshare.service.news.UserGetNewsResponseBean;
-import com.photoshare.service.photos.EditPhotoType;
+import com.photoshare.service.photos.DecoratePhotoType;
 import com.photoshare.service.photos.PhotoGetInfoRequestParam;
 import com.photoshare.service.photos.PhotoGetInfoResponseBean;
 import com.photoshare.service.photos.PhotoUploadRequestParam;
@@ -265,7 +265,7 @@ public class AsyncUtils {
 		imageLoader.loadImageFromWebUrl(pool, imageUrl, mCallback);
 	}
 
-	public void decorateImage(final EditPhotoType type, final Bitmap raw,
+	public void decorateImage(final DecoratePhotoType type, final Bitmap raw,
 			ImageCallback mCallback) {
 		imageLoader.docorateImage(pool, type, raw, mCallback);
 	}

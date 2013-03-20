@@ -16,7 +16,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.photoshare.service.photos.EditPhotoType;
+import com.photoshare.service.photos.DecoratePhotoType;
 import com.photoshare.utils.Utils;
 
 public class AsyncImageLoader {
@@ -81,7 +81,7 @@ public class AsyncImageLoader {
 		});
 	}
 
-	public void docorateImage(final Executor pool, final EditPhotoType type,
+	public void docorateImage(final Executor pool, final DecoratePhotoType type,
 			final Bitmap raw, final ImageCallback mCallback) {
 		pool.execute(new Runnable() {
 

@@ -26,7 +26,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.photoshare.service.photos.EditPhotoType;
+import com.photoshare.service.photos.DecoratePhotoType;
 import com.photoshare.tabHost.R;
 import com.photoshare.utils.FileTools;
 import com.photoshare.utils.Utils;
@@ -68,54 +68,26 @@ public class CameraView {
 		photoToolsView = (LinearLayout) baseView
 				.findViewById(R.id.editPhotoToolsGallery);
 		photoView = (ImageView) baseView.findViewById(R.id.editPhoto);
-		// mSubmitView = (ImageView) baseView
-		// .findViewById(R.id.editPhotoSubmitBtn);
-		// mCancleView = (ImageView) baseView
-		// .findViewById(R.id.editPhotoCancleBtn);
-		//
-		// mSubmitView.setOnClickListener(new OnClickListener() {
-		//
-		// public void onClick(View v) {
-		// // TODO Auto-generated method stub
-		// if (onCameraViewClick != null) {
-		// onCameraViewClick.OnSubmitClick();
-		// }
-		// }
-		// });
-		//
-		// mCancleView.setOnClickListener(new OnClickListener() {
-		//
-		// public void onClick(View v) {
-		// // TODO Auto-generated method stub
-		// if (onCameraViewClick != null) {
-		// onCameraViewClick.OnCancleClick();
-		// }
-		// }
-		// });
 		applyImageTool();
 	}
 
 	private void applyImageTool() {
-		Collection<EditPhotoType> values = Arrays
-				.asList(EditPhotoType.values());
-		for (EditPhotoType type : values) {
+		Collection<DecoratePhotoType> values = Arrays
+				.asList(DecoratePhotoType.values());
+		for (DecoratePhotoType type : values) {
 			photoToolsView.addView(insertImage(type));
 		}
 	}
 
 	public void DisappearPhotoTools() {
 		photoToolsView.setVisibility(View.GONE);
-		// mSubmitView.setVisibility(View.GONE);
-		// mCancleView.setVisibility(View.GONE);
 	}
 
 	public void DisplayPhotoTools() {
 		photoToolsView.setVisibility(View.VISIBLE);
-		// mSubmitView.setVisibility(View.VISIBLE);
-		// mCancleView.setVisibility(View.VISIBLE);
 	}
 
-	private View insertImage(final EditPhotoType type) {
+	private View insertImage(final DecoratePhotoType type) {
 		LinearLayout layout = new LinearLayout(context);
 		layout.setLayoutParams(new LayoutParams(320, 320));
 		layout.setGravity(Gravity.CENTER);
@@ -293,6 +265,6 @@ public class CameraView {
 
 		public void OnCancleClick();
 
-		public void OnToolsClick(EditPhotoType type, Bitmap map);
+		public void OnToolsClick(DecoratePhotoType type, Bitmap map);
 	}
 }

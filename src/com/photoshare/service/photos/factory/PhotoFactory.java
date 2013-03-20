@@ -1,14 +1,19 @@
-package com.photoshare.factory;
+package com.photoshare.service.photos.factory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.LinearGradient;
 import android.graphics.Matrix;
 import android.graphics.Paint;
@@ -18,6 +23,19 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader.TileMode;
 import android.util.Log;
+
+import com.photoshare.service.photos.filter.BrightContrastFilter;
+import com.photoshare.service.photos.filter.ComicFilter;
+import com.photoshare.service.photos.filter.FeatherFilter;
+import com.photoshare.service.photos.filter.FilmFilter;
+import com.photoshare.service.photos.filter.GaussianBlurFilter;
+import com.photoshare.service.photos.filter.GlowingEdgeFilter;
+import com.photoshare.service.photos.filter.IceFilter;
+import com.photoshare.service.photos.filter.ImageData;
+import com.photoshare.service.photos.filter.LomoFilter;
+import com.photoshare.service.photos.filter.MoltenFilter;
+import com.photoshare.service.photos.filter.SoftGlowFilter;
+import com.photoshare.service.photos.filter.VignetteFilter;
 
 public class PhotoFactory {
 
@@ -80,6 +98,63 @@ public class PhotoFactory {
 		cv.restore();// 存储
 		return newb;
 	}
+
+	/**
+	 * Ice Bitmap
+	 * 
+	 * @param bmp
+	 * @return
+	 */
+	public static Bitmap ice(Bitmap bmp) {
+
+		int width = bmp.getWidth();
+		int height = bmp.getHeight();
+
+		int dst[] = new int[width * height];
+		bmp.getPixels(dst, 0, width, 0, 0, width, height);
+
+		int R, G, B, pixel;
+		int pos, pixColor;
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
+				pos = y * width + x;
+				pixColor = dst[pos]; // 获取图片当前点的像素值
+
+				R = Color.red(pixColor); // 获取RGB三原色
+				G = Color.green(pixColor);
+				B = Color.blue(pixColor);
+
+				pixel = R - G - B;
+				pixel = pixel * 3 / 2;
+				if (pixel < 0)
+					pixel = -pixel;
+				if (pixel > 255)
+					pixel = 255;
+				R = pixel; // 计算后重置R值，以下类同
+
+				pixel = G - B - R;
+				pixel = pixel * 3 / 2;
+				if (pixel < 0)
+					pixel = -pixel;
+				if (pixel > 255)
+					pixel = 255;
+				G = pixel;
+
+				pixel = B - R - G;
+				pixel = pixel * 3 / 2;
+				if (pixel < 0)
+					pixel = -pixel;
+				if (pixel > 255)
+					pixel = 255;
+				B = pixel;
+				dst[pos] = Color.rgb(R, G, B); // 重置当前点的像素值
+			} // x
+		} // y
+		Bitmap bitmap = Bitmap.createBitmap(width, height,
+				Bitmap.Config.ARGB_8888);
+		bitmap.setPixels(dst, 0, width, 0, 0, width, height);
+		return bitmap;
+	} // end of Ice
 
 	/**
 	 * 将Bitmap转换成指定大小
@@ -227,4 +302,134 @@ public class PhotoFactory {
 		return bitmapWithReflection;
 	}
 
+	/**
+	 * @param bmpOriginal
+	 * @return
+	 */
+	public static Bitmap toGrayscale(Bitmap bmpOriginal) {
+		int width, height;
+		height = bmpOriginal.getHeight();
+		width = bmpOriginal.getWidth();
+
+		Bitmap bmpGrayscale = Bitmap.createBitmap(width, height,
+				Bitmap.Config.RGB_565);
+		Canvas c = new Canvas(bmpGrayscale);
+		Paint paint = new Paint();
+		ColorMatrix cm = new ColorMatrix();
+		cm.setSaturation(0); // ��ɫ
+		ColorMatrixColorFilter f = new ColorMatrixColorFilter(cm);
+		paint.setColorFilter(f);
+		c.drawBitmap(bmpOriginal, 0, 0, paint);
+		return bmpGrayscale;
+	}
+
+	/**
+	 * @param context
+	 * @param resId
+	 * @return
+	 */
+	public static Bitmap readBitMap(Context context, int resId) {
+		BitmapFactory.Options opt = new BitmapFactory.Options();
+		opt.inPreferredConfig = Bitmap.Config.RGB_565;
+		opt.inPurgeable = true;
+		opt.inInputShareable = true;
+		InputStream is = context.getResources().openRawResource(resId);
+		return BitmapFactory.decodeStream(is, null, opt);
+	}
+
+	/**
+	 * @param path
+	 * @return
+	 */
+	public static Bitmap readBitMap(String path) {
+		BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inPreferredConfig = Config.ARGB_8888;
+		Bitmap bm = BitmapFactory.decodeFile(path, options);
+		return bm;
+	}
+
+	/**
+	 * @param bitmap
+	 * @param w
+	 * @param h
+	 * @return
+	 */
+	public static Bitmap zoomBitmap(Bitmap bitmap, int w, int h) {
+		int width = bitmap.getWidth();
+		int height = bitmap.getHeight();
+		Matrix matrix = new Matrix();
+		float scaleWidht = ((float) w / width);
+		float scaleHeight = ((float) h / height);
+		matrix.postScale(scaleWidht, scaleHeight);
+		Bitmap newbmp = Bitmap.createBitmap(bitmap, 0, 0, width, height,
+				matrix, true);
+		return newbmp;
+	}
+
+	public static Bitmap brightContrastBitmap(Bitmap bitmap) {
+		BrightContrastFilter brightContrastFilter = new BrightContrastFilter(
+				bitmap);
+		ImageData image = brightContrastFilter.process();
+		return image.getDstBitmap();
+	}
+
+	public static Bitmap comicBitmap(Bitmap bmp) {
+		ComicFilter comicFilter = new ComicFilter(bmp);
+		ImageData image = comicFilter.process();
+		return image.getDstBitmap();
+	}
+
+	public static Bitmap featherBitmap(Bitmap bmp) {
+		FeatherFilter featherFilter = new FeatherFilter(bmp);
+		ImageData image = featherFilter.process();
+		return image.getDstBitmap();
+	}
+
+	public static Bitmap filmBitmap(Bitmap bmp, float angle) {
+		FilmFilter filmFilter = new FilmFilter(bmp, angle);
+		ImageData image = filmFilter.process();
+		return image.getDstBitmap();
+	}
+
+	public static Bitmap gaussianBlur(Bitmap bmp) {
+		GaussianBlurFilter blurFilter = new GaussianBlurFilter(bmp);
+		ImageData image = blurFilter.process();
+		return image.getDstBitmap();
+	}
+
+	public static Bitmap glowingEdge(Bitmap bmp) {
+		GlowingEdgeFilter edgeFilter = new GlowingEdgeFilter(bmp);
+		ImageData image = edgeFilter.process();
+		return image.getDstBitmap();
+	}
+
+	public static Bitmap iceEffect(Bitmap bmp) {
+		IceFilter iceFilter = new IceFilter(bmp);
+		ImageData image = iceFilter.process();
+		return image.getDstBitmap();
+	}
+
+	public static Bitmap lomo(Bitmap bmp) {
+		LomoFilter lomoFilter = new LomoFilter(bmp);
+		ImageData image = lomoFilter.process();
+		return image.getDstBitmap();
+	}
+
+	public static Bitmap softGlow(Bitmap bmp) {
+		SoftGlowFilter softGlowFilter = new SoftGlowFilter(bmp);
+		ImageData image = softGlowFilter.process();
+		return image.getDstBitmap();
+	}
+
+	public static Bitmap vignette(Bitmap bmp) {
+		VignetteFilter vignetteFilter = new VignetteFilter(bmp);
+		ImageData image = vignetteFilter.process();
+		return image.getDstBitmap();
+	}
+
+	public static Bitmap molten(Bitmap bmp) {
+		MoltenFilter moltenFilter = new MoltenFilter(bmp);
+		ImageData image = moltenFilter.process();
+		return image.getDstBitmap();
+	}
 }
