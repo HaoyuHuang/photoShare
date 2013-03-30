@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.photoshare.common.IObserver;
 import com.photoshare.msg.MsgType;
+import com.photoshare.service.photos.PhotoType;
+import com.photoshare.service.photos.factory.BitmapDisplayConfig;
 import com.photoshare.service.users.UserInfo;
 import com.photoshare.tabHost.R;
 import com.photoshare.utils.async.AsyncImageLoader.ImageCallback;
@@ -35,6 +37,7 @@ public class OtherHomeTitleBarView {
 	private UserBooleanBtn mUserFollowBtn;
 	private UserInfo userInfo;
 	private AsyncUtils async;
+	private BitmapDisplayConfig config;
 
 	/**
 	 * @param baseView
@@ -103,6 +106,8 @@ public class OtherHomeTitleBarView {
 		mUserWebsiteView.registerListener(websiteListener);
 		mUserWebsiteView.apply();
 
+		config = new BitmapDisplayConfig(PhotoType.SMALL);
+
 		if (userInfo.getTinyurl() != null) {
 			async.loadDrawableFromWeb(userInfo.getTinyurl(),
 					new ImageCallback() {
@@ -120,7 +125,7 @@ public class OtherHomeTitleBarView {
 								mCallback.OnDefault(mUserHomeHeadView);
 							}
 						}
-					});
+					}, config);
 		}
 
 	}

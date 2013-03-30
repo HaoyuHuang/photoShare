@@ -5,12 +5,15 @@ package com.photoshare.service.photos.views;
 
 import java.util.ArrayList;
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.photoshare.command.Command;
 import com.photoshare.common.AbstractRequestListener;
@@ -21,7 +24,7 @@ import com.photoshare.service.LikeHelper;
 import com.photoshare.service.likes.PhotoLikeRequestParam;
 import com.photoshare.service.likes.PhotoLikeResponseBean;
 import com.photoshare.service.photos.PhotoBean;
-import com.photoshare.service.photos.PhotoType;
+import com.photoshare.service.photos.RequestPhotoType;
 import com.photoshare.service.photos.PhotosGetInfoRequestParam;
 import com.photoshare.service.photos.PhotosGetInfoResponseBean;
 import com.photoshare.service.users.UserInfo;
@@ -39,7 +42,7 @@ public class FeedsFragment extends BaseFragment {
 	private UserInfo userInfo;
 	private int currentPage = 0;
 	private int demandPage = 10;
-	private PhotoType type;
+	private RequestPhotoType type;
 	private ArrayList<PhotoBean> photos;
 	private NotificationDisplayer mNotificationDisplayer;
 	private String leftBtnText = "";
@@ -54,7 +57,7 @@ public class FeedsFragment extends BaseFragment {
 		return feeds;
 	}
 
-	public PhotoType getType() {
+	public RequestPhotoType getType() {
 		return type;
 	}
 
@@ -72,7 +75,7 @@ public class FeedsFragment extends BaseFragment {
 				userInfo = bundle.getParcelable(UserInfo.KEY_USER_INFO);
 			}
 			if (bundle.containsKey(PhotoBean.KEY_PHOTO_TYPE)) {
-				type = PhotoType.SWITCH(bundle
+				type = RequestPhotoType.SWITCH(bundle
 						.getString(PhotoBean.KEY_PHOTO_TYPE));
 			}
 			if (bundle.containsKey(PhotoBean.KEY_PHOTOS)) {
@@ -80,23 +83,24 @@ public class FeedsFragment extends BaseFragment {
 			}
 		}
 		Tag = getFeedsFragment();
-		switch (type) {
-		case MyFeeds:
-			titlebarText = getFeedsText();
-			break;
-		case MyLikedPhotos:
-			titlebarText = getMyLikedPhotoText();
-			break;
-		case MyPhotos:
-			titlebarText = getMyPhotoText();
-			break;
-		case PopularPhotos:
-			titlebarText = getPopularPhoto();
-			break;
-		default:
-			break;
+		if (type != null) {
+			switch (type) {
+			case MyFeeds:
+				titlebarText = getFeedsText();
+				break;
+			case MyLikedPhotos:
+				titlebarText = getMyLikedPhotoText();
+				break;
+			case MyPhotos:
+				titlebarText = getMyPhotoText();
+				break;
+			case PopularPhotos:
+				titlebarText = getPopularPhoto();
+				break;
+			default:
+				break;
+			}
 		}
-
 		if (!processArguments()) {
 			initTitleBar(leftBtnText, rightBtnText, titlebarText,
 					leftBtnVisibility, rightBtnVisibility);
@@ -167,7 +171,7 @@ public class FeedsFragment extends BaseFragment {
 		super.onSaveInstanceState(outState);
 	}
 
-	private void AsyncLikePhoto(PhotoBean photo) throws NetworkException {
+	private void AsyncLikePhoto(final PhotoBean photo) throws NetworkException {
 		PhotoLikeRequestParam param = new PhotoLikeRequestParam.LikeBuilder()
 				.UserId(user.getUserInfo().getUid()).PhotoId(photo.getPid())
 				.isLike(photo.isLike()).build();
@@ -202,13 +206,16 @@ public class FeedsFragment extends BaseFragment {
 				}
 			}
 
-			public void OnComplete(PhotoLikeResponseBean bean) {
+			public void OnComplete(final PhotoLikeResponseBean bean) {
 				mNotificationDisplayer.setTag(getSuccessTag());
 				mNotificationDisplayer.setTicker(getSuccessTicker());
 				if (getActivity() != null) {
 					getActivity().runOnUiThread(new Runnable() {
 
 						public void run() {
+							if (bean != null && bean.getUserId() != 0) {
+								photo.setLike(!bean.isLike());
+							}
 							mNotificationDisplayer.displayNotification();
 							mNotificationDisplayer.cancleNotification();
 						}
@@ -263,7 +270,7 @@ public class FeedsFragment extends BaseFragment {
 			}
 
 			@Override
-			public void onComplete(PhotosGetInfoResponseBean bean) {
+			public void onComplete(final PhotosGetInfoResponseBean bean) {
 				if (bean != null) {
 					photos = bean.getPhotos();
 
@@ -273,9 +280,13 @@ public class FeedsFragment extends BaseFragment {
 					getActivity().runOnUiThread(new Runnable() {
 
 						public void run() {
-							initFeeds();
-							if (feedsView != null)
-								feedsView.onRefreshComplete();
+							if (bean.getPhotos() != null
+									&& !bean.getPhotos().isEmpty()) {
+								initFeeds();
+								if (feedsView != null) {
+									feedsView.onRefreshComplete();
+								}
+							}
 						}
 
 					});
@@ -293,6 +304,31 @@ public class FeedsFragment extends BaseFragment {
 		mNotificationDisplayer = new NotificationDisplayer.NotificationBuilder()
 				.Context(getActivity()).Tag(getLikeTag())
 				.Ticker(getLikeTicker()).build();
+	}
+
+	private void showLike(PhotoBean photo) {
+
+		// String likeText = ctx.getString(R.string.like);
+		// String unlikeText = ctx.getString(R.string.unlike);
+		boolean isLike = photo.isLike();
+		Toast toast = new Toast(getActivity());
+		LayoutInflater inflater = getActivity().getLayoutInflater();
+		View layout = inflater.inflate(R.layout.toast_like, null);
+		ImageView image = (ImageView) layout.findViewById(R.id.toastLikeView);
+		if (isLike) {
+			image.setImageResource(R.drawable.unlike);
+		} else {
+			image.setImageResource(R.drawable.like);
+		}
+		toast.setGravity(Gravity.CENTER, 0, 0);
+		// ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
+		// PhotoType.MIDDLE.getWidth(), PhotoType.MIDDLE.getHeight());
+		// layout.setLayoutParams(params);
+		// image.setLayoutParams(params);
+		layout.setAlpha(0.2f);
+		toast.setDuration(Toast.LENGTH_SHORT);
+		toast.setView(layout);
+		toast.show();
 	}
 
 	private FeedsView.OnFeedsActionListener mFeedsActionListener = new FeedsView.OnFeedsActionListener() {
@@ -315,6 +351,7 @@ public class FeedsFragment extends BaseFragment {
 		public void OnLikeClick(PhotoBean photo) {
 			try {
 				Utils.logger("OnLikeClicked");
+				showLike(photo);
 				AsyncLikePhoto(photo);
 			} catch (NetworkException e) {
 				AsyncSignIn();
@@ -395,7 +432,7 @@ public class FeedsFragment extends BaseFragment {
 		this.userInfo = userInfo;
 	}
 
-	public void setType(PhotoType type) {
+	public void setType(RequestPhotoType type) {
 		this.type = type;
 	}
 

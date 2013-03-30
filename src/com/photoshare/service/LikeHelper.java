@@ -115,7 +115,7 @@ public class LikeHelper {
 		if (params == null)
 			return;
 		
-		Utils.logger(params.toString());
+//		Utils.logger(params.toString());
 		
 		// AMsg 及 Listener 将一起放入管道中
 		RequestMsg<PhotoLikeRequestParam> AMsg = new RequestMsg<PhotoLikeRequestParam>(

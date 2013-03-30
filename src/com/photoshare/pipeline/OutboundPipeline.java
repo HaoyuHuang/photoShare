@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import com.photoshare.common.AbstractRequestListener;
 import com.photoshare.common.RequestParam;
 import com.photoshare.msg.RequestMsg;
+import com.photoshare.utils.Utils;
 
 /**
  * @author Aron
@@ -43,13 +44,17 @@ public class OutboundPipeline {
 	}
 
 	public interface Listener {
-		public void onFreshMsgBoard(RequestMsg<? extends RequestParam> request, AbstractRequestListener<String> listener);
+		public void onFreshMsgBoard(RequestMsg<? extends RequestParam> request,
+				AbstractRequestListener<String> listener);
 	}
 
 	private ArrayList<Listener> listeners = new ArrayList<Listener>();
 
-	public void notifySendToTargetHandler(RequestMsg<? extends RequestParam> request, final AbstractRequestListener<String> listener) {
+	public void notifySendToTargetHandler(
+			RequestMsg<? extends RequestParam> request,
+			final AbstractRequestListener<String> listener) {
 		for (Listener lis : listeners) {
+			Utils.logger("onFreshMsgBoard");
 			lis.onFreshMsgBoard(request, listener);
 		}
 	}

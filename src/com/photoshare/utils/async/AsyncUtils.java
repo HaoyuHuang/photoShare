@@ -42,6 +42,7 @@ import com.photoshare.service.photos.PhotoUploadRequestParam;
 import com.photoshare.service.photos.PhotoUploadResponseBean;
 import com.photoshare.service.photos.PhotosGetInfoRequestParam;
 import com.photoshare.service.photos.PhotosGetInfoResponseBean;
+import com.photoshare.service.photos.factory.BitmapDisplayConfig;
 import com.photoshare.service.signin.UserSignInRequestParam;
 import com.photoshare.service.signin.UserSignInResponseBean;
 import com.photoshare.service.signup.UserSignUpRequestParam;
@@ -59,27 +60,23 @@ import com.photoshare.utils.User;
 import com.photoshare.utils.UserReader;
 import com.photoshare.utils.Utils;
 import com.photoshare.utils.async.AsyncImageLoader.ImageCallback;
+import com.renren.api.connect.android.Util;
 
 public class AsyncUtils {
 	/** 线程池 */
 	private Executor pool;
 
-	private User user = User.getInstance();
-
 	private AsyncImageLoader imageLoader = new AsyncImageLoader();
 
-	private static AsyncUtils async = new AsyncUtils();
-
+	private static AsyncUtils ASYNC_UTILS = new AsyncUtils();
+	
 	public static AsyncUtils getInstance() {
-		return async;
+		return ASYNC_UTILS;
 	}
 
 	private AsyncUtils() {
+		Utils.logger("AsyncUtils Created");
 		this.pool = Executors.newFixedThreadPool(2);
-	}
-
-	public void setUser(User user) {
-		this.user = user;
 	}
 
 	/**
@@ -93,7 +90,7 @@ public class AsyncUtils {
 			public void run() {
 
 				try {
-					String resp = user.publishPhoto(method, photo, fileName,
+					String resp = User.Instance().publishPhoto(method, photo, fileName,
 							description, format);
 					NetworkError Error = Utils.parseNetworkError(resp);
 					if (Error != null) {
@@ -117,28 +114,28 @@ public class AsyncUtils {
 			AbstractRequestListener<UserGetInfoResponseBean> listener)
 			throws NetworkException {
 		checkLoggingStatus();
-		new UserInfoHelper(user).asyncGetUsersInfo(pool, param, listener);
+		new UserInfoHelper(User.Instance()).asyncGetUsersInfo(pool, param, listener);
 	}
 
 	public void getOthersInfo(UserGetOtherInfoRequestParam param,
 			AbstractRequestListener<UserGetInfoResponseBean> listener)
 			throws NetworkException {
 		checkLoggingStatus();
-		new UserInfoHelper(user).asyncGetOthersInfo(pool, param, listener);
+		new UserInfoHelper(User.Instance()).asyncGetOthersInfo(pool, param, listener);
 	}
 
 	public void getFollowsInfo(UserGetFollowInfoRequestParam param,
 			AbstractRequestListener<UserGetFollowInfoResponseBean> listener)
 			throws NetworkException {
 		checkLoggingStatus();
-		new FollowHelper(user).asyncGetFollowInfo(pool, param, listener);
+		new FollowHelper(User.Instance()).asyncGetFollowInfo(pool, param, listener);
 	}
 
 	public void getEditUserInfo(UserEditInfoRequestParam param,
 			AbstractRequestListener<UserGetInfoResponseBean> listener)
 			throws NetworkException {
 		checkLoggingStatus();
-		new UserInfoHelper(user).asyncEditUsersInfo(pool, param, listener);
+		new UserInfoHelper(User.Instance()).asyncEditUsersInfo(pool, param, listener);
 	}
 
 	/**
@@ -151,7 +148,7 @@ public class AsyncUtils {
 			AbstractRequestListener<PhotoGetInfoResponseBean> listener)
 			throws NetworkException {
 		// checkLoggingStatus();
-		new PhotoHelper(user).asyncGetPhotoInfo(pool, param, listener);
+		new PhotoHelper(User.Instance()).asyncGetPhotoInfo(pool, param, listener);
 	}
 
 	/**
@@ -164,21 +161,21 @@ public class AsyncUtils {
 			AbstractRequestListener<PhotosGetInfoResponseBean> listener)
 			throws NetworkException {
 		// checkLoggingStatus();
-		new PhotoHelper(user).asyncGetPhotosInfo(pool, param, listener);
+		new PhotoHelper(User.Instance()).asyncGetPhotosInfo(pool, param, listener);
 	}
 
 	public void getFollowNews(FollowGetNewsRequestParam param,
 			AbstractRequestListener<FollowGetNewsResponseBean> listener)
 			throws NetworkException {
 		checkLoggingStatus();
-		new NewsHelper(user).asyncGetFollowNews(pool, param, listener);
+		new NewsHelper(User.Instance()).asyncGetFollowNews(pool, param, listener);
 	}
 
 	public void getUserNews(UserGetNewsRequestParam param,
 			AbstractRequestListener<UserGetNewsResponseBean> listener)
 			throws NetworkException {
 		checkLoggingStatus();
-		new NewsHelper(user).asyncGetUserNews(pool, param, listener);
+		new NewsHelper(User.Instance()).asyncGetUserNews(pool, param, listener);
 	}
 
 	/**
@@ -191,28 +188,28 @@ public class AsyncUtils {
 			AbstractRequestListener<CommentsGetInfoResponseBean> listener)
 			throws NetworkException {
 		checkLoggingStatus();
-		new CommentHelper(user).asyncGetCommentsInfo(pool, param, listener);
+		new CommentHelper(User.Instance()).asyncGetCommentsInfo(pool, param, listener);
 	}
 
 	public void getLikesInfo(LikeGetInfoRequestParam param,
 			AbstractRequestListener<LikeGetInfoResponseBean> listener)
 			throws NetworkException {
 		checkLoggingStatus();
-		new LikeHelper(user).asyncGetLikesInfo(pool, param, listener);
+		new LikeHelper(User.Instance()).asyncGetLikesInfo(pool, param, listener);
 	}
 
 	public void getFriendsInfo(FindFriendsRequestParam param,
 			AbstractRequestListener<FindFriendsResponseBean> listener)
 			throws NetworkException {
 		checkLoggingStatus();
-		new FindFriendHelper(user).asyncGetFriendsInfo(pool, param, listener);
+		new FindFriendHelper(User.Instance()).asyncGetFriendsInfo(pool, param, listener);
 	}
 
 	public void setPrivacy(UserPrivacyRequestParam param,
 			AbstractRequestListener<UserPrivacyResponseBean> listener)
 			throws NetworkException {
 		checkLoggingStatus();
-		new UserInfoHelper(user).asyncSetPrivacy(pool, param, listener);
+		new UserInfoHelper(User.Instance()).asyncSetPrivacy(pool, param, listener);
 	}
 
 	/**
@@ -223,46 +220,48 @@ public class AsyncUtils {
 	public void publishPhoto(PhotoUploadRequestParam photo,
 			AbstractRequestListener<PhotoUploadResponseBean> listener)
 			throws NetworkException {
-//		checkLoggingStatus();
-		new PhotoHelper(user).asyncUploadPhoto(pool, photo, listener);
+		// checkLoggingStatus();
+		new PhotoHelper(User.Instance()).asyncUploadPhoto(pool, photo, listener);
 	}
 
 	public void publishLikePhoto(PhotoLikeRequestParam like,
 			LikeHelper.ICallback mCallback) throws NetworkException {
-//		checkLoggingStatus();
-		new LikeHelper(user).publishLikePhoto(like, mCallback);
+		Util.logger("publishLikePhoto");
+		new LikeHelper(User.Instance()).publishLikePhoto(like, mCallback);
 	}
 
 	public void publishFollow(UserFollowRequestParam follow,
 			FollowHelper.ICallback mCallback) throws NetworkException {
-//		checkLoggingStatus();
-		new FollowHelper(user).publishFollow(follow, mCallback);
+		// checkLoggingStatus();
+		new FollowHelper(User.Instance()).publishFollow(follow, mCallback);
 	}
 
 	public void publishComments(PutCommentRequestParam param,
 			CommentHelper.ICallback mCallback) throws NetworkException {
-//		checkLoggingStatus();
-		new CommentHelper(user).publishComment(param, mCallback);
+		// checkLoggingStatus();
+		new CommentHelper(User.Instance()).publishComment(param, mCallback);
 	}
 
 	public void SignIn(UserSignInRequestParam param,
 			AbstractRequestListener<UserSignInResponseBean> listener) {
-		new SignInHelper(user).asyncSignIn(pool, param, listener);
+		new SignInHelper(User.Instance()).asyncSignIn(pool, param, listener);
 	}
 
 	public void SignUp(UserSignUpRequestParam param,
 			AbstractRequestListener<UserSignUpResponseBean> listener) {
-		new SignUpHelper(user).asyncSignUp(pool, param, listener);
+		new SignUpHelper(User.Instance()).asyncSignUp(pool, param, listener);
 	}
 
 	public void loadDrawableFromFile(final String imageUrl,
-			final AsyncImageLoader.ImageCallback mCallback) {
-		imageLoader.loadImageFromFileUrl(pool, imageUrl, mCallback);
+			final AsyncImageLoader.ImageCallback mCallback,
+			final BitmapDisplayConfig config) {
+		imageLoader.loadImageFromFileUrl(pool, imageUrl, mCallback, config);
 	}
 
 	public void loadDrawableFromWeb(final String imageUrl,
-			final AsyncImageLoader.ImageCallback mCallback) {
-		imageLoader.loadImageFromWebUrl(pool, imageUrl, mCallback);
+			final AsyncImageLoader.ImageCallback mCallback,
+			final BitmapDisplayConfig config) {
+		imageLoader.loadImageFromWebUrl(pool, imageUrl, mCallback, config);
 	}
 
 	public void decorateImage(final DecoratePhotoType type, final Bitmap raw,
@@ -284,11 +283,11 @@ public class AsyncUtils {
 			public void run() {
 				// TODO Auto-generated method stub
 				try {
-					user = reader.loadFromXML(UserReader.USER_PATH,
+					reader.loadFromXML(UserReader.USER_PATH,
 							UserReader.USER_FILE_NAME);
 					UserInfo info = infoReader.loadFromXML(UserInfoReader.PATH,
 							UserInfoReader.FILE_NAME);
-					user.setUserInfo(info);
+					User.Instance().setUserInfo(info);
 					if (listener != null) {
 						listener.onComplete(info);
 					}
@@ -311,9 +310,9 @@ public class AsyncUtils {
 				// TODO Auto-generated method stub
 				try {
 					writer.WriteXML(UserReader.USER_PATH,
-							UserReader.USER_FILE_NAME, user);
+							UserReader.USER_FILE_NAME, User.Instance());
 					infoWriter.WriteXML(UserInfoReader.PATH,
-							UserInfoReader.FILE_NAME, user.getUserInfo());
+							UserInfoReader.FILE_NAME, User.Instance().getUserInfo());
 					if (listener != null) {
 						listener.onComplete(null);
 					}
@@ -411,7 +410,7 @@ public class AsyncUtils {
 	}
 
 	private void checkLoggingStatus() throws NetworkException {
-		if (!user.isLogging()) {
+		if (!User.Instance().isLogging()) {
 			throw new NetworkException(NetworkException.LOGGING_EXCEPTION);
 		}
 	}
@@ -442,7 +441,7 @@ public class AsyncUtils {
 		public void run() {
 
 			try {
-				resp = user.request(action, parameters);
+				resp = User.Instance().request(action, parameters);
 				if (resp != null) {
 					Utils.checkResponse(resp);
 

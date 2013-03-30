@@ -9,6 +9,8 @@ import android.view.View.OnClickListener;
 import android.widget.ImageView;
 
 import com.photoshare.service.photos.PhotoBean;
+import com.photoshare.service.photos.PhotoType;
+import com.photoshare.service.photos.factory.BitmapDisplayConfig;
 import com.photoshare.utils.async.AsyncImageLoader;
 import com.photoshare.utils.async.AsyncUtils;
 
@@ -20,6 +22,7 @@ public class MiddlePhotoImageView {
 	private PhotoBean photo;
 	private ImageView imageView;
 	private AsyncUtils async;
+	private BitmapDisplayConfig config;
 
 	/**
 	 * @param photo
@@ -36,6 +39,8 @@ public class MiddlePhotoImageView {
 	}
 
 	public void apply() {
+		config = new BitmapDisplayConfig(PhotoType.MIDDLE);
+		
 		async.loadDrawableFromWeb(photo.getUrlHead(),
 				new AsyncImageLoader.ImageCallback() {
 
@@ -53,7 +58,7 @@ public class MiddlePhotoImageView {
 						}
 					}
 
-				});
+				}, config);
 		imageView.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {

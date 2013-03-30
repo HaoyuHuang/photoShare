@@ -35,9 +35,9 @@ public class User {
 
 	private boolean configured;
 
-	private PipelineMsgHandler handler = new PipelineMsgHandler();
+	private PipelineMsgHandler handler = PipelineMsgHandler.Instance();
 	/** 服务器地址 */
-	private final String SERVER_URL = "http://222.94.185.37:8080/photoShareServer/photoShare-mobile";
+	private final String SERVER_URL = "http://121.229.103.52:8080/photoShareServer/photoShare-mobile";
 	/** 响应形式为Json */
 	public static final String RESPONSE_FORMAT_JSON = "json";
 	private final String LOG_TAG_REQUEST = "request";
@@ -47,16 +47,14 @@ public class User {
 
 	private static User user = new User();
 
-	public static User getInstance() {
-		if (user == null)
-			user = new User();
+	public static User Instance() {
 		return user;
 	}
 
 	private User() {
-
+		Utils.logger("User Created");
 	}
-
+	
 	/** 应该用不到的登出 */
 	public boolean logout(Context context) {
 		Utils.clearCookies(context);
@@ -112,11 +110,11 @@ public class User {
 		public static void readAccessToken(Context context) {
 			SharedPreferences pref = context.getSharedPreferences(
 					USER_PREFERENCE_NAME, Context.MODE_APPEND);
-			user.setMail(pref.getString(USER_PREFERENCE_MAIL, ""));
-			user.setPwd(pref.getString(USER_PREFERENCE_PWD, ""));
+			Instance().setMail(pref.getString(USER_PREFERENCE_MAIL, ""));
+			Instance().setPwd(pref.getString(USER_PREFERENCE_PWD, ""));
 			UserInfo info = new UserInfo();
 			info.setUid(pref.getLong(USER_PREFERENCE_ID, 0L));
-			user.setUserInfo(info);
+			Instance().setUserInfo(info);
 		}
 	}
 
@@ -282,7 +280,7 @@ public class User {
 	public boolean isCurrentUser(UserInfo info) {
 		Util.logger("currentUser");
 		if (info != null) {
-			if (user.getUserInfo().getUid() == info.getUid()) {
+			if (Instance().getUserInfo().getUid() == info.getUid()) {
 				Util.logger("isCurrentUser");
 				return true;
 			}

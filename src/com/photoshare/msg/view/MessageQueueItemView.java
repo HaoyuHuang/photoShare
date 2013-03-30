@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.photoshare.common.IObserver;
 import com.photoshare.msg.MessageItem;
+import com.photoshare.service.photos.PhotoType;
+import com.photoshare.service.photos.factory.BitmapDisplayConfig;
 import com.photoshare.tabHost.R;
 import com.photoshare.utils.async.AsyncImageLoader.ImageCallback;
 import com.photoshare.utils.async.AsyncUtils;
@@ -27,7 +29,7 @@ public class MessageQueueItemView {
 	private UserBooleanBtn msgBtn;
 	private MessageItem item;
 	private AsyncUtils async;
-	
+
 	/**
 	 * @param baseView
 	 * @param item
@@ -52,22 +54,40 @@ public class MessageQueueItemView {
 		msgPhoto = (ImageView) baseView.findViewById(R.id.itemMessagePhoto);
 		msgDecription.setText(item.getMsgDescription());
 		msgName.setText(item.getMsgName());
-		
+
+		BitmapDisplayConfig config = new BitmapDisplayConfig();
+
+		switch (item.getMsgType()) {
+		case COMMENT:
+		case FOLLOW:
+			config.setPhotoType(PhotoType.SMALL);
+			break;
+		case LIKE:
+		case PHOTO:
+			config.setPhotoType(PhotoType.MIDDLE);
+			break;
+		case NULL:
+			break;
+		default:
+			break;
+
+		}
+
 		async.loadDrawableFromFile(item.getMsgPhotoUrl(), new ImageCallback() {
-			
+
 			public void imageLoaded(Drawable imageDrawable, String imageUrl) {
 				if (msgListener != null) {
 					msgListener
 							.OnImageLoaded(msgPhoto, imageDrawable, imageUrl);
 				}
 			}
-			
+
 			public void imageDefault() {
 				if (msgListener != null) {
 					msgListener.OnImageDefault(msgPhoto);
 				}
 			}
-		});
+		}, config);
 
 	}
 

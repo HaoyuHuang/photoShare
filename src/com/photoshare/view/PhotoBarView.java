@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-import com.photoshare.service.photos.PhotoType;
+import com.photoshare.service.photos.RequestPhotoType;
 import com.photoshare.service.users.UserInfo;
 import com.photoshare.tabHost.R;
 
@@ -23,12 +23,12 @@ public class PhotoBarView {
 	private Button mShowProfileBtn;
 	private int fragmentViewId;
 	private UserInfo userInfo;
-	private PhotoType type;
+	private RequestPhotoType type;
 
 	/**
 	 * @param baseView
 	 */
-	public PhotoBarView(View baseView, PhotoType type, UserInfo userInfo) {
+	public PhotoBarView(View baseView, RequestPhotoType type, UserInfo userInfo) {
 		super();
 		this.baseView = baseView;
 		this.type = type;

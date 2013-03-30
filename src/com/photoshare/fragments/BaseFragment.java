@@ -19,7 +19,7 @@ import com.photoshare.common.AbstractRequestListener;
 import com.photoshare.exception.NetworkError;
 import com.photoshare.fragments.stacktrace.TraceConfig;
 import com.photoshare.service.photos.PhotoBean;
-import com.photoshare.service.photos.PhotoType;
+import com.photoshare.service.photos.RequestPhotoType;
 import com.photoshare.service.photos.views.FeedsFragment;
 import com.photoshare.service.photos.views.PopularPhotosFragment;
 import com.photoshare.service.signin.UserSignInRequestParam;
@@ -45,7 +45,7 @@ public abstract class BaseFragment extends Fragment {
 
 	protected int fragmentViewId;
 	protected AsyncUtils async = AsyncUtils.getInstance();
-	protected User user = User.getInstance();
+	protected User user = User.Instance();
 	private AppTitleBarView titleView;
 	protected String Tag;
 
@@ -477,7 +477,7 @@ public abstract class BaseFragment extends Fragment {
 		persist(fragmentViewId, uhtbf);
 	}
 
-	protected void ShowPhotoBarFragment(int fragmentViewId, PhotoType type,
+	protected void ShowPhotoBarFragment(int fragmentViewId, RequestPhotoType type,
 			UserInfo info, ArrayList<PhotoBean> photos) {
 		PhotoBarFragment pbf = PhotoBarFragment.newInstance(fragmentViewId);
 		Bundle args = new Bundle();

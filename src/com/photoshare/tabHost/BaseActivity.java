@@ -32,7 +32,7 @@ import com.photoshare.utils.async.AsyncUtils;
 public class BaseActivity extends Activity {
 	private ProgressDialog progressDialog;
 
-	protected User user = User.getInstance();
+	protected User user = User.Instance();
 
 	protected AsyncUtils async = AsyncUtils.getInstance();
 

@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.photoshare.service.news.NewsBean;
 import com.photoshare.service.photos.PhotoBean;
+import com.photoshare.service.photos.factory.BitmapDisplayConfig;
 import com.photoshare.service.users.UserInfo;
 import com.photoshare.tabHost.R;
 import com.photoshare.utils.async.AsyncImageLoader.ImageCallback;
@@ -107,7 +108,7 @@ public class NewsItemView {
 					mNewsPhoto.setImageResource(R.drawable.icon);
 				}
 
-			});
+			}, BitmapDisplayConfig.MIDDLE);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			mNewsPhoto.setImageResource(R.drawable.icon);
@@ -142,7 +143,7 @@ public class NewsItemView {
 					mNewsPhoto.setImageResource(R.drawable.icon);
 				}
 
-			});
+			}, BitmapDisplayConfig.MIDDLE);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			mNewsPhoto.setImageResource(R.drawable.icon);

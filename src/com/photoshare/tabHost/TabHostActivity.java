@@ -21,6 +21,7 @@ import com.photoshare.tabHost.tab.TabHomeActivity;
 import com.photoshare.tabHost.tab.TabHomePageActivity;
 import com.photoshare.tabHost.tab.TabNewsActivity;
 import com.photoshare.tabHost.tab.TabPopularActivity;
+import com.photoshare.utils.User;
 import com.photoshare.utils.UserReader;
 import com.photoshare.utils.async.AsyncUtils;
 import com.renren.api.connect.android.Util;
@@ -83,7 +84,8 @@ public class TabHostActivity extends TabActivity {
 	}
 
 	private void init() {
-
+//		User.Instance();
+//		AsyncUtils.getInstance();
 		tabHost.addTab(tabHost.newTabSpec(TAB_HOME).setIndicator(TAB_HOME)
 				.setContent(new Intent(this, TabHomeActivity.class)));
 		tabHost.addTab(tabHost.newTabSpec(TAB_POPULAR)

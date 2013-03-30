@@ -62,4 +62,17 @@ public class PhotoLikeResponseBean extends ResponseBean {
 
 		return sb.toString();
 	}
+
+	public boolean isLike() {
+		return isLike;
+	}
+
+	public long getUserId() {
+		return UserId;
+	}
+
+	public long getPhotoId() {
+		return PhotoId;
+	}
+
 }

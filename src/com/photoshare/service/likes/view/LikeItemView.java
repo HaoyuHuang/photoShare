@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.photoshare.service.likes.LikeBean;
+import com.photoshare.service.photos.PhotoType;
+import com.photoshare.service.photos.factory.BitmapDisplayConfig;
 import com.photoshare.service.users.UserInfo;
 import com.photoshare.tabHost.R;
 import com.photoshare.utils.async.AsyncImageLoader.ImageCallback;
@@ -68,7 +70,7 @@ public class LikeItemView {
 					onLikeClickListener.OnImageDefaule(mUserHead);
 				}
 			}
-		});
+		}, BitmapDisplayConfig.SMALL);
 
 	}
 

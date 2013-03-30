@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.photoshare.service.photos.PhotoType;
+import com.photoshare.service.photos.factory.BitmapDisplayConfig;
 import com.photoshare.service.users.UserInfo;
 import com.photoshare.tabHost.R;
 import com.photoshare.utils.async.AsyncImageLoader.ImageCallback;
@@ -28,6 +30,7 @@ public class UserHomeTitleBarView {
 	private UserTextView mUserHomeFollowingCntView;
 	private UserInfo userInfo;
 	private AsyncUtils async;
+	private BitmapDisplayConfig config;
 
 	/**
 	 * @param baseView
@@ -65,6 +68,8 @@ public class UserHomeTitleBarView {
 				.findViewById(R.id.userHomeTitleBarPhotosCnt);
 		mUserHomePhotosCntView.setText(userInfo.getPhotosCnt() + "\r\n 照片");
 
+		config = new BitmapDisplayConfig(PhotoType.SMALL);
+
 		async.loadDrawableFromWeb(userInfo.getTinyurl(), new ImageCallback() {
 
 			public void imageLoaded(Drawable imageDrawable, String imageUrl) {
@@ -79,7 +84,7 @@ public class UserHomeTitleBarView {
 					mCallback.OnDefault(mUserHomeHeadView);
 				}
 			}
-		});
+		}, config);
 
 	}
 

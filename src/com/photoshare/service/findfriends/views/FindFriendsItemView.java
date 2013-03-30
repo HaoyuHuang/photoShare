@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.photoshare.service.photos.factory.BitmapDisplayConfig;
 import com.photoshare.service.users.UserInfo;
 import com.photoshare.tabHost.R;
 import com.photoshare.utils.async.AsyncImageLoader;
@@ -64,7 +65,7 @@ public class FindFriendsItemView {
 							onFriendsViewDisplay.OnDefault(mHeadView);
 						}
 					}
-				});
+				}, BitmapDisplayConfig.SMALL);
 	}
 
 	private OnFriendsViewDisplay onFriendsViewDisplay;

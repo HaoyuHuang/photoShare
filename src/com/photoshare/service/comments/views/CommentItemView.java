@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.photoshare.service.comments.CommentInfo;
+import com.photoshare.service.photos.factory.BitmapDisplayConfig;
 import com.photoshare.service.users.UserInfo;
 import com.photoshare.tabHost.R;
 import com.photoshare.utils.async.AsyncImageLoader.ImageCallback;
@@ -75,7 +76,7 @@ public class CommentItemView {
 							}
 						}
 
-					});
+					}, BitmapDisplayConfig.SMALL);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			userHead.setImageResource(R.drawable.icon);

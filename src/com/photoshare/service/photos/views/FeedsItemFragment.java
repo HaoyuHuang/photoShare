@@ -129,10 +129,10 @@ public class FeedsItemFragment extends BaseFragment {
 		return getString(R.string.ffeedsItemFragment);
 	}
 
-	private void AsyncLikePhoto(PhotoBean photo) throws NetworkException {
+	private void AsyncLikePhoto(PhotoBean like) throws NetworkException {
 		PhotoLikeRequestParam param = new PhotoLikeRequestParam.LikeBuilder()
-				.UserId(user.getUserInfo().getUid()).PhotoId(photo.getPid())
-				.isLike(photo.isLike()).build();
+				.UserId(user.getUserInfo().getUid()).PhotoId(like.getPid())
+				.isLike(like.isLike()).build();
 		mNotificationDisplayer.setTag(getLikeTag());
 		mNotificationDisplayer.setTicker(getLikeTicker());
 		mNotificationDisplayer.displayNotification();
@@ -164,13 +164,14 @@ public class FeedsItemFragment extends BaseFragment {
 				}
 			}
 
-			public void OnComplete(PhotoLikeResponseBean bean) {
+			public void OnComplete(final PhotoLikeResponseBean bean) {
 				mNotificationDisplayer.setTag(getSuccessTag());
 				mNotificationDisplayer.setTicker(getSuccessTicker());
 				if (getActivity() != null) {
 					getActivity().runOnUiThread(new Runnable() {
 
 						public void run() {
+							photo.setLike(bean.isLike());
 							mNotificationDisplayer.displayNotification();
 							mNotificationDisplayer.cancleNotification();
 						}

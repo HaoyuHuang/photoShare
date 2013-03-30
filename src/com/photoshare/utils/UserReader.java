@@ -45,7 +45,7 @@ public class UserReader implements XMLParser<User> {
 	 */
 	public User loadFromXML(String path, String file) throws Exception {
 
-		User user = User.getInstance();
+		User user = User.Instance();
 		try {
 			XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
 			XmlPullParser parser = factory.newPullParser();

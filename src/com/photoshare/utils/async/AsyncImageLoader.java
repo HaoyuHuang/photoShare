@@ -14,9 +14,12 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.util.LruCache;
 import android.util.Log;
 
 import com.photoshare.service.photos.DecoratePhotoType;
+import com.photoshare.service.photos.factory.BitmapDisplayConfig;
+import com.photoshare.service.photos.factory.PhotoFactory;
 import com.photoshare.utils.Utils;
 
 public class AsyncImageLoader {
@@ -24,7 +27,8 @@ public class AsyncImageLoader {
 	private Map<String, SoftReference<Drawable>> imageCache = new HashMap<String, SoftReference<Drawable>>();
 
 	public void loadImageFromFileUrl(final Executor pool,
-			final String imageUrl, final ImageCallback mCallback) {
+			final String imageUrl, final ImageCallback mCallback,
+			final BitmapDisplayConfig config) {
 
 		Drawable drawable = get(imageUrl);
 
@@ -42,8 +46,10 @@ public class AsyncImageLoader {
 				opt.inPreferredConfig = Bitmap.Config.RGB_565;
 				opt.inPurgeable = true;
 				opt.inInputShareable = true;
-
 				bit = BitmapFactory.decodeFile(imageUrl);
+				if (bit != null) {
+					bit = PhotoFactory.createConfiguredBitmap(bit, config);
+				}
 				Drawable drawable = new BitmapDrawable(bit);
 				imageCache.put(imageUrl, new SoftReference<Drawable>(drawable));
 				mCallback.imageLoaded(drawable, imageUrl);
@@ -53,7 +59,7 @@ public class AsyncImageLoader {
 	}
 
 	public void loadImageFromWebUrl(final Executor pool, final String imageUrl,
-			final ImageCallback mCallback) {
+			final ImageCallback mCallback, final BitmapDisplayConfig config) {
 
 		Drawable drawable = get(imageUrl);
 
@@ -69,6 +75,9 @@ public class AsyncImageLoader {
 				Bitmap bit = null;
 				try {
 					bit = getBitMapFromWeb(imageUrl);
+					if (bit != null) {
+						bit = PhotoFactory.createConfiguredBitmap(bit, config);
+					}
 				} catch (RuntimeException re) {
 					re.printStackTrace();
 					mCallback.imageDefault();
@@ -81,8 +90,9 @@ public class AsyncImageLoader {
 		});
 	}
 
-	public void docorateImage(final Executor pool, final DecoratePhotoType type,
-			final Bitmap raw, final ImageCallback mCallback) {
+	public void docorateImage(final Executor pool,
+			final DecoratePhotoType type, final Bitmap raw,
+			final ImageCallback mCallback) {
 		pool.execute(new Runnable() {
 
 			public void run() {
@@ -124,8 +134,7 @@ public class AsyncImageLoader {
 	 * 将指定的url中的数据读入字节数组
 	 * */
 	private byte[] getBytes(String url, Bundle params) {
-		
-		
+
 		try {
 			HttpURLConnection conn = Utils.openConn(url, "post", params);
 			ByteArrayOutputStream os = new ByteArrayOutputStream();

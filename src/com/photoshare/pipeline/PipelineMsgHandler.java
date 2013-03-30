@@ -18,7 +18,8 @@ import com.photoshare.utils.async.AsyncUtils;
  */
 public class PipelineMsgHandler {
 
-	public PipelineMsgHandler() {
+	private PipelineMsgHandler() {
+		Utils.logger("PipelineMsgHandler Created");
 		register();
 	}
 
@@ -29,6 +30,12 @@ public class PipelineMsgHandler {
 	private MessageList messageList = MessageList.getInstance();
 
 	public static final int MAX_TRIAL = 3;
+
+	private static PipelineMsgHandler HANDLER = new PipelineMsgHandler();
+
+	public static PipelineMsgHandler Instance() {
+		return HANDLER;
+	}
 
 	private OutboundPipeline.Listener msgListener = new OutboundPipeline.Listener() {
 
@@ -82,18 +89,6 @@ public class PipelineMsgHandler {
 		};
 
 		try {
-			if (async != null) {
-				Utils.logger("async not null-----------------");
-			}
-			
-			if (request.getType() != null) {
-				Utils.logger(request.getType().getAction() + " not null-----------------");
-			}
-			
-			if (request.getAMsg() != null) {
-				Utils.logger("amsg not null-----------------");
-			}
-			
 			async.request(request.getType().getAction(), request.getAMsg()
 					.getParams(), httpListener);
 		} catch (NetworkException e) {

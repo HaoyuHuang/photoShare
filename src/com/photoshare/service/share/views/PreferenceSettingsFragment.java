@@ -16,7 +16,7 @@ import com.photoshare.fragments.stacktrace.TraceConfig;
 import com.photoshare.history.SearchHistory;
 import com.photoshare.service.follow.FollowType;
 import com.photoshare.service.photos.PhotoBean;
-import com.photoshare.service.photos.PhotoType;
+import com.photoshare.service.photos.RequestPhotoType;
 import com.photoshare.service.users.UserInfo;
 import com.photoshare.service.users.UserPrivacyRequestParam;
 import com.photoshare.service.users.UserPrivacyResponseBean;
@@ -194,7 +194,7 @@ public class PreferenceSettingsFragment extends BaseFragment {
 			titleBarBtnDrawable();
 			Bundle param = new Bundle();
 			param.putString(PhotoBean.KEY_PHOTO_TYPE,
-					PhotoType.MyLikedPhotos.toString());
+					RequestPhotoType.MyLikedPhotos.toString());
 			param.putParcelable(UserInfo.KEY_USER_INFO, user.getUserInfo());
 			param.putBoolean(KEY_IGNORE_TITLE_VIEW, true);
 			forward(getFeedFragment(), param);
@@ -253,7 +253,7 @@ public class PreferenceSettingsFragment extends BaseFragment {
 			titleBarBtnDrawable();
 			Bundle param = new Bundle();
 			param.putString(PhotoBean.KEY_PHOTO_TYPE,
-					PhotoType.MyPhotos.toString());
+					RequestPhotoType.MyPhotos.toString());
 			param.putParcelable(UserInfo.KEY_USER_INFO, user.getUserInfo());
 			param.putBoolean(KEY_IGNORE_TITLE_VIEW, true);
 			forward(getFeedFragment(), param);

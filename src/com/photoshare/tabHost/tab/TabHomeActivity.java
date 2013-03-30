@@ -14,7 +14,7 @@ import com.photoshare.fragments.stacktrace.TraceElement;
 import com.photoshare.fragments.stacktrace.TracePhase;
 import com.photoshare.service.photos.PhotoBean;
 import com.photoshare.service.photos.PhotoBeanReader;
-import com.photoshare.service.photos.PhotoType;
+import com.photoshare.service.photos.RequestPhotoType;
 import com.photoshare.service.photos.views.FeedsFragment;
 import com.photoshare.service.users.UserInfo;
 import com.photoshare.tabHost.BaseActivity;
@@ -108,7 +108,7 @@ public class TabHomeActivity extends BaseActivity {
 		ff.setCanonicalTag(getFeedsFragment());
 		ff.setPhotos(feeds.getFeeds());
 		ff.setUserInfo(user.getUserInfo());
-		ff.setType(PhotoType.MyFeeds);
+		ff.setType(RequestPhotoType.MyFeeds);
 
 		TraceElement element = new TraceElement(getFeedsFragment(), null);
 		stack.setCurrentPhase(TracePhase.HOME);

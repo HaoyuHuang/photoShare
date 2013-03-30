@@ -43,7 +43,7 @@ public class PhotosGetInfoRequestParam extends RequestParam {
 
 	private int demandPage;
 
-	private PhotoType type;
+	private RequestPhotoType type;
 
 	@Deprecated
 	public String getMethod() {
@@ -77,7 +77,7 @@ public class PhotosGetInfoRequestParam extends RequestParam {
 
 		private int demandPage;
 
-		private PhotoType method;
+		private RequestPhotoType method;
 
 		private String fields;
 
@@ -96,7 +96,7 @@ public class PhotosGetInfoRequestParam extends RequestParam {
 			return this;
 		}
 
-		public PhotoRequestBuilder Method(PhotoType method) {
+		public PhotoRequestBuilder Method(RequestPhotoType method) {
 			this.method = method;
 			return this;
 		}

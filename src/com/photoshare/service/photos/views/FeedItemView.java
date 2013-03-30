@@ -1,13 +1,21 @@
 package com.photoshare.service.photos.views;
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.photoshare.service.photos.PhotoBean;
+import com.photoshare.service.photos.PhotoType;
+import com.photoshare.service.photos.factory.BitmapDisplayConfig;
 import com.photoshare.service.users.UserInfo;
 import com.photoshare.tabHost.R;
 import com.photoshare.utils.async.AsyncImageLoader;
@@ -23,7 +31,6 @@ public class FeedItemView {
 	private TextView mFeedFavor;
 	private UserTextView mFeedLike;
 	private UserTextView mFeedComment;
-	private ImageView hintImageView;
 	private ImageView mFeedPhoto;
 	private AsyncUtils async;
 	private PhotoBean photo;
@@ -35,7 +42,6 @@ public class FeedItemView {
 	public FeedItemView(View baseView, AsyncUtils async, PhotoBean photo) {
 		super();
 		this.baseView = baseView;
-		hintImageView = (ImageView) baseView.findViewById(R.id.image);
 		this.async = async;
 		this.photo = photo;
 	}
@@ -64,10 +70,10 @@ public class FeedItemView {
 						+ photo.getLikesCount());
 		mFeedLike.registerListener(OnLikeClickListener);
 		mFeedLike.apply();
-		
+
 		mFeedFavor = (TextView) baseView.findViewById(R.id.feedLike);
 		mFeedFavor.setOnClickListener(new OnClickListener() {
-			
+
 			public void onClick(View v) {
 				if (mCallback != null) {
 					mCallback.OnLikeClick(photo);
@@ -81,10 +87,11 @@ public class FeedItemView {
 
 		load();
 	}
-	
+
 	private void load() {
 
 		String url = photo.getUrlLarge();
+		BitmapDisplayConfig config = new BitmapDisplayConfig(PhotoType.LARGE);
 
 		if (url == null) {
 			async.loadDrawableFromFile(photo.getAbsolutePath(),
@@ -104,7 +111,7 @@ public class FeedItemView {
 							}
 						}
 
-					});
+					}, config);
 		} else {
 			async.loadDrawableFromWeb(url,
 					new AsyncImageLoader.ImageCallback() {
@@ -123,14 +130,14 @@ public class FeedItemView {
 							}
 						}
 
-					});
+					}, config);
 			mFeedPhoto.setOnLongClickListener(new OnLongClickListener() {
 
-				public boolean onLongClick(View v) {
+				public boolean onLongClick(View arg0) {
 					if (mCallback != null) {
 						mCallback.OnLikeClick(photo);
 					}
-					animation();
+//					showLike();
 					return true;
 				}
 
@@ -154,9 +161,11 @@ public class FeedItemView {
 						}
 					}
 
-				});
+				}, new BitmapDisplayConfig(PhotoType.SMALL));
 
 	}
+
+	
 
 	private UserTextView.UserTextOnClickListener OnNameClickListener = new UserTextView.UserTextOnClickListener() {
 
@@ -212,12 +221,6 @@ public class FeedItemView {
 		public void OnUserHeadDefault(ImageView image);
 
 		public void OnFeedPhotoDefault(ImageView image);
-	}
-
-	private void animation() {
-		hintImageView.setVisibility(View.VISIBLE);
-		hintImageView.bringToFront();
-		hintImageView.setVisibility(View.GONE);
 	}
 
 }

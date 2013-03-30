@@ -27,7 +27,7 @@ import com.photoshare.service.follow.FollowType;
 import com.photoshare.service.follow.UserFollowRequestParam;
 import com.photoshare.service.follow.UserFollowResponseBean;
 import com.photoshare.service.photos.PhotoBean;
-import com.photoshare.service.photos.PhotoType;
+import com.photoshare.service.photos.RequestPhotoType;
 import com.photoshare.service.photos.PhotosGetInfoRequestParam;
 import com.photoshare.service.photos.PhotosGetInfoResponseBean;
 import com.photoshare.service.photos.views.PopularPhotosView;
@@ -47,7 +47,7 @@ public class UserHomeFragment extends BaseFragment {
 
 	// ---------- meta data
 	private ArrayList<PhotoBean> photos;
-	private PhotoType type;
+	private RequestPhotoType type;
 	private UserInfo userInfo;
 
 	// ---------- title bar attributes
@@ -175,14 +175,14 @@ public class UserHomeFragment extends BaseFragment {
 				userInfo = bundle.getParcelable(UserInfo.KEY_USER_INFO);
 			}
 			if (bundle.containsKey(PhotoBean.KEY_PHOTO_TYPE)) {
-				type = PhotoType.SWITCH(bundle
+				type = RequestPhotoType.SWITCH(bundle
 						.getString(PhotoBean.KEY_PHOTO_TYPE));
 			}
 			if (bundle.containsKey(PhotoBean.KEY_PHOTOS)) {
 				photos = bundle.getParcelableArrayList(PhotoBean.KEY_PHOTOS);
 			}
 		}
-		type = PhotoType.MyPhotos;
+		type = RequestPhotoType.MyPhotos;
 		initVOtherHomeTitleBarViews();
 		try {
 			AsyncGetOthersInfo();

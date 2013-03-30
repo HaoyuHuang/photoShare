@@ -77,7 +77,7 @@ public class PhotoFactory {
 		return bitmap;
 	}
 
-	public static Bitmap createBitmapForWatermark(Bitmap src, Bitmap watermark) {
+	public static Bitmap createBitmapWithWatermark(Bitmap src, Bitmap watermark) {
 		if (src == null) {
 			return null;
 		}
@@ -97,6 +97,12 @@ public class PhotoFactory {
 		// store
 		cv.restore();// 存储
 		return newb;
+	}
+
+	public static Bitmap createConfiguredBitmap(Bitmap bitmap,
+			BitmapDisplayConfig config) {
+		return Bitmap.createScaledBitmap(bitmap, config.getPhotoType()
+				.getWidth(), config.getPhotoType().getHeight(), true);
 	}
 
 	/**
@@ -174,7 +180,7 @@ public class PhotoFactory {
 	 * @param bitmap
 	 * @param name
 	 */
-	public static void savePNG_After(Bitmap bitmap, String name) {
+	public static void saveAsPNG(Bitmap bitmap, String name) {
 		File file = new File(name);
 		try {
 			FileOutputStream out = new FileOutputStream(file);
@@ -195,7 +201,7 @@ public class PhotoFactory {
 	 * @param bitmap
 	 * @param path
 	 */
-	public static void saveJPGE_After(Bitmap bitmap, String path) {
+	public static void saveAsJPGE(Bitmap bitmap, String path) {
 		File file = new File(path);
 		try {
 			FileOutputStream out = new FileOutputStream(file);

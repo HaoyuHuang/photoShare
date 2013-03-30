@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.photoshare.common.IObserver;
 import com.photoshare.msg.MsgType;
+import com.photoshare.service.photos.factory.BitmapDisplayConfig;
 import com.photoshare.service.users.UserInfo;
 import com.photoshare.tabHost.R;
 import com.photoshare.utils.async.AsyncImageLoader.ImageCallback;
@@ -83,7 +84,7 @@ public class FollowItemView {
 							mCallback.OnImageDefaule(userHead);
 						}
 					}
-				});
+				}, BitmapDisplayConfig.SMALL);
 		userPseudoName.setText(followerInfo.getPseudoName());
 		userNameView.registerListener(listener);
 		userNameView.apply();

@@ -18,7 +18,7 @@ import com.photoshare.exception.NetworkError;
 import com.photoshare.exception.NetworkException;
 import com.photoshare.fragments.BaseFragment;
 import com.photoshare.service.photos.PhotoBean;
-import com.photoshare.service.photos.PhotoType;
+import com.photoshare.service.photos.RequestPhotoType;
 import com.photoshare.service.photos.PhotosGetInfoRequestParam;
 import com.photoshare.service.photos.PhotosGetInfoResponseBean;
 import com.photoshare.service.users.UserInfo;
@@ -34,7 +34,7 @@ public class PopularPhotosFragment extends BaseFragment {
 	private PopularPhotosView popularView;
 	private UserInfo userInfo;
 	private ArrayList<PhotoBean> photos;
-	private PhotoType type;
+	private RequestPhotoType type;
 	private int leftBtnVisibility = View.INVISIBLE;
 	private int rightBtnVisibility = View.INVISIBLE;
 	private String titleBarText;
@@ -52,7 +52,7 @@ public class PopularPhotosFragment extends BaseFragment {
 		return userInfo;
 	}
 
-	public PhotoType getType() {
+	public RequestPhotoType getType() {
 		return type;
 	}
 
@@ -64,7 +64,7 @@ public class PopularPhotosFragment extends BaseFragment {
 		this.userInfo = userInfo;
 	}
 
-	public void setType(PhotoType type) {
+	public void setType(RequestPhotoType type) {
 		this.type = type;
 	}
 
@@ -80,7 +80,7 @@ public class PopularPhotosFragment extends BaseFragment {
 						.getParcelableArrayList(PhotoBean.KEY_PHOTOS);
 			}
 			if (savedInstanceState.containsKey(PhotoBean.KEY_PHOTO_TYPE)) {
-				type = PhotoType.SWITCH(savedInstanceState
+				type = RequestPhotoType.SWITCH(savedInstanceState
 						.getString(PhotoBean.KEY_PHOTO_TYPE));
 			}
 			if (savedInstanceState.containsKey(UserInfo.KEY_USER_INFO)) {
@@ -95,7 +95,7 @@ public class PopularPhotosFragment extends BaseFragment {
 				userInfo = bundle.getParcelable(UserInfo.KEY_USER_INFO);
 			}
 			if (bundle.containsKey(PhotoBean.KEY_PHOTO_TYPE)) {
-				type = PhotoType.SWITCH(bundle
+				type = RequestPhotoType.SWITCH(bundle
 						.getString(PhotoBean.KEY_PHOTO_TYPE));
 			}
 			if (bundle.containsKey(PhotoBean.KEY_PHOTOS)) {
@@ -131,7 +131,7 @@ public class PopularPhotosFragment extends BaseFragment {
 				userInfo = bundle.getParcelable(UserInfo.KEY_USER_INFO);
 			}
 			if (bundle.containsKey(PhotoBean.KEY_PHOTO_TYPE)) {
-				type = PhotoType.SWITCH(bundle
+				type = RequestPhotoType.SWITCH(bundle
 						.getString(PhotoBean.KEY_PHOTO_TYPE));
 			}
 			if (bundle.containsKey(PhotoBean.KEY_PHOTOS)) {
@@ -230,6 +230,7 @@ public class PopularPhotosFragment extends BaseFragment {
 		public void OnImageClick(PhotoBean photo) {
 			Bundle params = (Bundle) getArguments().clone();
 			params.putParcelable(PhotoBean.KEY_PHOTO, photo);
+			params.putParcelable(UserInfo.KEY_USER_INFO, userInfo);
 			forward(getFeedsItemFragment(), params);
 		}
 

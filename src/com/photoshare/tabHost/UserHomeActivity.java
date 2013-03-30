@@ -2,6 +2,7 @@ package com.photoshare.tabHost;
 
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.view.Window;
 
 import com.photoshare.command.Command;
 import com.photoshare.fragments.stacktrace.TraceElement;
@@ -46,6 +47,8 @@ public class UserHomeActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		
 		setContentView(R.layout.user_home_layout_holder);
 		initFragments();
 	}

@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 
 import com.photoshare.fragments.stacktrace.TraceConfig;
 import com.photoshare.service.photos.PhotoBean;
-import com.photoshare.service.photos.PhotoType;
+import com.photoshare.service.photos.RequestPhotoType;
 import com.photoshare.service.users.UserInfo;
 import com.photoshare.tabHost.R;
 import com.photoshare.view.PhotoBarView;
@@ -27,7 +27,7 @@ import com.photoshare.view.PhotoBarView;
 public class PhotoBarFragment extends BaseFragment {
 	private PhotoBarView photoBar;
 	private UserInfo userInfo;
-	private PhotoType type;
+	private RequestPhotoType type;
 	private ArrayList<PhotoBean> photos;
 
 	@Override
@@ -62,7 +62,7 @@ public class PhotoBarFragment extends BaseFragment {
 		return pf;
 	}
 
-	public PhotoType getType() {
+	public RequestPhotoType getType() {
 		return type;
 	}
 
@@ -81,7 +81,7 @@ public class PhotoBarFragment extends BaseFragment {
 				userInfo = bundle.getParcelable(UserInfo.KEY_USER_INFO);
 			}
 			if (bundle.containsKey(PhotoBean.KEY_PHOTO_TYPE)) {
-				type = PhotoType.SWITCH(bundle
+				type = RequestPhotoType.SWITCH(bundle
 						.getString(PhotoBean.KEY_PHOTO_TYPE));
 			}
 			if (bundle.containsKey(PhotoBean.KEY_PHOTOS)) {
