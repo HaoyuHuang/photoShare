@@ -56,7 +56,7 @@ public class CameraFragment extends BaseFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		if (!processArguments()) {
+		if (!hideTitleBarView()) {
 			container.addView(super.onCreateView(inflater, container,
 					savedInstanceState));
 		}
@@ -68,7 +68,7 @@ public class CameraFragment extends BaseFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
-		if (processArguments()) {
+		if (hideTitleBarView()) {
 			initTitleBar(leftBtnText, rightBtnText, titlebarText);
 			initView();
 			initViews();

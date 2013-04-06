@@ -99,7 +99,7 @@ public class NewsFragment extends BaseFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		Log.i("NewsFragment", "createTitleView");
-		if (!processArguments()) {
+		if (!hideTitleBarView()) {
 			container.addView(super.onCreateView(inflater, container,
 					savedInstanceState));
 		}

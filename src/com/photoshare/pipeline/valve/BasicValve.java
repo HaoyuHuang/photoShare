@@ -1,26 +1,29 @@
 /**
  * 
  */
-package com.photoshare.pipeline;
+package com.photoshare.pipeline.valve;
 
 import com.photoshare.common.AbstractRequestListener;
 import com.photoshare.common.RequestParam;
 import com.photoshare.exception.NetworkError;
 import com.photoshare.exception.NetworkException;
+import com.photoshare.exception.ValveException;
 import com.photoshare.msg.MessageList;
 import com.photoshare.msg.RequestMsg;
+import com.photoshare.pipeline.OutboundPipeline;
 import com.photoshare.utils.Utils;
 import com.photoshare.utils.async.AsyncUtils;
 
 /**
+ * The Basic Valve is responsible for sending the request to the server.
+ * 
  * @author Aron
  * 
  */
-public class PipelineMsgHandler {
+public class BasicValve implements Valve {
 
-	private PipelineMsgHandler() {
-		Utils.logger("PipelineMsgHandler Created");
-		register();
+	public BasicValve() {
+		
 	}
 
 	private AsyncUtils async = AsyncUtils.getInstance();
@@ -31,24 +34,28 @@ public class PipelineMsgHandler {
 
 	public static final int MAX_TRIAL = 3;
 
-	private static PipelineMsgHandler HANDLER = new PipelineMsgHandler();
-
-	public static PipelineMsgHandler Instance() {
-		return HANDLER;
+	public void addMsg(RequestMsg<? extends RequestParam> AMsg,
+			final AbstractRequestListener<String> listener) {
+		Utils.logger(AMsg.toString());
+		pipeline.add(AMsg, listener);
 	}
 
-	private OutboundPipeline.Listener msgListener = new OutboundPipeline.Listener() {
+	public String getInfo() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-		public void onFreshMsgBoard(RequestMsg<? extends RequestParam> request,
-				AbstractRequestListener<String> listener) {
-			asyncPublishRequest(request, listener);
-		}
-	};
-
-	private void asyncPublishRequest(
-			final RequestMsg<? extends RequestParam> request,
-			final AbstractRequestListener<String> listener) {
-		Utils.logger("asyncPublishRequest");
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.photoshare.pipeline.valve.Valve#invoke(com.photoshare.msg.RequestMsg,
+	 * com.photoshare.common.AbstractRequestListener,
+	 * com.photoshare.pipeline.valve.ValveContext)
+	 */
+	public void invoke(final RequestMsg<? extends RequestParam> request,
+			final AbstractRequestListener<String> listener, ValveContext context)
+			throws ValveException {
 		async = AsyncUtils.getInstance();
 		if (request == null)
 			return;
@@ -70,7 +77,13 @@ public class PipelineMsgHandler {
 				}
 				if (request.getTrial() <= MAX_TRIAL) {
 					request.tryAgain();
-					pipeline.notifySendToTargetHandler(request, listener);
+					try {
+						pipeline.invoke(request, listener);
+					} catch (ValveException e) {
+						messageList.add(request);
+						pipeline.moveToLast();
+						e.printStackTrace();
+					}
 				} else {
 					messageList.add(request);
 					pipeline.moveToLast();
@@ -97,16 +110,6 @@ public class PipelineMsgHandler {
 			}
 		}
 
-	}
-
-	public void addMsg(RequestMsg<? extends RequestParam> AMsg,
-			final AbstractRequestListener<String> listener) {
-		Utils.logger(AMsg.toString());
-		pipeline.add(AMsg, listener);
-	}
-
-	private void register() {
-		pipeline.registerListener(msgListener);
 	}
 
 }

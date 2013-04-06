@@ -113,6 +113,7 @@
     <string name="cancel">取消</string>
     <string name="myNews">我</string>
     <string name="followingNews">跟随</string>
+    <string name="refresh">刷新</string>
 
     <!-- Api Invoker -->
     <string name="renren_one_click_photo_invoke">Renren.publishPhotoWithActivity</string>

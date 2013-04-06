@@ -349,8 +349,8 @@ public final class R {
         public static final int cancel=0x7f08005d;
         public static final int comment=0x7f080008;
         public static final int crop=0x7f080010;
-        public static final int cropDirStr=0x7f080083;
-        public static final int cropedDirStr=0x7f080084;
+        public static final int cropDirStr=0x7f080084;
+        public static final int cropedDirStr=0x7f080085;
         public static final int croping=0x7f080016;
         public static final int date=0x7f08001a;
         /**  Image Description 
@@ -375,52 +375,52 @@ public final class R {
         public static final int epseudoNameError=0x7f08003c;
         public static final int epwdError=0x7f08003a;
         public static final int erefreshError=0x7f080035;
-        public static final int error_renren_authorize=0x7f080061;
-        public static final int error_renren_publish_photo=0x7f080062;
-        public static final int error_sina_weibo_authorize=0x7f080063;
-        public static final int error_sina_weibo_publish_photo=0x7f080064;
-        public static final int error_tx_weibo_authorize=0x7f080065;
-        public static final int error_tx_weibo_publish_photo=0x7f080066;
+        public static final int error_renren_authorize=0x7f080062;
+        public static final int error_renren_publish_photo=0x7f080063;
+        public static final int error_sina_weibo_authorize=0x7f080064;
+        public static final int error_sina_weibo_publish_photo=0x7f080065;
+        public static final int error_tx_weibo_authorize=0x7f080066;
+        public static final int error_tx_weibo_publish_photo=0x7f080067;
         public static final int esignIn=0x7f080038;
         public static final int esignInError=0x7f080037;
         public static final int esignUpError=0x7f080036;
         public static final int esignUpMailExistError=0x7f080043;
         /**  Fragment Invoker 
          */
-        public static final int fcameraPhotoFragment=0x7f080067;
-        public static final int fcommentsFragment=0x7f080068;
-        public static final int fdecoratedPhotoFragment=0x7f080069;
-        public static final int fdecoratedPhotoShareFragment=0x7f08006a;
-        public static final int fdecoratedSharingPreferenceFragment=0x7f08006b;
+        public static final int fcameraPhotoFragment=0x7f080068;
+        public static final int fcommentsFragment=0x7f080069;
+        public static final int fdecoratedPhotoFragment=0x7f08006a;
+        public static final int fdecoratedPhotoShareFragment=0x7f08006b;
+        public static final int fdecoratedSharingPreferenceFragment=0x7f08006c;
         public static final int feeds=0x7f080005;
-        public static final int ffeedsFragment=0x7f08006c;
-        public static final int ffeedsItemFragment=0x7f08006d;
-        public static final int ffindFriendsFragment=0x7f08006e;
-        public static final int ffollowInfoFragment=0x7f08006f;
-        public static final int flikeFragment=0x7f080070;
-        public static final int fmainFragment=0x7f080071;
-        public static final int fnewsFragment=0x7f080072;
+        public static final int ffeedsFragment=0x7f08006d;
+        public static final int ffeedsItemFragment=0x7f08006e;
+        public static final int ffindFriendsFragment=0x7f08006f;
+        public static final int ffollowInfoFragment=0x7f080070;
+        public static final int flikeFragment=0x7f080071;
+        public static final int fmainFragment=0x7f080072;
+        public static final int fnewsFragment=0x7f080073;
         public static final int follow=0x7f08000c;
         public static final int follower=0x7f080004;
         public static final int following=0x7f08000d;
         public static final int followingNews=0x7f08005f;
         public static final int forward=0x7f080059;
-        public static final int fotherHomeTitleBarFragment=0x7f080073;
-        public static final int fpersonalProfileFragment=0x7f080074;
-        public static final int fphotoBarFragment=0x7f080075;
-        public static final int fpopularPhotosFragment=0x7f080076;
-        public static final int fpreferenceSettingsFragment=0x7f080077;
+        public static final int fotherHomeTitleBarFragment=0x7f080074;
+        public static final int fpersonalProfileFragment=0x7f080075;
+        public static final int fphotoBarFragment=0x7f080076;
+        public static final int fpopularPhotosFragment=0x7f080077;
+        public static final int fpreferenceSettingsFragment=0x7f080078;
         public static final int friends=0x7f080012;
-        public static final int fsharePreferenceFragment=0x7f080078;
-        public static final int fshareSettingsFragment=0x7f080079;
-        public static final int fsignInFragment=0x7f08007a;
-        public static final int fsignUpFragment=0x7f08007b;
-        public static final int fuserHomeFragment=0x7f08007c;
-        public static final int fuserHomeTitleBarFragment=0x7f08007d;
-        public static final int fuserProfileFragment=0x7f08007e;
+        public static final int fsharePreferenceFragment=0x7f080079;
+        public static final int fshareSettingsFragment=0x7f08007a;
+        public static final int fsignInFragment=0x7f08007b;
+        public static final int fsignUpFragment=0x7f08007c;
+        public static final int fuserHomeFragment=0x7f08007d;
+        public static final int fuserHomeTitleBarFragment=0x7f08007e;
+        public static final int fuserProfileFragment=0x7f08007f;
         public static final int hello=0x7f080000;
         public static final int home=0x7f08000e;
-        public static final int homeDirStr=0x7f080081;
+        public static final int homeDirStr=0x7f080082;
         public static final int lastRefresh=0x7f08001c;
         public static final int like=0x7f080009;
         public static final int loadMore=0x7f080057;
@@ -458,19 +458,20 @@ public final class R {
         /**  View Description 
          */
         public static final int popular=0x7f080002;
-        public static final int popularDirStr=0x7f080082;
-        public static final int poseDirStr=0x7f080085;
+        public static final int popularDirStr=0x7f080083;
+        public static final int poseDirStr=0x7f080086;
         public static final int preferences=0x7f080011;
         public static final int privateinfo=0x7f080024;
         public static final int profile=0x7f080006;
         public static final int psuedoname=0x7f080026;
         public static final int publicinfo=0x7f080023;
+        public static final int refresh=0x7f080060;
         /**  Share Description 
          */
         public static final int renren=0x7f080053;
         /**  Api Invoker 
          */
-        public static final int renren_one_click_photo_invoke=0x7f080060;
+        public static final int renren_one_click_photo_invoke=0x7f080061;
         /**  Buttons Text Description 
          */
         public static final int retake=0x7f080056;
@@ -483,8 +484,8 @@ public final class R {
         public static final int sinaWeibo=0x7f080054;
         public static final int start=0x7f080058;
         public static final int submit=0x7f08005c;
-        public static final int suitDirStr=0x7f080086;
-        public static final int tempDirStr=0x7f080080;
+        public static final int suitDirStr=0x7f080087;
+        public static final int tempDirStr=0x7f080081;
         public static final int toastStartCroping=0x7f08001d;
         public static final int toastStopCroping=0x7f08001e;
         public static final int txWeibo=0x7f080055;
@@ -493,7 +494,7 @@ public final class R {
         public static final int uploadPhotoContent=0x7f080033;
         /**  文件目录 
          */
-        public static final int userDirStr=0x7f08007f;
+        public static final int userDirStr=0x7f080080;
         public static final int website=0x7f080027;
     }
     public static final class style {

@@ -79,13 +79,19 @@ public class TabHomeActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 		super.onResume();
 		if (onStop) {
+			Utils.logger("onTabHomeActivityResumed");
 			stack.setCurrentPhase(TracePhase.HOME);
-			Bundle args = new Bundle();
-			args.putParcelableArrayList(PhotoBean.KEY_PHOTOS, feeds.getFeeds());
-			args.putParcelable(UserInfo.KEY_USER_INFO, user.getUserInfo());
-			Command.forwardTab((BaseFragment) getFragmentManager()
-					.findFragmentById(R.id.TabHomeLayoutHolderId),
-					getFeedsFragment(), args);
+			// Bundle args = new Bundle();
+			// args.putParcelableArrayList(PhotoBean.KEY_PHOTOS,
+			// feeds.getFeeds());
+			// for (PhotoBean bean : feeds.getFeeds()) {
+			// System.out.println(bean);
+			// }
+			// args.putParcelable(UserInfo.KEY_USER_INFO, user.getUserInfo());
+			// args.putBoolean(BaseFragment.KEY_IGNORE_TITLE_VIEW, true);
+			// Command.forwardTab((BaseFragment) getFragmentManager()
+			// .findFragmentById(R.id.TabHomeLayoutHolderId),
+			// getFeedsFragment(), args);
 		}
 
 	}
@@ -111,14 +117,17 @@ public class TabHomeActivity extends BaseActivity {
 		ff.setType(RequestPhotoType.MyFeeds);
 
 		TraceElement element = new TraceElement(getFeedsFragment(), null);
+		Bundle args = new Bundle();
+		args.putBoolean(BaseFragment.KEY_IGNORE_TITLE_BAR_ELEMENT, true);
+		element.setParams(args);
 		stack.setCurrentPhase(TracePhase.HOME);
 		stack.forward(element);
 
+		ff.setArguments(args);
 		// Execute a transaction, replacing any existing fragment
 		// with this one inside the frame.
 		FragmentTransaction ft = getFragmentManager().beginTransaction();
 		ft.replace(R.id.TabHomeLayoutHolderId, ff);
-
 		ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 		ft.commit();
 	}

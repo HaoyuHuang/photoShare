@@ -19,6 +19,7 @@ import com.photoshare.command.Command;
 import com.photoshare.common.AbstractRequestListener;
 import com.photoshare.exception.NetworkError;
 import com.photoshare.exception.NetworkException;
+import com.photoshare.exception.ValveException;
 import com.photoshare.fragments.BaseFragment;
 import com.photoshare.service.LikeHelper;
 import com.photoshare.service.likes.PhotoLikeRequestParam;
@@ -49,7 +50,7 @@ public class FeedsFragment extends BaseFragment {
 	private String rightBtnText = "";
 	private String titlebarText = "";
 	private int leftBtnVisibility = View.INVISIBLE;
-	private int rightBtnVisibility = View.INVISIBLE;
+	private int rightBtnVisibility = View.VISIBLE;
 
 	public static FeedsFragment newInstance(int fragmentViewId) {
 		FeedsFragment feeds = new FeedsFragment();
@@ -67,22 +68,30 @@ public class FeedsFragment extends BaseFragment {
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
-
+		Utils.logger("onFeedsActivityCreated");
+		Tag = getFeedsFragment();
 		super.onActivityCreated(savedInstanceState);
-		Bundle bundle = getArguments();
-		if (bundle != null) {
-			if (bundle.containsKey(UserInfo.KEY_USER_INFO)) {
-				userInfo = bundle.getParcelable(UserInfo.KEY_USER_INFO);
-			}
-			if (bundle.containsKey(PhotoBean.KEY_PHOTO_TYPE)) {
-				type = RequestPhotoType.SWITCH(bundle
-						.getString(PhotoBean.KEY_PHOTO_TYPE));
-			}
-			if (bundle.containsKey(PhotoBean.KEY_PHOTOS)) {
-				photos = bundle.getParcelableArrayList(PhotoBean.KEY_PHOTOS);
+	}
+
+	@Override
+	public void onResume() {
+		Utils.logger("onFeedsResume");
+		if (isRunning) {
+			Bundle bundle = getArguments();
+			if (bundle != null) {
+				if (bundle.containsKey(UserInfo.KEY_USER_INFO)) {
+					userInfo = bundle.getParcelable(UserInfo.KEY_USER_INFO);
+				}
+				if (bundle.containsKey(PhotoBean.KEY_PHOTO_TYPE)) {
+					type = RequestPhotoType.SWITCH(bundle
+							.getString(PhotoBean.KEY_PHOTO_TYPE));
+				}
+				if (bundle.containsKey(PhotoBean.KEY_PHOTOS)) {
+					photos = bundle
+							.getParcelableArrayList(PhotoBean.KEY_PHOTOS);
+				}
 			}
 		}
-		Tag = getFeedsFragment();
 		if (type != null) {
 			switch (type) {
 			case MyFeeds:
@@ -101,7 +110,8 @@ public class FeedsFragment extends BaseFragment {
 				break;
 			}
 		}
-		if (!processArguments()) {
+		rightBtnText = getRefreshText();
+		if (hideTitleBarElement()) {
 			initTitleBar(leftBtnText, rightBtnText, titlebarText,
 					leftBtnVisibility, rightBtnVisibility);
 		} else {
@@ -119,12 +129,14 @@ public class FeedsFragment extends BaseFragment {
 				AsyncSignIn();
 			}
 		}
+		super.onResume();
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		if (!processArguments()) {
+		Utils.logger("onFeedsViewCreated");
+		if (!hideTitleBarView()) {
 			container.addView(super.onCreateView(inflater, container,
 					savedInstanceState));
 		}
@@ -166,7 +178,15 @@ public class FeedsFragment extends BaseFragment {
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		if (outState != null) {
-			outState.putParcelableArrayList(PhotoBean.KEY_PHOTOS, photos);
+			if (photos != null) {
+				outState.putParcelableArrayList(PhotoBean.KEY_PHOTOS, photos);
+			}
+			if (userInfo != null) {
+				outState.putParcelable(UserInfo.KEY_USER_INFO, userInfo);
+			}
+			if (type != null) {
+				outState.putString(PhotoBean.KEY_PHOTO_TYPE, type.toString());
+			}
 		}
 		super.onSaveInstanceState(outState);
 	}
@@ -224,7 +244,12 @@ public class FeedsFragment extends BaseFragment {
 				}
 			}
 		};
-		async.publishLikePhoto(param, mCallback);
+		try {
+			async.publishLikePhoto(param, mCallback);
+		} catch (ValveException e) {
+			mExceptionHandler.obtainMessage(NetworkError.ERROR_NETWORK)
+					.sendToTarget();
+		}
 		mNotificationDisplayer.cancleNotification();
 	}
 
@@ -273,27 +298,33 @@ public class FeedsFragment extends BaseFragment {
 			public void onComplete(final PhotosGetInfoResponseBean bean) {
 				if (bean != null) {
 					photos = bean.getPhotos();
-
 					currentPage += demandPage;
 				}
 				if (getActivity() != null) {
 					getActivity().runOnUiThread(new Runnable() {
 
 						public void run() {
-							if (bean.getPhotos() != null
-									&& !bean.getPhotos().isEmpty()) {
-								initFeeds();
-								if (feedsView != null) {
-									feedsView.onRefreshComplete();
-								}
-							}
+							onAsyncGetFeedsComplete(bean);
 						}
-
 					});
 				}
 			}
 		};
 		async.getPhotosInfo(param, listener);
+	}
+
+	private void onAsyncGetFeedsComplete(final PhotosGetInfoResponseBean bean) {
+		if (bean.getPhotos() != null && !bean.getPhotos().isEmpty()) {
+
+			this.currentPage += this.demandPage;
+			// if the feedsView is null, initialize it.
+			if (this.feedsView == null) {
+				initFeeds();
+			} else {
+				this.feedsView.addPhotoBeans(bean.getPhotos());
+				this.feedsView.onRefreshComplete();
+			}
+		}
 	}
 
 	private void initFeeds() {
@@ -443,7 +474,12 @@ public class FeedsFragment extends BaseFragment {
 	 */
 	@Override
 	protected void onRightBtnClicked() {
-
+		try {
+			AsyncGetFeeds();
+		} catch (NetworkException e) {
+			AsyncSignIn();
+			e.printStackTrace();
+		}
 	}
 
 	/*
@@ -466,6 +502,10 @@ public class FeedsFragment extends BaseFragment {
 
 	private String getLikeFragment() {
 		return getString(R.string.flikeFragment);
+	}
+
+	private String getRefreshText() {
+		return getString(R.string.refresh);
 	}
 
 	@Override

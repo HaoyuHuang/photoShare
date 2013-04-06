@@ -21,6 +21,7 @@ import com.photoshare.common.AbstractRequestListener;
 import com.photoshare.common.IObserver;
 import com.photoshare.exception.NetworkError;
 import com.photoshare.exception.NetworkException;
+import com.photoshare.exception.ValveException;
 import com.photoshare.fragments.BaseFragment;
 import com.photoshare.service.FollowHelper;
 import com.photoshare.service.follow.FollowType;
@@ -71,7 +72,7 @@ public class UserHomeFragment extends BaseFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		Log.i("UserHomeFragment", "titleBarCreated");
-		if (!processArguments()) {
+		if (!hideTitleBarView()) {
 			container.addView(super.onCreateView(inflater, container,
 					savedInstanceState));
 		}
@@ -323,7 +324,12 @@ public class UserHomeFragment extends BaseFragment {
 				}
 			}
 		};
-		async.publishFollow(param, mCallback);
+		try {
+			async.publishFollow(param, mCallback);
+		} catch (ValveException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**

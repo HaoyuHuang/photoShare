@@ -10,6 +10,7 @@ import android.os.Bundle;
 import com.photoshare.common.AbstractRequestListener;
 import com.photoshare.exception.NetworkError;
 import com.photoshare.exception.NetworkException;
+import com.photoshare.exception.ValveException;
 import com.photoshare.msg.MsgType;
 import com.photoshare.msg.RequestMsg;
 import com.photoshare.service.follow.UserFollowRequestParam;
@@ -37,9 +38,10 @@ public class FollowHelper {
 	 * 
 	 * @param param
 	 * @param mCallback
+	 * @throws ValveException 
 	 */
 	public void publishFollow(UserFollowRequestParam param,
-			final ICallback mCallback) {
+			final ICallback mCallback) throws ValveException {
 
 		if (param == null)
 			return;

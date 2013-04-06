@@ -11,6 +11,7 @@ import com.photoshare.command.Command;
 import com.photoshare.common.AbstractRequestListener;
 import com.photoshare.exception.NetworkError;
 import com.photoshare.exception.NetworkException;
+import com.photoshare.exception.ValveException;
 import com.photoshare.fragments.BaseFragment;
 import com.photoshare.service.CommentHelper;
 import com.photoshare.service.comments.CommentsGetInfoRequestParam;
@@ -122,8 +123,7 @@ public class CommentsFragment extends BaseFragment {
 		mNotificationDisplayer.setTicker(getCommentTicker());
 		mNotificationDisplayer.setTag(getCommentTag());
 		mNotificationDisplayer.displayNotification();
-
-		async.publishComments(param, new CommentHelper.ICallback() {
+		CommentHelper.ICallback callback = new CommentHelper.ICallback() {
 
 			public void OnNetworkError(NetworkError networkError) {
 				if (getActivity() != null) {
@@ -174,7 +174,13 @@ public class CommentsFragment extends BaseFragment {
 				}
 
 			}
-		});
+		};
+		try {
+			async.publishComments(param, callback);
+		} catch (ValveException e) {
+			mExceptionHandler.obtainMessage(
+					NetworkError.ERROR_NETWORK).sendToTarget();
+		}
 		mNotificationDisplayer.cancleNotification();
 	}
 

@@ -42,7 +42,7 @@ public class MainFragment extends BaseFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		Log.i("init", "init");
-		if (!processArguments()) {
+		if (!hideTitleBarView()) {
 			container.addView(super.onCreateView(inflater, container,
 					savedInstanceState));
 		}

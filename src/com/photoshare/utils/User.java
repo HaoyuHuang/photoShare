@@ -8,8 +8,14 @@ import android.util.Log;
 
 import com.photoshare.common.AbstractRequestListener;
 import com.photoshare.common.RequestParam;
+import com.photoshare.exception.ValveException;
 import com.photoshare.msg.RequestMsg;
-import com.photoshare.pipeline.PipelineMsgHandler;
+import com.photoshare.pipeline.OutboundPipeline;
+import com.photoshare.pipeline.Pipeline;
+import com.photoshare.pipeline.valve.BasicValve;
+import com.photoshare.pipeline.valve.LoggerValve;
+import com.photoshare.pipeline.valve.StoreValve;
+import com.photoshare.pipeline.valve.ValidationValve;
 import com.photoshare.service.photos.PhotoBean;
 import com.photoshare.service.users.UserInfo;
 import com.renren.api.connect.android.Util;
@@ -35,9 +41,10 @@ public class User {
 
 	private boolean configured;
 
-	private PipelineMsgHandler handler = PipelineMsgHandler.Instance();
+	private Pipeline pipeline = OutboundPipeline.getInstance();
+
 	/** 服务器地址 */
-	private final String SERVER_URL = "http://121.229.103.52:8080/photoShareServer/photoShare-mobile";
+	private final String SERVER_URL = "http://222.94.233.136:8080/photoShareServer/photoShare-mobile";
 	/** 响应形式为Json */
 	public static final String RESPONSE_FORMAT_JSON = "json";
 	private final String LOG_TAG_REQUEST = "request";
@@ -53,8 +60,17 @@ public class User {
 
 	private User() {
 		Utils.logger("User Created");
+		initPipeline();
 	}
-	
+
+	private void initPipeline() {
+		pipeline = OutboundPipeline.getInstance();
+		pipeline.setBasic(new BasicValve());
+		pipeline.addValve(new LoggerValve());
+		pipeline.addValve(new StoreValve());
+		pipeline.addValve(new ValidationValve());
+	}
+
 	/** 应该用不到的登出 */
 	public boolean logout(Context context) {
 		Utils.clearCookies(context);
@@ -233,8 +249,9 @@ public class User {
 	}
 
 	public void addMsg(final RequestMsg<? extends RequestParam> AMsg,
-			final AbstractRequestListener<String> listener) {
-		handler.addMsg(AMsg, listener);
+			final AbstractRequestListener<String> listener)
+			throws ValveException {
+		pipeline.invoke(AMsg, listener);
 	}
 
 	public String getPwd() {

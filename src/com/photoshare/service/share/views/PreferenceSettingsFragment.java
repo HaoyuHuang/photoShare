@@ -66,7 +66,7 @@ public class PreferenceSettingsFragment extends BaseFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		if (!processArguments()) {
+		if (!hideTitleBarView()) {
 			container.addView(super.onCreateView(inflater, container,
 					savedInstanceState));
 		}
@@ -196,7 +196,7 @@ public class PreferenceSettingsFragment extends BaseFragment {
 			param.putString(PhotoBean.KEY_PHOTO_TYPE,
 					RequestPhotoType.MyLikedPhotos.toString());
 			param.putParcelable(UserInfo.KEY_USER_INFO, user.getUserInfo());
-			param.putBoolean(KEY_IGNORE_TITLE_VIEW, true);
+//			param.putBoolean(KEY_IGNORE_TITLE_VIEW, true);
 			forward(getFeedFragment(), param);
 		}
 
@@ -255,7 +255,7 @@ public class PreferenceSettingsFragment extends BaseFragment {
 			param.putString(PhotoBean.KEY_PHOTO_TYPE,
 					RequestPhotoType.MyPhotos.toString());
 			param.putParcelable(UserInfo.KEY_USER_INFO, user.getUserInfo());
-			param.putBoolean(KEY_IGNORE_TITLE_VIEW, true);
+//			param.putBoolean(KEY_IGNORE_TITLE_VIEW, true);
 			forward(getFeedFragment(), param);
 		}
 	};

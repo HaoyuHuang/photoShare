@@ -18,6 +18,7 @@ import com.photoshare.common.AbstractRequestListener;
 import com.photoshare.common.IObserver;
 import com.photoshare.exception.NetworkError;
 import com.photoshare.exception.NetworkException;
+import com.photoshare.exception.ValveException;
 import com.photoshare.fragments.BaseFragment;
 import com.photoshare.fragments.PhotoBarFragment;
 import com.photoshare.service.FollowHelper;
@@ -221,7 +222,12 @@ public class OtherHomeTitleBarFragment extends BaseFragment {
 				}
 			}
 		};
-		async.publishFollow(param, mCallback);
+		try {
+			async.publishFollow(param, mCallback);
+		} catch (ValveException e) {
+			mExceptionHandler.obtainMessage(
+					NetworkError.ERROR_NETWORK).sendToTarget();
+		}
 	}
 
 	private void AsyncGetOthersInfo() throws NetworkException {

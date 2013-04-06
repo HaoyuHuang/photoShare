@@ -17,6 +17,7 @@ import com.photoshare.common.AbstractRequestListener;
 import com.photoshare.common.IObserver;
 import com.photoshare.exception.NetworkError;
 import com.photoshare.exception.NetworkException;
+import com.photoshare.exception.ValveException;
 import com.photoshare.fragments.BaseFragment;
 import com.photoshare.msg.MessageItem;
 import com.photoshare.msg.MessageList;
@@ -141,7 +142,7 @@ public class MessageFragment extends BaseFragment {
 		mNotificationDisplayer.setTicker(getCommentTicker());
 		mNotificationDisplayer.displayNotification();
 
-		async.publishComments(param, new CommentHelper.ICallback() {
+		CommentHelper.ICallback callback = new CommentHelper.ICallback() {
 
 			public void OnNetworkError(NetworkError networkError) {
 				if (getActivity() != null) {
@@ -187,7 +188,14 @@ public class MessageFragment extends BaseFragment {
 					});
 				}
 			}
-		});
+		};
+
+		try {
+			async.publishComments(param, callback);
+		} catch (ValveException e) {
+			mExceptionHandler.obtainMessage(NetworkError.ERROR_NETWORK)
+					.sendToTarget();
+		}
 		mNotificationDisplayer.cancleNotification();
 	}
 
@@ -199,8 +207,7 @@ public class MessageFragment extends BaseFragment {
 				.isLike(message.isBtnStatus()).build();
 		mNotificationDisplayer.setTicker(getLikeTicker());
 		mNotificationDisplayer.displayNotification();
-
-		async.publishLikePhoto(param, new LikeHelper.ICallback() {
+		LikeHelper.ICallback callback = new LikeHelper.ICallback() {
 
 			public void OnNetworkError(NetworkError error) {
 				if (getActivity() != null) {
@@ -246,7 +253,13 @@ public class MessageFragment extends BaseFragment {
 					});
 				}
 			}
-		});
+		};
+		try {
+			async.publishLikePhoto(param, callback);
+		} catch (ValveException e) {
+			mExceptionHandler.obtainMessage(NetworkError.ERROR_NETWORK)
+					.sendToTarget();
+		}
 		mNotificationDisplayer.cancleNotification();
 	}
 
@@ -259,8 +272,7 @@ public class MessageFragment extends BaseFragment {
 
 		mNotificationDisplayer.setTicker(getFollowTicker());
 		mNotificationDisplayer.displayNotification();
-
-		async.publishFollow(param, new FollowHelper.ICallback() {
+		FollowHelper.ICallback callback = new FollowHelper.ICallback() {
 
 			public void OnNetworkError(NetworkError error) {
 				if (getActivity() != null) {
@@ -307,7 +319,13 @@ public class MessageFragment extends BaseFragment {
 				}
 			}
 
-		});
+		};
+		try {
+			async.publishFollow(param, callback);
+		} catch (ValveException e) {
+			mExceptionHandler.obtainMessage(NetworkError.ERROR_NETWORK)
+					.sendToTarget();
+		}
 		mNotificationDisplayer.cancleNotification();
 	}
 

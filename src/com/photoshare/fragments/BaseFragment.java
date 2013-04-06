@@ -41,8 +41,10 @@ public abstract class BaseFragment extends Fragment {
 	public static final String KEY_FRAGMENT_VIEW_ID = "fragmentViewId";
 	public static final String KEY_TAG = "tag";
 
-	protected static final String KEY_IGNORE_TITLE_VIEW = "ignore_title_view";
-
+	public static final String KEY_IGNORE_TITLE_VIEW = "ignore_title_view";
+	public static final String KEY_IGNORE_TITLE_BAR_ELEMENT = "ignore_title_element";
+	protected boolean isTitleViewHided;
+	protected boolean isRunning = true;
 	protected int fragmentViewId;
 	protected AsyncUtils async = AsyncUtils.getInstance();
 	protected User user = User.Instance();
@@ -73,10 +75,30 @@ public abstract class BaseFragment extends Fragment {
 
 	}
 
-	// @Override
-	// public void onActivityCreated(Bundle savedInstanceState) {
-	// super.onActivityCreated(savedInstanceState);
-	// }
+	@Override
+	public void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+	}
+
+	@Override
+	public void onDetach() {
+		// TODO Auto-generated method stub
+		super.onDetach();
+	}
+
+	@Override
+	public void onPause() {
+		// TODO Auto-generated method stub
+		isRunning = false;
+		super.onPause();
+	}
+
+	@Override
+	public void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+	}
 
 	protected void initTitleBar(String leftBtnText, String rightBtnText,
 			String titlebarText) {
@@ -477,8 +499,8 @@ public abstract class BaseFragment extends Fragment {
 		persist(fragmentViewId, uhtbf);
 	}
 
-	protected void ShowPhotoBarFragment(int fragmentViewId, RequestPhotoType type,
-			UserInfo info, ArrayList<PhotoBean> photos) {
+	protected void ShowPhotoBarFragment(int fragmentViewId,
+			RequestPhotoType type, UserInfo info, ArrayList<PhotoBean> photos) {
 		PhotoBarFragment pbf = PhotoBarFragment.newInstance(fragmentViewId);
 		Bundle args = new Bundle();
 		args.putParcelable(UserInfo.KEY_USER_INFO, info);
@@ -518,14 +540,25 @@ public abstract class BaseFragment extends Fragment {
 	 * 
 	 * @return result
 	 */
-	protected boolean processArguments() {
+	protected boolean hideTitleBarView() {
 		Bundle params = getArguments();
 		if (params != null) {
 			if (params.containsKey(KEY_IGNORE_TITLE_VIEW)) {
+				// isTitleViewHided = params.getBoolean(KEY_IGNORE_TITLE_VIEW);
 				return params.getBoolean(KEY_IGNORE_TITLE_VIEW);
 			}
 			if (params.containsKey(TraceConfig.getTrackBackward())) {
 				return params.getBoolean(TraceConfig.getTrackBackward());
+			}
+		}
+		return false;
+	}
+
+	protected boolean hideTitleBarElement() {
+		Bundle params = getArguments();
+		if (params != null) {
+			if (params.containsKey(KEY_IGNORE_TITLE_BAR_ELEMENT)) {
+				return params.getBoolean(KEY_IGNORE_TITLE_BAR_ELEMENT);
 			}
 		}
 		return false;

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import com.photoshare.common.AbstractRequestListener;
 import com.photoshare.exception.NetworkError;
 import com.photoshare.exception.NetworkException;
+import com.photoshare.exception.ValveException;
 import com.photoshare.msg.MsgType;
 import com.photoshare.msg.RequestMsg;
 import com.photoshare.service.comments.CommentsGetInfoRequestParam;
@@ -103,9 +104,10 @@ public class CommentHelper {
 	 * 
 	 * @param params
 	 * @param mCallback
+	 * @throws ValveException 
 	 */
 	public void publishComment(PutCommentRequestParam params,
-			final ICallback mCallback) {
+			final ICallback mCallback) throws ValveException {
 		if (params == null)
 			return;
 

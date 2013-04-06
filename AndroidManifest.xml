@@ -71,7 +71,8 @@
         </activity>
         <activity
             android:name=".UserHomeActivity"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait" 
+            android:theme="@style/MyTheme.NoTitleBar.CustomBackground" >
         </activity>
 
         <!-- RenRen sdk -->

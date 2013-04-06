@@ -88,7 +88,8 @@ public class FeedsView {
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 			if (rowView == null) {
-				rowView = inflater.inflate( R.layout.simple_list_item_feeds, null);
+				rowView = inflater.inflate(R.layout.simple_list_item_feeds,
+						null);
 				PhotoBean feed = getItem(position);
 				feeds = new FeedItemView(rowView, async, feed);
 				rowView.setTag(feeds);
@@ -106,6 +107,15 @@ public class FeedsView {
 	public void addPhotoBean(PhotoBean photo) {
 		if (photo != null) {
 			feeds.add(photo);
+			mFeedsAdapter.notifyDataSetChanged();
+		}
+	}
+
+	public void addPhotoBeans(List<PhotoBean> photos) {
+		if (photos != null) {
+			for (PhotoBean photo : photos) {
+				feeds.add(photo);
+			}
 			mFeedsAdapter.notifyDataSetChanged();
 		}
 	}
@@ -166,7 +176,7 @@ public class FeedsView {
 	public void registerCallback(OnFeedsActionListener actionListener) {
 		this.mFeedsActionListener = actionListener;
 	}
-	
+
 	public void onRefreshComplete() {
 		feedsView.onRefreshComplete();
 	}

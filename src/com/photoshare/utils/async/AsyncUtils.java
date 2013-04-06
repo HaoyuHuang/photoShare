@@ -11,6 +11,7 @@ import com.photoshare.common.AbstractRequestListener;
 import com.photoshare.common.XMLParser;
 import com.photoshare.exception.NetworkError;
 import com.photoshare.exception.NetworkException;
+import com.photoshare.exception.ValveException;
 import com.photoshare.service.CommentHelper;
 import com.photoshare.service.FindFriendHelper;
 import com.photoshare.service.FollowHelper;
@@ -225,19 +226,20 @@ public class AsyncUtils {
 	}
 
 	public void publishLikePhoto(PhotoLikeRequestParam like,
-			LikeHelper.ICallback mCallback) throws NetworkException {
+			LikeHelper.ICallback mCallback) throws NetworkException, ValveException {
 		Util.logger("publishLikePhoto");
 		new LikeHelper(User.Instance()).publishLikePhoto(like, mCallback);
 	}
 
 	public void publishFollow(UserFollowRequestParam follow,
-			FollowHelper.ICallback mCallback) throws NetworkException {
+			FollowHelper.ICallback mCallback) throws NetworkException, ValveException {
 		// checkLoggingStatus();
 		new FollowHelper(User.Instance()).publishFollow(follow, mCallback);
 	}
 
 	public void publishComments(PutCommentRequestParam param,
-			CommentHelper.ICallback mCallback) throws NetworkException {
+			CommentHelper.ICallback mCallback) throws NetworkException,
+			ValveException {
 		// checkLoggingStatus();
 		new CommentHelper(User.Instance()).publishComment(param, mCallback);
 	}

@@ -10,6 +10,7 @@ import android.os.Bundle;
 import com.photoshare.common.AbstractRequestListener;
 import com.photoshare.exception.NetworkError;
 import com.photoshare.exception.NetworkException;
+import com.photoshare.exception.ValveException;
 import com.photoshare.msg.MsgType;
 import com.photoshare.msg.RequestMsg;
 import com.photoshare.service.likes.LikeGetInfoRequestParam;
@@ -108,19 +109,20 @@ public class LikeHelper {
 	 * 
 	 * @param param
 	 * @param mCallback
+	 * @throws ValveException
 	 */
 	public void publishLikePhoto(PhotoLikeRequestParam params,
-			final ICallback mCallback) {
-		
+			final ICallback mCallback) throws ValveException {
+
 		if (params == null)
 			return;
-		
-//		Utils.logger(params.toString());
-		
+
+		// Utils.logger(params.toString());
+
 		// AMsg 及 Listener 将一起放入管道中
 		RequestMsg<PhotoLikeRequestParam> AMsg = new RequestMsg<PhotoLikeRequestParam>(
 				params, MsgType.LIKE);
-		
+
 		AbstractRequestListener<String> listener = new AbstractRequestListener<String>() {
 
 			@Override

@@ -15,6 +15,7 @@ import com.photoshare.command.Command;
 import com.photoshare.common.AbstractRequestListener;
 import com.photoshare.exception.NetworkError;
 import com.photoshare.exception.NetworkException;
+import com.photoshare.exception.ValveException;
 import com.photoshare.fragments.BaseFragment;
 import com.photoshare.service.LikeHelper;
 import com.photoshare.service.likes.PhotoLikeRequestParam;
@@ -145,7 +146,8 @@ public class FeedsItemFragment extends BaseFragment {
 					getActivity().runOnUiThread(new Runnable() {
 
 						public void run() {
-
+							mExceptionHandler.obtainMessage(
+									NetworkError.ERROR_NETWORK).sendToTarget();
 						}
 
 					});
@@ -157,7 +159,8 @@ public class FeedsItemFragment extends BaseFragment {
 					getActivity().runOnUiThread(new Runnable() {
 
 						public void run() {
-
+							mExceptionHandler.obtainMessage(
+									NetworkError.ERROR_NETWORK).sendToTarget();
 						}
 
 					});
@@ -180,7 +183,12 @@ public class FeedsItemFragment extends BaseFragment {
 				}
 			}
 		};
-		async.publishLikePhoto(param, mCallback);
+		try {
+			async.publishLikePhoto(param, mCallback);
+		} catch (ValveException e) {
+			mExceptionHandler.obtainMessage(NetworkError.ERROR_NETWORK)
+					.sendToTarget();
+		}
 		mNotificationDisplayer.cancleNotification();
 	}
 
