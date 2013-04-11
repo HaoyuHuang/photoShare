@@ -5,234 +5,400 @@ package com.photoshare.camera;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.photoshare.cache.FeedsList;
-import com.photoshare.common.AbstractRequestListener;
-import com.photoshare.common.RequestParam;
 import com.photoshare.exception.NetworkError;
-import com.photoshare.exception.NetworkException;
 import com.photoshare.fragments.BaseFragment;
-import com.photoshare.msg.MessageList;
-import com.photoshare.msg.MsgType;
-import com.photoshare.msg.RequestMsg;
+import com.photoshare.service.ShareHelper;
 import com.photoshare.service.photos.PhotoBean;
-import com.photoshare.service.photos.PhotoUploadRequestParam;
-import com.photoshare.service.photos.PhotoUploadResponseBean;
+import com.photoshare.service.share.ShareBean;
+import com.photoshare.service.share.ShareType;
+import com.photoshare.service.share.SinaWeiboToken;
+import com.photoshare.service.share.views.SharePreferencesView;
 import com.photoshare.tabHost.R;
 import com.photoshare.utils.Utils;
 import com.photoshare.view.NotificationDisplayer;
+import com.renren.api.connect.android.Renren;
+import com.renren.api.connect.android.Util;
+import com.renren.api.connect.android.common.AbstractRequestListener;
+import com.renren.api.connect.android.exception.RenrenAuthError;
+import com.renren.api.connect.android.exception.RenrenError;
+import com.renren.api.connect.android.photos.PhotoUploadResponseBean;
+import com.renren.api.connect.android.view.RenrenAuthListener;
+import com.weibo.sdk.android.Oauth2AccessToken;
+import com.weibo.sdk.android.Weibo;
+import com.weibo.sdk.android.WeiboAuthListener;
+import com.weibo.sdk.android.WeiboDialogError;
+import com.weibo.sdk.android.WeiboException;
+import com.weibo.sdk.android.api.StatusesAPI;
+import com.weibo.sdk.android.net.RequestListener;
+import com.weibo.sdk.android.sso.SsoHandler;
+import com.weibo.sdk.android.util.Utility;
 
 /**
  * @author Aron
  * 
- *         DecoratedPhotoShareFragment displays views for uploading photos.
+ *         The Decorated Photo Share Fragment designed for cross-platform
+ *         sharing the newly captured photo.
  * 
  */
 public class DecoratedPhotoShareFragment extends BaseFragment {
 
-	private MessageList mMsgList = MessageList.getInstance();
 	private DecoratedPhotoShareView shareView;
+	private SharePreferencesView view;
+	private Bitmap photo;
+	private String caption = "";
+	private Renren mRenren;
 
-	private String leftBtnText = "";
-	private String rightBtnText = "";
-	private String titlebarText = "";
+	private Weibo mWeibo;
+
+	public static final String TAG = "sinasdk";
+	private SsoHandler mSsoHandler;
+
+	private NotificationDisplayer mNotificationDisplayer;
 
 	public static DecoratedPhotoShareFragment newInstance(int fragmentViewId) {
-		DecoratedPhotoShareFragment dpsf = new DecoratedPhotoShareFragment();
-		dpsf.setFragmentViewId(fragmentViewId);
-		return dpsf;
+		DecoratedPhotoShareFragment ss = new DecoratedPhotoShareFragment();
+		ss.setFragmentViewId(fragmentViewId);
+		return ss;
 	}
 
-	private String getDecoratedPhotoShareFragment() {
-		return getString(R.string.fdecoratedPhotoShareFragment);
-	}
-
-	private NotificationDisplayer displayer;
-
-	private Bitmap photo;
-
-	public Bitmap getPhoto() {
-		return photo;
-	}
-
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.decorating_share_photo_layout,
-				container, false);
-	}
-
-	@Override
-	protected void onRightBtnClicked() {
-		try {
-			upload();
-		} catch (NetworkException e) {
-			mExceptionHandler.obtainMessage(NetworkError.ERROR_SIGN_IN_NULL)
-					.sendToTarget();
-		}
-	}
-
-	private String getDecoratedSharingPreferenceFragment() {
-		return getString(R.string.fdecoratedSharingPreferenceFragment);
-	}
-
-	@Override
-	protected void onLeftBtnClicked() {
-		Bundle args = new Bundle();
-		args.putParcelable(PhotoBean.KEY_PHOTO, photo);
-		args.putString(PhotoBean.KEY_CAPTION, shareView.getCaption());
-		forward(getDecoratedSharingPreferenceFragment(), args);
-	}
-
-	@Override
-	public void onSaveInstanceState(Bundle outState) {
-		if (outState != null) {
-			outState.putParcelable(PhotoBean.KEY_PHOTO, photo);
-		}
-		super.onSaveInstanceState(outState);
-	}
-
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		Bundle args = getArguments();
-		if (args != null) {
-			if (args.containsKey(PhotoBean.KEY_PHOTO)) {
-				photo = args.getParcelable(PhotoBean.KEY_PHOTO);
-			}
-		}
-		initViews();
-	}
-
-	private void initViews() {
-		leftBtnText = getShareText();
-		titlebarText = getPhotoText();
-		rightBtnText = getSubmitText();
-		initTitleBar(leftBtnText, rightBtnText, titlebarText);
-		setTitleBarDrawable(R.drawable.titlebar_right_button,
-				R.drawable.titlebar_right_button);
-		shareView = new DecoratedPhotoShareView(getActivity().findViewById(
-				R.id.decoratingSharePhotoLayoutId));
-		shareView.applyView();
-		displayer = new NotificationDisplayer.NotificationBuilder()
-				.Context(getActivity()).Tag(MsgType.PHOTO.toString())
-				.ContentTitle(getContentTitle()).ContentText(getContent())
-				.Ticker(getContentTitle()).build();
-	}
-
-	private String getContentTitle() {
-		return getString(R.string.uploadPhotoCaption);
-	}
-
-	private String getContent() {
-		return getString(R.string.uploadPhotoContent);
+	private String getBackText() {
+		return getString(R.string.back);
 	}
 
 	private String getShareText() {
 		return getString(R.string.share);
 	}
 
-	private String getSubmitText() {
-		return getString(R.string.submit);
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		if (savedInstanceState != null) {
+			if (savedInstanceState.containsKey(PhotoBean.KEY_PHOTO)) {
+				photo = savedInstanceState.getParcelable(PhotoBean.KEY_PHOTO);
+			}
+			if (savedInstanceState.containsKey(PhotoBean.KEY_CAPTION)) {
+				caption = savedInstanceState.getString(PhotoBean.KEY_CAPTION);
+			}
+		}
+		super.onActivityCreated(savedInstanceState);
+		Bundle params = getArguments();
+		if (params != null) {
+			if (params.containsKey(PhotoBean.KEY_PHOTO)) {
+				photo = params.getParcelable(PhotoBean.KEY_PHOTO);
+			}
+			if (params.containsKey(PhotoBean.KEY_CAPTION)) {
+				caption = params.getString(PhotoBean.KEY_CAPTION);
+			}
+		}
+		initViews();
 	}
 
-	private String getPhotoText() {
-		return getString(R.string.photos);
+	/**
+	 * 
+	 */
+	private void initViews() {
+		initTitleBar(getBackText(), "", getShareText(), View.VISIBLE, View.GONE);
+		mNotificationDisplayer = new NotificationDisplayer.NotificationBuilder()
+				.Context(getActivity()).Ticker(getSuccessTicker()).build();
+		shareView = new DecoratedPhotoShareView(getActivity().findViewById(
+				R.id.SharingPhotoLayout), photo, false);
+		shareView.applyView();
+		view = new SharePreferencesView(getActivity().findViewById(
+				R.id.sharingPhotoLayoutId), getActivity());
+		view.registerListener(listener);
+		view.applyView();
 	}
 
-	private String getDecoratedPhotoFragment() {
-		return getString(R.string.fdecoratedPhotoFragment);
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		if (outState != null) {
+			outState.putParcelable(PhotoBean.KEY_PHOTO, photo);
+			outState.putString(PhotoBean.KEY_CAPTION, caption);
+		}
+		super.onSaveInstanceState(outState);
 	}
 
-	private void upload() throws NetworkException {
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		photo.compress(CompressFormat.PNG, 100, baos);
-		File file = Utils.getFileFromBytes(baos.toByteArray(), "bitmap");
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		return inflater
+				.inflate(R.layout.sharing_photo_layout, container, false);
+	}
 
-		final PhotoUploadRequestParam photoParam = new PhotoUploadRequestParam();
+	private String getSinaWeiboTag() {
+		return getString(R.string.nSinaWeibo);
+	}
 
-		photoParam.setFile(file);
-		photoParam.setCaption(shareView.getCaption());
-		photoParam.setUid(user.getUserInfo().getUid());
+	private String getRenrenTag() {
+		return getString(R.string.nRenren);
+	}
 
-		displayer.displayNotification();
+	private String getTxWeiboTag() {
+		return getString(R.string.nTxWeibo);
+	}
 
-		async.publishPhoto(photoParam,
-				new AbstractRequestListener<PhotoUploadResponseBean>() {
-					@Override
-					public void onNetworkError(NetworkError networkError) {
-						if (networkError != null) {
-							RequestMsg<? extends RequestParam> msg = new RequestMsg<PhotoUploadRequestParam>(
-									photoParam, MsgType.PHOTO);
-							mMsgList.add(msg);
-							if (getActivity() != null) {
-								getActivity().runOnUiThread(new Runnable() {
+	private SharePreferencesView.OnAsyncItemClickListener listener = new SharePreferencesView.OnAsyncItemClickListener() {
 
-									public void run() {
-										mExceptionHandler.obtainMessage(
-												NetworkError.ERROR_PHOTO)
-												.sendToTarget();
-									}
+		public void AsyncShareSettings(View view, ShareBean info) {
+			ShareType type = info.getmShareType();
+			switch (type) {
+			case NULL:
+				break;
+			case RenRen:
+				mRenren = new Renren(type.getApiKey(), type.getSecretKey(),
+						type.getAppId(), getActivity());
+				mRenren.init(getActivity());
+				mRenren.authorize(getActivity(), new RenrenAuthListenerImpl());
+				mNotificationDisplayer.setTag(getRenrenTag());
+				break;
+			case SinaWeibo:
+				mWeibo = Weibo.getInstance(type.getApiKey(),
+						ShareBean.KEY_SINA_WEIBO_REDIRECT_URL);
+				try {
+					Class sso = Class
+							.forName("com.weibo.sdk.android.sso.SsoHandler");
+					mSsoHandler = new SsoHandler(getActivity(), mWeibo);
+					mSsoHandler.authorize(new SinaWeiboAuthListener());
 
-								});
-							}
-						}
+				} catch (ClassNotFoundException e) {
+					Log.i(TAG, "com.weibo.sdk.android.sso.SsoHandler not found");
+					mWeibo.authorize(getActivity(), new SinaWeiboAuthListener());
+				}
+
+				SinaWeiboToken.readAccessToken(getActivity());
+				mNotificationDisplayer.setTag(getSinaWeiboTag());
+				if (SinaWeiboToken.isSeesionValid()) {
+					Weibo.isWifi = Utility.isWifi(getActivity());
+					try {
+						Class.forName("com.weibo.sdk.android.api.WeiboAPI");
+					} catch (ClassNotFoundException e) {
+						mExceptionHandler.obtainMessage(
+								NetworkError.ERROR_SINA_WEIBO_AUTHORIZE)
+								.sendToTarget();
 					}
+				} else {
+					// mSsoHandler = new SsoHandler(getActivity(), mWeibo);
+					// mSsoHandler.authorize(mWeiboAuthListener);
+				}
+				break;
+			case TxWeibo:
+				mNotificationDisplayer.setTag(getTxWeiboTag());
+				break;
+			default:
+				break;
+			}
+			if (info != null && info.isValid()) {
 
-					@Override
-					public void onFault(Throwable fault) {
-						if (fault != null) {
-							RequestMsg<? extends RequestParam> msg = new RequestMsg<PhotoUploadRequestParam>(
-									photoParam, MsgType.PHOTO);
-							mMsgList.add(msg);
-							if (getActivity() != null) {
-								getActivity().runOnUiThread(new Runnable() {
+			} else {
 
-									public void run() {
-										mExceptionHandler.obtainMessage(
-												NetworkError.ERROR_NETWORK)
-												.sendToTarget();
-									}
+			}
+		}
+	};
 
-								});
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		Util.logger("Call back");
+		super.onActivityResult(requestCode, resultCode, data);
+		if (mRenren != null) {
+			mRenren.authorizeCallback(requestCode, resultCode, data);
+			return;
+		}
+		if (mSsoHandler != null) {
+			mSsoHandler.authorizeCallBack(requestCode, resultCode, data);
+		}
+	}
+
+	public void onAuthorizeCallback(int requestCode, int resultCode, Intent data) {
+		Util.logger("AuthCallback");
+		if (mRenren != null) {
+			mRenren.authorizeCallback(requestCode, resultCode, data);
+			return;
+		}
+		if (mSsoHandler != null) {
+			mSsoHandler.authorizeCallBack(requestCode, resultCode, data);
+		}
+	}
+
+	class RenrenAuthListenerImpl implements RenrenAuthListener {
+
+		public void onComplete(Bundle values) {
+			Util.logger("complete");
+			ShareHelper helper = new ShareHelper();
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			Drawable d = getResources().getDrawable(
+					R.drawable.titlebar_left_button);
+			photo = ((BitmapDrawable) d).getBitmap();
+			photo.compress(CompressFormat.PNG, 100, baos);
+			File file = Utils.getFileFromBytes(baos.toByteArray(), "bitmap");
+
+			AbstractRequestListener<PhotoUploadResponseBean> listener = new AbstractRequestListener<PhotoUploadResponseBean>() {
+
+				@Override
+				public void onRenrenError(RenrenError renrenError) {
+					mExceptionHandler.obtainMessage(
+							NetworkError.ERROR_RENREN_PUBLISH_PHOTO)
+							.sendToTarget();
+
+				}
+
+				@Override
+				public void onFault(Throwable fault) {
+					mExceptionHandler.obtainMessage(
+							NetworkError.ERROR_RENREN_PUBLISH_PHOTO)
+							.sendToTarget();
+				}
+
+				@Override
+				public void onComplete(PhotoUploadResponseBean bean) {
+					if (getActivity() != null) {
+						// TODO Auto-generated method stub
+						getActivity().runOnUiThread(new Runnable() {
+
+							public void run() {
+								mNotificationDisplayer.displayNotification();
+								mNotificationDisplayer.cancleNotification();
 							}
-						}
+						});
 					}
+				}
+			};
+			helper.uploadPhotoToRenRen(file, caption, listener, mRenren);
+		}
 
-					@Override
-					public void onComplete(final PhotoUploadResponseBean bean) {
-						if (bean != null) {
-							if (getActivity() != null) {
-								getActivity().runOnUiThread(new Runnable() {
+		public void onRenrenAuthError(RenrenAuthError renrenAuthError) {
+			Util.logger("AuthError");
+			mExceptionHandler
+					.obtainMessage(NetworkError.ERROR_RENREN_AUTHORIZE)
+					.sendToTarget();
+		}
 
-									public void run() {
-										FeedsList feeds = FeedsList
-												.getInstance();
-										PhotoBean photo = bean.get();
-										feeds.addFeed(photo);
-										// TabHostActivity
-										// .setCurrentTab(TabHostActivity.TAB_HOME);
+		public void onCancelLogin() {
+			Util.logger("cancle");
+			mExceptionHandler
+					.obtainMessage(NetworkError.ERROR_RENREN_AUTHORIZE)
+					.sendToTarget();
+		}
 
-									}
+		public void onCancelAuth(Bundle values) {
+			Util.logger("AuthCancle");
+			mExceptionHandler
+					.obtainMessage(NetworkError.ERROR_RENREN_AUTHORIZE)
+					.sendToTarget();
+		}
 
-								});
+	};
+
+	class SinaWeiboAuthListener implements WeiboAuthListener {
+
+		public void onWeiboException(WeiboException arg0) {
+			mExceptionHandler.obtainMessage(
+					NetworkError.ERROR_SINA_WEIBO_AUTHORIZE).sendToTarget();
+		}
+
+		public void onError(WeiboDialogError arg0) {
+			mExceptionHandler.obtainMessage(
+					NetworkError.ERROR_SINA_WEIBO_AUTHORIZE).sendToTarget();
+		}
+
+		public void onComplete(Bundle values) {
+			String token = values.getString("access_token");
+			String expires_in = values.getString("expires_in");
+			Oauth2AccessToken wToken = SinaWeiboToken.createToken(token,
+					expires_in);
+
+			if (wToken.isSessionValid()) {
+				try {
+					Class.forName("com.weibo.sdk.android.api.WeiboAPI");
+				} catch (ClassNotFoundException e) {
+					mExceptionHandler
+							.obtainMessage(NetworkError.ERROR_SINA_WEIBO_AUTHORIZE);
+				}
+				SinaWeiboToken.keepAccessToken(getActivity(), wToken);
+			}
+
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			photo.compress(CompressFormat.PNG, 100, baos);
+			File file = Utils.getFileFromBytes(baos.toByteArray(), "bitmap");
+
+			final RequestListener listener = new RequestListener() {
+
+				public void onIOException(IOException arg0) {
+					mExceptionHandler.obtainMessage(
+							NetworkError.ERROR_SINA_WEIBO_PUBLISH_PHOTO)
+							.sendToTarget();
+				}
+
+				public void onError(WeiboException arg0) {
+					mExceptionHandler.obtainMessage(
+							NetworkError.ERROR_SINA_WEIBO_PUBLISH_PHOTO)
+							.sendToTarget();
+				}
+
+				public void onComplete(String arg0) {
+					if (getActivity() != null) {
+						getActivity().runOnUiThread(new Runnable() {
+
+							public void run() {
+								mNotificationDisplayer.displayNotification();
+								mNotificationDisplayer.cancleNotification();
 							}
-						}
+						});
 					}
-				});
-		displayer.cancleNotification();
+				}
+			};
+
+			StatusesAPI api = new StatusesAPI(wToken);
+			if (file != null) {
+				api.upload(caption, file.getAbsolutePath(), "90.0", "90.0",
+						listener);
+			} else {
+				caption += "";
+				api.update(caption, "90.0", "90.0", listener);
+			}
+		}
+
+		public void onCancel() {
+			mExceptionHandler.obtainMessage(
+					NetworkError.ERROR_SINA_WEIBO_AUTHORIZE).sendToTarget();
+		}
+	};
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.photoshare.fragments.BaseFragment#OnRightBtnClicked()
+	 */
+	@Override
+	protected void onRightBtnClicked() {
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.photoshare.fragments.BaseFragment#OnLeftBtnClicked()
+	 */
+	@Override
+	protected void onLeftBtnClicked() {
+		backward(null);
 	}
 
 	@Override
 	protected void onLoginSuccess() {
 		// TODO Auto-generated method stub
-		
+
 	}
+
 }

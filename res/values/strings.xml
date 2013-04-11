@@ -56,6 +56,7 @@
     <string name="editPhotoCancle">取消照片</string>
     <string name="editPhotoSubmit">发布照片</string>
     <string name="editPhotoCrop">裁剪</string>
+    <string name="editPhotoCropComplete">裁剪完成</string>
     <string name="editPhotoCaption">标题..</string>
     <string name="uploadPhotoCaption">上传</string>
     <string name="uploadPhotoContent">上传中..</string>
@@ -128,6 +129,7 @@
     <string name="fcameraPhotoFragment">camera</string>
     <string name="fcommentsFragment">comments</string>
     <string name="fdecoratedPhotoFragment">decoratedPhoto</string>
+    <string name="fdecoratedPhotoUploadFragment">decoratedPhotoUpload</string>
     <string name="fdecoratedPhotoShareFragment">decoratedPhotoShare</string>
     <string name="fdecoratedSharingPreferenceFragment">decoratedSharingPreference</string>
     <string name="ffeedsFragment">feedsFragment</string>

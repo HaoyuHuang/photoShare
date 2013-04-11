@@ -127,7 +127,6 @@ public class DecoratedPhotoFragment extends BaseFragment {
 		mZoomListener.mBitmap = mBitmap;
 		mZoomView.setOnTouchListener(mZoomListener);
 		mImageView = (ImageView) getActivity().findViewById(R.id.cropImageView);
-
 		resetZoomState();
 	}
 
@@ -157,8 +156,8 @@ public class DecoratedPhotoFragment extends BaseFragment {
 		return getString(R.string.croping);
 	}
 
-	private String getDecoratedPhotoShareFragment() {
-		return getString(R.string.fdecoratedPhotoShareFragment);
+	private String getDecoratedPhotoUploadFragment() {
+		return getString(R.string.fdecoratedPhotoUploadFragment);
 	}
 
 	private String getToastStartCroping() {
@@ -175,6 +174,10 @@ public class DecoratedPhotoFragment extends BaseFragment {
 
 	private String getCameraPhotoFragment() {
 		return getString(R.string.fcameraPhotoFragment);
+	}
+
+	private String getEditPhotoCropCompleteText() {
+		return getString(R.string.editPhotoCropComplete);
 	}
 
 	private String getStartText() {
@@ -279,10 +282,10 @@ public class DecoratedPhotoFragment extends BaseFragment {
 				.show();
 		resetZoomState();
 		if (mBitmap != null) {
-//			mBitmap.recycle();
+			// mBitmap.recycle();
 		}
 		if (bmp != null) {
-//			bmp.recycle();
+			// bmp.recycle();
 		}
 		mZoomView.operateType = 1;
 		mBitmap = oBitmap;
@@ -296,10 +299,10 @@ public class DecoratedPhotoFragment extends BaseFragment {
 			mZoomView.Destroy();
 		}
 		if (mBitmap != null) {
-//			mBitmap.recycle();
+			// mBitmap.recycle();
 		}
 		if (bmp != null) {
-//			bmp.recycle();
+			// bmp.recycle();
 		}
 	}
 
@@ -327,11 +330,11 @@ public class DecoratedPhotoFragment extends BaseFragment {
 					public void onOK() {
 						Bundle param = new Bundle();
 						param.putParcelable(PhotoBean.KEY_PHOTO, mBitmap);
-						forward(getDecoratedPhotoShareFragment(), param);
+						forward(getDecoratedPhotoUploadFragment(), param);
 					}
 
 					public void onCancel() {
-						
+
 					}
 				});
 	}
@@ -343,7 +346,7 @@ public class DecoratedPhotoFragment extends BaseFragment {
 		Toast.makeText(this.getActivity(), getToastStartCroping(),
 				Toast.LENGTH_SHORT).show();
 		leftBtnText = getCancleText();
-		rightBtnText = getCropingText();
+		rightBtnText = getEditPhotoCropCompleteText();
 		setTitleBarText(leftBtnText, rightBtnText, titlebarText);
 		mZoomView.operateType = 2;
 	}
@@ -369,7 +372,7 @@ public class DecoratedPhotoFragment extends BaseFragment {
 	@Override
 	protected void onLoginSuccess() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

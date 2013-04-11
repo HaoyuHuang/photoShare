@@ -34,6 +34,7 @@ import com.photoshare.service.photos.filter.IceFilter;
 import com.photoshare.service.photos.filter.ImageData;
 import com.photoshare.service.photos.filter.LomoFilter;
 import com.photoshare.service.photos.filter.MoltenFilter;
+import com.photoshare.service.photos.filter.NoiseFilter;
 import com.photoshare.service.photos.filter.SoftGlowFilter;
 import com.photoshare.service.photos.filter.VignetteFilter;
 
@@ -430,6 +431,12 @@ public class PhotoFactory {
 	public static Bitmap vignette(Bitmap bmp) {
 		VignetteFilter vignetteFilter = new VignetteFilter(bmp);
 		ImageData image = vignetteFilter.process();
+		return image.getDstBitmap();
+	}
+
+	public static Bitmap noise(Bitmap bmp) {
+		NoiseFilter noiseFilter = new NoiseFilter(bmp);
+		ImageData image = noiseFilter.process();
 		return image.getDstBitmap();
 	}
 

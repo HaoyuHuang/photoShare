@@ -12,6 +12,7 @@ import android.os.Bundle;
 import com.photoshare.camera.CameraFragment;
 import com.photoshare.camera.DecoratedPhotoFragment;
 import com.photoshare.camera.DecoratedPhotoShareFragment;
+import com.photoshare.camera.DecoratedPhotoUploadFragment;
 import com.photoshare.fragments.BaseFragment;
 import com.photoshare.fragments.MainFragment;
 import com.photoshare.fragments.PhotoBarFragment;
@@ -61,9 +62,9 @@ public final class Command {
 		intent.putExtra(UserHomeActivity.KEY_USER_HOME_BUNDLES, args);
 		orig.startActivity(intent);
 	}
-	
+
 	public static void MsgList(Context orig) {
-		
+
 	}
 
 	public static void TabHost(Context orig) {
@@ -172,6 +173,9 @@ public final class Command {
 		} else if (base.getString(R.string.fdecoratedPhotoFragment).equals(
 				invokeName)) {
 			target = DecoratedPhotoFragment.newInstance(fragmentViewId);
+		} else if (base.getString(R.string.fdecoratedPhotoUploadFragment)
+				.equals(invokeName)) {
+			target = DecoratedPhotoUploadFragment.newInstance(fragmentViewId);
 		} else if (base.getString(R.string.fdecoratedPhotoShareFragment)
 				.equals(invokeName)) {
 			target = DecoratedPhotoShareFragment.newInstance(fragmentViewId);

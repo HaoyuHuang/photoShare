@@ -129,6 +129,11 @@ public abstract class BaseFragment extends Fragment {
 		titleView.setRightBtnText(rightBtnText);
 		titleView.setTitlebarText(titlebarText);
 	}
+	
+	protected void setTitleBarVisibility(int leftBtn, int rightBtn) {
+		titleView.setTitleLeftButtonVisibility(leftBtn);
+		titleView.setTitleRightButtonVisibility(rightBtn);
+	}
 
 	protected void setTitleBarDrawable(int leftRid, int rightRidd) {
 		titleView.setTitleLeftButtonBackground(leftRid);

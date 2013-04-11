@@ -20,14 +20,25 @@ public class DecoratedPhotoShareView {
 	private ImageView mPhotoView;
 	private EditText mPhotoCaptionView;
 	private Bitmap photo;
+	private boolean displayCaption = true;
 	private int mSharePhotoPreferencesLayoutHolderId;
 
 	/**
 	 * @param baseView
+	 * @param photo
 	 */
-	public DecoratedPhotoShareView(View baseView) {
+	public DecoratedPhotoShareView(View baseView, Bitmap photo) {
 		super();
 		this.baseView = baseView;
+		this.photo = photo;
+	}
+
+	public DecoratedPhotoShareView(View baseView, Bitmap photo,
+			boolean displayCaption) {
+		super();
+		this.baseView = baseView;
+		this.photo = photo;
+		this.displayCaption = displayCaption;
 	}
 
 	public void applyView() {
@@ -35,8 +46,13 @@ public class DecoratedPhotoShareView {
 				.findViewById(R.id.decoratingSharePhoto);
 		mPhotoCaptionView = (EditText) baseView
 				.findViewById(R.id.decoratingSharePhotoCaption);
+		if (!displayCaption) {
+			mPhotoCaptionView.setVisibility(View.GONE);
+		}
 		mSharePhotoPreferencesLayoutHolderId = R.id.decoratedPhotoSharingPreferenceListHolder;
-		mPhotoView.setImageBitmap(photo);
+		if (photo != null) {
+			mPhotoView.setImageBitmap(photo);
+		}
 	}
 
 	public String getCaption() {

@@ -45,7 +45,7 @@ public class ImageTool {
 			matrix.postScale(scaleW, scaleH);
 			newBmp = Bitmap.createBitmap(bmp, 0, 0, imageWidth, imageHeight,
 					matrix, true);
-			bmp.recycle();
+//			bmp.recycle();
 		} else {
 			newBmp = bmp;
 		}

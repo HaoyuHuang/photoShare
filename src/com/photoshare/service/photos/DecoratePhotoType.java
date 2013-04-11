@@ -17,7 +17,7 @@ public enum DecoratePhotoType implements DecoratePhotoAction {
 
 		public int getImageId() {
 			// TODO Auto-generated method stub
-			return R.drawable.icon;
+			return R.drawable.oldmemorylogo;
 		}
 
 		public Bitmap Decorate(Bitmap raw) {
@@ -29,7 +29,7 @@ public enum DecoratePhotoType implements DecoratePhotoAction {
 
 		public int getImageId() {
 			// TODO Auto-generated method stub
-			return R.drawable.icon;
+			return R.drawable.reflectionlogo;
 		}
 
 		public Bitmap Decorate(Bitmap raw) {
@@ -41,7 +41,7 @@ public enum DecoratePhotoType implements DecoratePhotoAction {
 
 		public int getImageId() {
 			// TODO Auto-generated method stub
-			return R.drawable.icon;
+			return R.drawable.icelogo;
 		}
 
 		public Bitmap Decorate(Bitmap raw) {
@@ -50,12 +50,11 @@ public enum DecoratePhotoType implements DecoratePhotoAction {
 		}
 
 	},
-
 	LOMO() {
 
 		public int getImageId() {
 			// TODO Auto-generated method stub
-			return R.drawable.icon;
+			return R.drawable.lomologo;
 		}
 
 		public Bitmap Decorate(Bitmap raw) {
@@ -64,12 +63,11 @@ public enum DecoratePhotoType implements DecoratePhotoAction {
 		}
 
 	},
-
 	FILM() {
 
 		public int getImageId() {
 			// TODO Auto-generated method stub
-			return R.drawable.icon;
+			return R.drawable.filmlogo;
 		}
 
 		public Bitmap Decorate(Bitmap raw) {
@@ -83,7 +81,7 @@ public enum DecoratePhotoType implements DecoratePhotoAction {
 
 		public int getImageId() {
 			// TODO Auto-generated method stub
-			return R.drawable.icon;
+			return R.drawable.featherlogo;
 		}
 
 		public Bitmap Decorate(Bitmap raw) {
@@ -97,7 +95,7 @@ public enum DecoratePhotoType implements DecoratePhotoAction {
 
 		public int getImageId() {
 			// TODO Auto-generated method stub
-			return R.drawable.icon;
+			return R.drawable.glowingedgelogo;
 		}
 
 		public Bitmap Decorate(Bitmap raw) {
@@ -105,12 +103,78 @@ public enum DecoratePhotoType implements DecoratePhotoAction {
 			return PhotoFactory.glowingEdge(raw);
 		}
 	},
+	GREY() {
+
+		public int getImageId() {
+			// TODO Auto-generated method stub
+			return R.drawable.greylogo;
+		}
+
+		public Bitmap Decorate(Bitmap raw) {
+			// TODO Auto-generated method stub
+			return PhotoFactory.toGrayscale(raw);
+		}
+
+	},
+
+	NOISE() {
+
+		public int getImageId() {
+			// TODO Auto-generated method stub
+			return R.drawable.noiselogo;
+		}
+
+		public Bitmap Decorate(Bitmap raw) {
+			// TODO Auto-generated method stub
+			return PhotoFactory.noise(raw);
+		}
+
+	},
+
+	ROUNDEDCORNER() {
+
+		public int getImageId() {
+			// TODO Auto-generated method stub
+			return R.drawable.roundedcornerlogo;
+		}
+
+		public Bitmap Decorate(Bitmap raw) {
+			// TODO Auto-generated method stub
+			return PhotoFactory.getRoundedCornerBitmap(raw, 50f);
+		}
+	},
+
+	BRIGHTCONTRAST() {
+
+		public int getImageId() {
+			// TODO Auto-generated method stub
+			return R.drawable.brightcontrastlogo;
+		}
+
+		public Bitmap Decorate(Bitmap raw) {
+			// TODO Auto-generated method stub
+			return PhotoFactory.brightContrastBitmap(raw);
+		}
+	},
+
+	COMIC() {
+
+		public int getImageId() {
+			// TODO Auto-generated method stub
+			return R.drawable.comiclogo;
+		}
+
+		public Bitmap Decorate(Bitmap raw) {
+			// TODO Auto-generated method stub
+			return PhotoFactory.comicBitmap(raw);
+		}
+	},
 
 	SOFTGLOW() {
 
 		public int getImageId() {
 			// TODO Auto-generated method stub
-			return R.drawable.icon;
+			return R.drawable.softglowlogo;
 		}
 
 		public Bitmap Decorate(Bitmap raw) {
@@ -123,7 +187,7 @@ public enum DecoratePhotoType implements DecoratePhotoAction {
 
 		public int getImageId() {
 			// TODO Auto-generated method stub
-			return R.drawable.icon;
+			return R.drawable.moltenlogo;
 		}
 
 		public Bitmap Decorate(Bitmap raw) {
@@ -136,7 +200,7 @@ public enum DecoratePhotoType implements DecoratePhotoAction {
 
 		public int getImageId() {
 			// TODO Auto-generated method stub
-			return R.drawable.icon;
+			return R.drawable.vignettelogo;
 		}
 
 		public Bitmap Decorate(Bitmap raw) {
@@ -149,7 +213,7 @@ public enum DecoratePhotoType implements DecoratePhotoAction {
 
 		public int getImageId() {
 			// TODO Auto-generated method stub
-			return R.drawable.icon;
+			return R.drawable.gaussianblurlogo;
 		}
 
 		public Bitmap Decorate(Bitmap raw) {

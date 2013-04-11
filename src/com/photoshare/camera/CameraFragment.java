@@ -159,8 +159,8 @@ public class CameraFragment extends BaseFragment {
 		return getString(R.string.fdecoratedPhotoFragment);
 	}
 
-	private String getDecoratedPhotoShareFragment() {
-		return getString(R.string.fdecoratedPhotoShareFragment);
+	private String getDecoratedPhotoUploadFragment() {
+		return getString(R.string.fdecoratedPhotoUploadFragment);
 	}
 
 	/** The callback is used to asynchronized decorating image */
@@ -320,7 +320,7 @@ public class CameraFragment extends BaseFragment {
 		public void OnSubmitClick() {
 			Bundle param = new Bundle();
 			param.putParcelable(PhotoBean.KEY_PHOTO, photo);
-			forward(getDecoratedPhotoShareFragment(), param);
+			forward(getDecoratedPhotoUploadFragment(), param);
 		}
 
 		public void OnCancleClick() {

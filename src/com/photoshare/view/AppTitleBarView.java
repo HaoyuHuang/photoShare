@@ -134,6 +134,14 @@ public class AppTitleBarView {
 		this.titlebarText = titlebarText;
 		this.titlebarTextView.setText(this.titlebarText);
 	}
+	
+	public void setTitleLeftButtonVisibility(int visibility) {
+		this.titlebarLeftButton.setVisibility(visibility);
+	}
+	
+	public void setTitleRightButtonVisibility(int visibility) {
+		this.titlebarRightButton.setVisibility(visibility);
+	}
 
 	public void setTitleLeftButtonBackground(int rid) {
 		this.titlebarLeftButton.setBackgroundResource(rid);
