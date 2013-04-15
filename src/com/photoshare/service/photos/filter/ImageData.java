@@ -6,7 +6,7 @@ import android.graphics.Color;
 
 /**
  * @author Aron
- *
+ * 
  */
 public class ImageData {
 	private Bitmap srcBitmap;

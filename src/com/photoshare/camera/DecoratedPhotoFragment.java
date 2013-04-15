@@ -321,15 +321,16 @@ public class DecoratedPhotoFragment extends BaseFragment {
 		pf = new PolygonFill(mBitmap.getWidth(), mBitmap.getHeight(),
 				new DrawLine());
 		pf.polygonFill(Config.pointList);
-		mZoomView.invalidate();
-		mZoomView.operateType = 1;
-		Config.pointList.clear();
+
 		Utils.showOptionWindow(getActivity(), "", "",
 				new Utils.OnOptionListener() {
 
 					public void onOK() {
 						Bundle param = new Bundle();
 						param.putParcelable(PhotoBean.KEY_PHOTO, mBitmap);
+//						mZoomView.invalidate();
+//						mZoomView.operateType = 1;
+//						Config.pointList.clear();
 						forward(getDecoratedPhotoUploadFragment(), param);
 					}
 

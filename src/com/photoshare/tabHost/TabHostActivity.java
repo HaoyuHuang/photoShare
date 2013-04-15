@@ -14,6 +14,9 @@ import com.photoshare.common.TabActivityResultListener;
 import com.photoshare.exception.NetworkError;
 import com.photoshare.fragments.stacktrace.TracePhase;
 import com.photoshare.fragments.stacktrace.TraceStack;
+import com.photoshare.service.photos.DecorateTextures;
+import com.photoshare.service.photos.Texture;
+import com.photoshare.service.photos.factory.PhotoFactory;
 import com.photoshare.service.users.UserInfo;
 import com.photoshare.service.users.UserInfoReader;
 import com.photoshare.tabHost.tab.TabCameraActivity;
@@ -21,7 +24,6 @@ import com.photoshare.tabHost.tab.TabHomeActivity;
 import com.photoshare.tabHost.tab.TabHomePageActivity;
 import com.photoshare.tabHost.tab.TabNewsActivity;
 import com.photoshare.tabHost.tab.TabPopularActivity;
-import com.photoshare.utils.User;
 import com.photoshare.utils.UserReader;
 import com.photoshare.utils.async.AsyncUtils;
 import com.renren.api.connect.android.Util;
@@ -83,9 +85,15 @@ public class TabHostActivity extends TabActivity {
 		super.onDestroy();
 	}
 
+	private String getMarbleTexture() {
+		return getString(R.string.textureMarble);
+	}
+
 	private void init() {
-//		User.Instance();
-//		AsyncUtils.getInstance();
+		// User.Instance();
+		// AsyncUtils.getInstance();
+		DecorateTextures.offer(new Texture(getMarbleTexture(), PhotoFactory
+				.readBitMap(getApplicationContext(), R.drawable.marble)));
 		tabHost.addTab(tabHost.newTabSpec(TAB_HOME).setIndicator(TAB_HOME)
 				.setContent(new Intent(this, TabHomeActivity.class)));
 		tabHost.addTab(tabHost.newTabSpec(TAB_POPULAR)

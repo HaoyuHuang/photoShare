@@ -60,7 +60,11 @@
     <string name="editPhotoCaption">标题..</string>
     <string name="uploadPhotoCaption">上传</string>
     <string name="uploadPhotoContent">上传中..</string>
-
+    
+    <!-- Decorate Texture -->
+	<string name="textureMarble">marble</string>
+	
+	
     <!-- Exception Description -->
     <string name="eNetworkError">网络错误</string>
     <string name="erefreshError">无法刷新获取</string>

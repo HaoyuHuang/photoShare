@@ -14,11 +14,10 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.util.LruCache;
 import android.util.Log;
 
-import com.photoshare.service.photos.DecoratePhotoType;
 import com.photoshare.service.photos.factory.BitmapDisplayConfig;
+import com.photoshare.service.photos.factory.DecoratePhotoWrapper;
 import com.photoshare.service.photos.factory.PhotoFactory;
 import com.photoshare.utils.Utils;
 
@@ -91,13 +90,13 @@ public class AsyncImageLoader {
 	}
 
 	public void docorateImage(final Executor pool,
-			final DecoratePhotoType type, final Bitmap raw,
+			final DecoratePhotoWrapper photoWrapper,
 			final ImageCallback mCallback) {
 		pool.execute(new Runnable() {
 
 			public void run() {
 				// TODO Auto-generated method stub
-				Bitmap photo = type.Decorate(raw);
+				Bitmap photo = photoWrapper.getRenderedPhoto();
 				if (mCallback != null) {
 					BitmapDrawable drawable = new BitmapDrawable(photo);
 					mCallback.imageLoaded(drawable, null);

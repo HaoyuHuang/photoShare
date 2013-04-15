@@ -28,8 +28,8 @@
 
         <ImageView
             android:id="@+id/decoratingSharePhoto"
-            android:layout_width="@dimen/middleImageWidth"
-            android:layout_height="@dimen/middleImageHeight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:contentDescription="@string/editPhotoCrop"
             android:src="@drawable/logo" />

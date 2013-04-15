@@ -5,6 +5,7 @@ package com.photoshare.service.photos;
 
 import android.graphics.Bitmap;
 
+import com.photoshare.service.photos.factory.DecoratePhotoWrapper;
 import com.photoshare.service.photos.factory.PhotoFactory;
 import com.photoshare.tabHost.R;
 
@@ -20,9 +21,9 @@ public enum DecoratePhotoType implements DecoratePhotoAction {
 			return R.drawable.oldmemorylogo;
 		}
 
-		public Bitmap Decorate(Bitmap raw) {
+		public Bitmap Decorate(DecoratePhotoWrapper raw) {
 			// TODO Auto-generated method stub
-			return PhotoFactory.oldRemeber(raw);
+			return PhotoFactory.oldRemeber(raw.getRaw());
 		}
 	},
 	REFLECTION() {
@@ -32,9 +33,9 @@ public enum DecoratePhotoType implements DecoratePhotoAction {
 			return R.drawable.reflectionlogo;
 		}
 
-		public Bitmap Decorate(Bitmap raw) {
+		public Bitmap Decorate(DecoratePhotoWrapper raw) {
 			// TODO Auto-generated method stub
-			return PhotoFactory.createReflectionImageWithOrigin(raw);
+			return PhotoFactory.createReflectionImageWithOrigin(raw.getRaw());
 		}
 	},
 	ICE() {
@@ -44,9 +45,9 @@ public enum DecoratePhotoType implements DecoratePhotoAction {
 			return R.drawable.icelogo;
 		}
 
-		public Bitmap Decorate(Bitmap raw) {
+		public Bitmap Decorate(DecoratePhotoWrapper raw) {
 			// TODO Auto-generated method stub
-			return PhotoFactory.iceEffect(raw);
+			return PhotoFactory.createReflectionImageWithOrigin(raw.getRaw());
 		}
 
 	},
@@ -57,9 +58,9 @@ public enum DecoratePhotoType implements DecoratePhotoAction {
 			return R.drawable.lomologo;
 		}
 
-		public Bitmap Decorate(Bitmap raw) {
+		public Bitmap Decorate(DecoratePhotoWrapper raw) {
 			// TODO Auto-generated method stub
-			return PhotoFactory.lomo(raw);
+			return PhotoFactory.lomo(raw.getRaw());
 		}
 
 	},
@@ -70,9 +71,9 @@ public enum DecoratePhotoType implements DecoratePhotoAction {
 			return R.drawable.filmlogo;
 		}
 
-		public Bitmap Decorate(Bitmap raw) {
+		public Bitmap Decorate(DecoratePhotoWrapper raw) {
 			// TODO Auto-generated method stub
-			return PhotoFactory.filmBitmap(raw, 45f);
+			return PhotoFactory.filmBitmap(raw.getRaw(), 45f);
 		}
 
 	},
@@ -84,9 +85,93 @@ public enum DecoratePhotoType implements DecoratePhotoAction {
 			return R.drawable.featherlogo;
 		}
 
-		public Bitmap Decorate(Bitmap raw) {
+		public Bitmap Decorate(DecoratePhotoWrapper raw) {
 			// TODO Auto-generated method stub
-			return PhotoFactory.featherBitmap(raw);
+			return PhotoFactory.featherBitmap(raw.getRaw());
+		}
+
+	},
+
+	ANAGLYPH() {
+
+		public int getImageId() {
+			// TODO Auto-generated method stub
+			return R.drawable.anaglyphlogo;
+		}
+
+		public Bitmap Decorate(DecoratePhotoWrapper raw) {
+			// TODO Auto-generated method stub
+			return PhotoFactory.anaglyphBitmap(raw.getRaw());
+		}
+	},
+
+	PENCIL() {
+
+		public int getImageId() {
+			// TODO Auto-generated method stub
+			return R.drawable.pencillogo;
+		}
+
+		public Bitmap Decorate(DecoratePhotoWrapper raw) {
+			// TODO Auto-generated method stub
+			return PhotoFactory.createPencilBitmap(raw.getRaw());
+		}
+
+	},
+
+	OILPAINTING() {
+
+		public int getImageId() {
+			// TODO Auto-generated method stub
+			return R.drawable.oillogo;
+		}
+
+		public Bitmap Decorate(DecoratePhotoWrapper raw) {
+			// TODO Auto-generated method stub
+			return PhotoFactory.createOilPaintingBitmap(raw.getRaw());
+		}
+
+	},
+
+	HALFTONE() {
+
+		public int getImageId() {
+			// TODO Auto-generated method stub
+			return R.drawable.halftonelogo;
+		}
+
+		public Bitmap Decorate(DecoratePhotoWrapper raw) {
+			// TODO Auto-generated method stub
+			return PhotoFactory.createHalfToneBitmap(raw.getRaw(), raw
+					.getTexture().getTexture());
+		}
+
+	},
+
+	MEANSHIFT() {
+
+		public int getImageId() {
+			// TODO Auto-generated method stub
+			return R.drawable.meanlogo;
+		}
+
+		public Bitmap Decorate(DecoratePhotoWrapper raw) {
+			// TODO Auto-generated method stub
+			return PhotoFactory.meanShift(raw.getRaw());
+		}
+
+	},
+
+	SWIRL() {
+
+		public int getImageId() {
+			// TODO Auto-generated method stub
+			return R.drawable.swirllogo;
+		}
+
+		public Bitmap Decorate(DecoratePhotoWrapper raw) {
+			// TODO Auto-generated method stub
+			return PhotoFactory.swirl(raw.getRaw());
 		}
 
 	},
@@ -98,9 +183,9 @@ public enum DecoratePhotoType implements DecoratePhotoAction {
 			return R.drawable.glowingedgelogo;
 		}
 
-		public Bitmap Decorate(Bitmap raw) {
+		public Bitmap Decorate(DecoratePhotoWrapper raw) {
 			// TODO Auto-generated method stub
-			return PhotoFactory.glowingEdge(raw);
+			return PhotoFactory.glowingEdge(raw.getRaw());
 		}
 	},
 	GREY() {
@@ -110,9 +195,9 @@ public enum DecoratePhotoType implements DecoratePhotoAction {
 			return R.drawable.greylogo;
 		}
 
-		public Bitmap Decorate(Bitmap raw) {
+		public Bitmap Decorate(DecoratePhotoWrapper raw) {
 			// TODO Auto-generated method stub
-			return PhotoFactory.toGrayscale(raw);
+			return PhotoFactory.toGrayscale(raw.getRaw());
 		}
 
 	},
@@ -124,9 +209,9 @@ public enum DecoratePhotoType implements DecoratePhotoAction {
 			return R.drawable.noiselogo;
 		}
 
-		public Bitmap Decorate(Bitmap raw) {
+		public Bitmap Decorate(DecoratePhotoWrapper raw) {
 			// TODO Auto-generated method stub
-			return PhotoFactory.noise(raw);
+			return PhotoFactory.noise(raw.getRaw());
 		}
 
 	},
@@ -138,9 +223,9 @@ public enum DecoratePhotoType implements DecoratePhotoAction {
 			return R.drawable.roundedcornerlogo;
 		}
 
-		public Bitmap Decorate(Bitmap raw) {
+		public Bitmap Decorate(DecoratePhotoWrapper raw) {
 			// TODO Auto-generated method stub
-			return PhotoFactory.getRoundedCornerBitmap(raw, 50f);
+			return PhotoFactory.getRoundedCornerBitmap(raw.getRaw(), 50f);
 		}
 	},
 
@@ -151,9 +236,9 @@ public enum DecoratePhotoType implements DecoratePhotoAction {
 			return R.drawable.brightcontrastlogo;
 		}
 
-		public Bitmap Decorate(Bitmap raw) {
+		public Bitmap Decorate(DecoratePhotoWrapper raw) {
 			// TODO Auto-generated method stub
-			return PhotoFactory.brightContrastBitmap(raw);
+			return PhotoFactory.brightContrastBitmap(raw.getRaw());
 		}
 	},
 
@@ -164,9 +249,9 @@ public enum DecoratePhotoType implements DecoratePhotoAction {
 			return R.drawable.comiclogo;
 		}
 
-		public Bitmap Decorate(Bitmap raw) {
+		public Bitmap Decorate(DecoratePhotoWrapper raw) {
 			// TODO Auto-generated method stub
-			return PhotoFactory.comicBitmap(raw);
+			return PhotoFactory.comicBitmap(raw.getRaw());
 		}
 	},
 
@@ -177,9 +262,9 @@ public enum DecoratePhotoType implements DecoratePhotoAction {
 			return R.drawable.softglowlogo;
 		}
 
-		public Bitmap Decorate(Bitmap raw) {
+		public Bitmap Decorate(DecoratePhotoWrapper raw) {
 			// TODO Auto-generated method stub
-			return PhotoFactory.softGlow(raw);
+			return PhotoFactory.softGlow(raw.getRaw());
 		}
 	},
 
@@ -190,9 +275,9 @@ public enum DecoratePhotoType implements DecoratePhotoAction {
 			return R.drawable.moltenlogo;
 		}
 
-		public Bitmap Decorate(Bitmap raw) {
+		public Bitmap Decorate(DecoratePhotoWrapper raw) {
 			// TODO Auto-generated method stub
-			return PhotoFactory.molten(raw);
+			return PhotoFactory.molten(raw.getRaw());
 		}
 	},
 
@@ -203,9 +288,9 @@ public enum DecoratePhotoType implements DecoratePhotoAction {
 			return R.drawable.vignettelogo;
 		}
 
-		public Bitmap Decorate(Bitmap raw) {
+		public Bitmap Decorate(DecoratePhotoWrapper raw) {
 			// TODO Auto-generated method stub
-			return PhotoFactory.vignette(raw);
+			return PhotoFactory.vignette(raw.getRaw());
 		}
 	},
 
@@ -216,16 +301,15 @@ public enum DecoratePhotoType implements DecoratePhotoAction {
 			return R.drawable.gaussianblurlogo;
 		}
 
-		public Bitmap Decorate(Bitmap raw) {
+		public Bitmap Decorate(DecoratePhotoWrapper raw) {
 			// TODO Auto-generated method stub
-			return PhotoFactory.gaussianBlur(raw);
-		}
-	};
-
+			return PhotoFactory.gaussianBlur(raw.getRaw());
+		};
+	}
 }
 
 interface DecoratePhotoAction {
 	public int getImageId();
 
-	public Bitmap Decorate(Bitmap raw);
+	public Bitmap Decorate(DecoratePhotoWrapper raw);
 }

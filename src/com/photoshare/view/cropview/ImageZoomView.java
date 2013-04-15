@@ -32,7 +32,7 @@ public class ImageZoomView extends View implements Observer {
 			mCanvas = null;
 		}
 		if (mBitmap != null) {
-			mBitmap.recycle();
+//			mBitmap.recycle();
 		}
 
 	}

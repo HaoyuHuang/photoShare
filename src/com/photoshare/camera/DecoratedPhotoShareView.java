@@ -3,12 +3,18 @@
  */
 package com.photoshare.camera;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.photoshare.service.photos.PhotoType;
+import com.photoshare.service.photos.factory.PhotoFactory;
 import com.photoshare.tabHost.R;
+import com.photoshare.utils.Utils;
 
 /**
  * @author Aron
@@ -50,8 +56,12 @@ public class DecoratedPhotoShareView {
 			mPhotoCaptionView.setVisibility(View.GONE);
 		}
 		mSharePhotoPreferencesLayoutHolderId = R.id.decoratedPhotoSharingPreferenceListHolder;
+		photo = PhotoFactory.createBitmapBySize(photo,
+				PhotoType.MIDDLE.getWidth(), PhotoType.MIDDLE.getHeight());
+		Drawable drawable = new BitmapDrawable(photo);
 		if (photo != null) {
-			mPhotoView.setImageBitmap(photo);
+			Utils.logger("Set Decorated Image Drawable");
+			mPhotoView.setBackgroundDrawable(drawable);
 		}
 	}
 

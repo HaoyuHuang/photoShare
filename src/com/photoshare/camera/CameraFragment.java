@@ -24,7 +24,9 @@ import android.view.ViewGroup;
 
 import com.photoshare.fragments.BaseFragment;
 import com.photoshare.service.photos.DecoratePhotoType;
+import com.photoshare.service.photos.DecorateTextures;
 import com.photoshare.service.photos.PhotoBean;
+import com.photoshare.service.photos.factory.DecoratePhotoWrapper;
 import com.photoshare.tabHost.R;
 import com.photoshare.utils.Utils;
 import com.photoshare.utils.async.AsyncImageLoader;
@@ -161,6 +163,10 @@ public class CameraFragment extends BaseFragment {
 
 	private String getDecoratedPhotoUploadFragment() {
 		return getString(R.string.fdecoratedPhotoUploadFragment);
+	}
+	
+	private String getMarbleTexture() {
+		return getString(R.string.textureMarble);
 	}
 
 	/** The callback is used to asynchronized decorating image */
@@ -310,11 +316,13 @@ public class CameraFragment extends BaseFragment {
 				PackageManager.MATCH_DEFAULT_ONLY);
 		return list.size() > 0;
 	}
-
+	
 	private CameraView.OnCameraViewClick listener = new CameraView.OnCameraViewClick() {
 
 		public void OnToolsClick(DecoratePhotoType type, Bitmap map) {
-			async.decorateImage(type, map, mCallback);
+			DecoratePhotoWrapper wrapper = new DecoratePhotoWrapper(map,
+					DecorateTextures.getTextureByName(getMarbleTexture()), type);
+			async.decorateImage(wrapper, mCallback);
 		}
 
 		public void OnSubmitClick() {

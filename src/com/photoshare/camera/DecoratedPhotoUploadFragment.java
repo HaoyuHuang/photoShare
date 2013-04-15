@@ -106,6 +106,7 @@ public class DecoratedPhotoUploadFragment extends BaseFragment {
 		if (args != null) {
 			if (args.containsKey(PhotoBean.KEY_PHOTO)) {
 				photo = args.getParcelable(PhotoBean.KEY_PHOTO);
+				Utils.logger("-------------------- photo --------------- not null");
 			}
 		}
 		initViews();
