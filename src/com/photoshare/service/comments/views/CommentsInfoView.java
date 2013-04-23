@@ -38,8 +38,8 @@ public class CommentsInfoView {
 	private CommentAdapter mCommentAdapter;
 	private PhotoBean photoBean;
 	private AsyncUtils async;
-	private int currentPage;
-	private int demandPage;
+	private int currentPage = 1;
+	private int demandPage = 20;
 	private int maxPage;
 	private boolean initiated;
 
@@ -65,8 +65,7 @@ public class CommentsInfoView {
 			return;
 		initiated = true;
 		mCommentAdapter = new CommentAdapter();
-		mCommentsView = (MyListView) baseView
-				.findViewById(R.id.commentlist);
+		mCommentsView = (MyListView) baseView.findViewById(R.id.commentlist);
 		mCommentsView.setAdapter(mCommentAdapter);
 		comments = (EditText) baseView.findViewById(R.id.putCommentEditText);
 		mCommentSubmit = (Button) baseView
@@ -113,7 +112,8 @@ public class CommentsInfoView {
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 			if (rowView == null) {
-				rowView = inflater.inflate(R.layout.feeds_layout, null);
+				rowView = inflater.inflate(R.layout.simple_list_item_comment,
+						null);
 				CommentInfo comment = getItem(position);
 				commentView = new CommentItemView(comment, rowView, async);
 				rowView.setTag(commentView);

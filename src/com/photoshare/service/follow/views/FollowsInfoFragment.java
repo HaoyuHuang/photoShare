@@ -28,7 +28,6 @@ import com.photoshare.service.follow.UserGetFollowInfoResponseBean;
 import com.photoshare.service.users.UserInfo;
 import com.photoshare.tabHost.R;
 import com.photoshare.view.AppTitleBarView;
-import com.photoshare.view.NotificationDisplayer;
 
 /**
  * @author Aron

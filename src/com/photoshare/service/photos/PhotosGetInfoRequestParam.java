@@ -22,7 +22,7 @@ public class PhotosGetInfoRequestParam extends RequestParam {
 			+ "," + PhotoBean.KEY_LIKES_COUNT + "," + PhotoBean.KEY_TINY_URL
 			+ "," + PhotoBean.KEY_MIDDLE_URL + "," + PhotoBean.KEY_LARGE_URL
 			+ "," + PhotoBean.KEY_COMMENTS;
-	
+
 	/**
 	 * 默认字段<br>
 	 * 不添加fields参数也按此字段返回
@@ -39,7 +39,7 @@ public class PhotosGetInfoRequestParam extends RequestParam {
 	 */
 	private long uid;
 
-	private int currentPage;
+	private int currentPage = 1;
 
 	private int demandPage;
 
@@ -122,9 +122,11 @@ public class PhotosGetInfoRequestParam extends RequestParam {
 	public Bundle getParams() throws NetworkException {
 		// TODO Auto-generated method stub
 		Bundle parameters = new Bundle();
-		parameters.putString("method", type.toString());
+		parameters.putString("method",
+				type.toString());
 		if (fields != null) {
-			parameters.putString("fields", fields);
+			parameters.putString(UserInfo.KEY_USER_INFO + "." + "fields",
+					fields);
 		}
 		parameters.putString(UserInfo.KEY_USER_INFO + "." + KEY_CURRENT_PAGE,
 				currentPage + "");

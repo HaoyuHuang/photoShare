@@ -44,7 +44,7 @@ public class User {
 	private Pipeline pipeline = OutboundPipeline.getInstance();
 
 	/** 服务器地址 */
-	private final String SERVER_URL = "http://222.94.233.136:8080/photoShareServer/photoShare-mobile";
+	private final String SERVER_URL = "http://192.168.0.11:8080/photoShareServer/photoShare-mobile";
 	/** 响应形式为Json */
 	public static final String RESPONSE_FORMAT_JSON = "json";
 	private final String LOG_TAG_REQUEST = "request";

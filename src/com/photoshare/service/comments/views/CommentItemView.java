@@ -48,38 +48,39 @@ public class CommentItemView {
 		userComment = (TextView) baseView.findViewById(R.id.comment);
 		userDate = (TextView) baseView.findViewById(R.id.commentDate);
 		userHead = (ImageView) baseView.findViewById(R.id.commentHead);
-		userComment.setText(comment.getComment());
-		userDate.setText(comment.getCreateTime());
+		if (comment != null) {
+			userComment.setText(comment.getComment());
+			userDate.setText(comment.getCreateTime());
+			try {
+				userNameView = new UserTextView(
+						(TextView) baseView.findViewById(R.id.newsPopularName),
+						new UserInfo.UserInfoBuilder().ID(comment.getUid())
+								.Name(comment.getUname()).build(),
+						comment.getUname());
+				userNameView.registerListener(listener);
+				userNameView.apply();
+				async.loadDrawableFromWeb(comment.getTinyHead(),
+						new ImageCallback() {
 
-		try {
-			userNameView = new UserTextView(
-					(TextView) baseView.findViewById(R.id.newsPopularName),
-					new UserInfo.UserInfoBuilder().ID(comment.getUid())
-							.Name(comment.getUname()).build(),
-					comment.getUname());
-			userNameView.registerListener(listener);
-			userNameView.apply();
-			async.loadDrawableFromWeb(comment.getTinyHead(),
-					new ImageCallback() {
-
-						public void imageLoaded(Drawable imageDrawable,
-								String imageUrl) {
-							if (mCallback != null) {
-								mCallback.OnUserHeadLoaded(userHead,
-										imageDrawable, imageUrl);
+							public void imageLoaded(Drawable imageDrawable,
+									String imageUrl) {
+								if (mCallback != null) {
+									mCallback.OnUserHeadLoaded(userHead,
+											imageDrawable, imageUrl);
+								}
 							}
-						}
 
-						public void imageDefault() {
-							if (mCallback != null) {
-								mCallback.OnImageDefaule(userHead);
+							public void imageDefault() {
+								if (mCallback != null) {
+									mCallback.OnImageDefaule(userHead);
+								}
 							}
-						}
 
-					}, BitmapDisplayConfig.SMALL);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			userHead.setImageResource(R.drawable.icon);
+						}, BitmapDisplayConfig.SMALL);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				userHead.setImageResource(R.drawable.icon);
+			}
 		}
 	}
 

@@ -21,16 +21,19 @@ public class UserHomeActivity extends BaseActivity {
 				R.id.userHomeHolderId);
 		mf = UserHomeFragment.newInstance(R.id.userHomeHolderId);
 		mf.setCanonicalTag(getUserHomeFragment());
-		
+
+		Bundle extra = getIntent().getExtras().getBundle(KEY_USER_HOME_BUNDLES);
+
+		UserInfo info = extra.getParcelable(UserInfo.KEY_USER_INFO);
 		Bundle args = new Bundle();
-		args.putParcelable(UserInfo.KEY_USER_INFO,
-				new UserInfo.UserInfoBuilder().ID(2L).build());
+
+		args.putParcelable(UserInfo.KEY_USER_INFO, info);
 		mf.setArguments(args);
-		
+
 		TraceElement element = new TraceElement(getUserHomeFragment(), args);
 		stack.setCurrentPhase(TracePhase.USER_HOME);
 		stack.forward(element);
-		
+
 		FragmentTransaction ft = getFragmentManager().beginTransaction();
 		ft.replace(R.id.userHomeHolderId, mf);
 		ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
@@ -48,7 +51,7 @@ public class UserHomeActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		
+
 		setContentView(R.layout.user_home_layout_holder);
 		initFragments();
 	}

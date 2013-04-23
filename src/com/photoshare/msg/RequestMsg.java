@@ -70,4 +70,10 @@ public class RequestMsg<Type extends RequestParam> {
 		this.type = type;
 	}
 
+	@Override
+	public String toString() {
+		return "RequestMsg [AMsg=" + AMsg + ", isSend=" + isSend + ", type="
+				+ type + ", trial=" + trial + ", expired=" + expired + "]";
+	}
+
 }

@@ -21,8 +21,7 @@ public class ValidationValve implements Valve {
 	public void invoke(RequestMsg<? extends RequestParam> request,
 			AbstractRequestListener<String> listener, ValveContext context)
 			throws ValveException {
-		// TODO Auto-generated method stub
-
+		context.invokeNext(request, listener);
 	}
 
 }

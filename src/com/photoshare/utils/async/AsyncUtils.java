@@ -60,7 +60,6 @@ import com.photoshare.utils.User;
 import com.photoshare.utils.UserReader;
 import com.photoshare.utils.Utils;
 import com.photoshare.utils.async.AsyncImageLoader.ImageCallback;
-import com.renren.api.connect.android.Util;
 
 public class AsyncUtils {
 	/** 线程池 */
@@ -77,6 +76,10 @@ public class AsyncUtils {
 	private AsyncUtils() {
 		Utils.logger("AsyncUtils Created");
 		this.pool = Executors.newFixedThreadPool(2);
+	}
+
+	void consumeAsyncPhotoBean(final AsyncPhotoBean asyncPhotoBean) {
+		imageLoader.consumeAsyncPhotoBean(asyncPhotoBean);
 	}
 
 	/**
@@ -239,7 +242,7 @@ public class AsyncUtils {
 	public void publishLikePhoto(PhotoLikeRequestParam like,
 			LikeHelper.ICallback mCallback) throws NetworkException,
 			ValveException {
-		Util.logger("publishLikePhoto");
+		Utils.logger("publishLikePhoto");
 		new LikeHelper(User.Instance()).publishLikePhoto(like, mCallback);
 	}
 
@@ -286,6 +289,7 @@ public class AsyncUtils {
 
 	public void request(final String action, final Bundle parameters,
 			final AbstractRequestListener<String> listener) {
+		System.out.println("AsyncRequest Invoked");
 		AsyncRequest request = new AsyncRequest(parameters, action, listener);
 		pool.execute(request);
 	}

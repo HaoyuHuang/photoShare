@@ -5,7 +5,6 @@ package com.photoshare.service.photos.views;
 
 import java.util.ArrayList;
 
-import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -25,9 +24,9 @@ import com.photoshare.service.LikeHelper;
 import com.photoshare.service.likes.PhotoLikeRequestParam;
 import com.photoshare.service.likes.PhotoLikeResponseBean;
 import com.photoshare.service.photos.PhotoBean;
-import com.photoshare.service.photos.RequestPhotoType;
 import com.photoshare.service.photos.PhotosGetInfoRequestParam;
 import com.photoshare.service.photos.PhotosGetInfoResponseBean;
+import com.photoshare.service.photos.RequestPhotoType;
 import com.photoshare.service.users.UserInfo;
 import com.photoshare.tabHost.R;
 import com.photoshare.utils.Utils;
@@ -41,7 +40,7 @@ public class FeedsFragment extends BaseFragment {
 
 	private FeedsView feedsView;
 	private UserInfo userInfo;
-	private int currentPage = 0;
+	private int currentPage = 1;
 	private int demandPage = 10;
 	private RequestPhotoType type;
 	private ArrayList<PhotoBean> photos;
@@ -298,7 +297,6 @@ public class FeedsFragment extends BaseFragment {
 			public void onComplete(final PhotosGetInfoResponseBean bean) {
 				if (bean != null) {
 					photos = bean.getPhotos();
-					currentPage += demandPage;
 				}
 				if (getActivity() != null) {
 					getActivity().runOnUiThread(new Runnable() {

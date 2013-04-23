@@ -34,6 +34,7 @@ public class CommentsGetInfoResponseBean extends ResponseBean {
 					CommentInfo info = new CommentInfo();
 					info.parse(array.optJSONObject(i));
 					if (info != null) {
+						System.out.println(info);
 						comments.add(info);
 					}
 				}

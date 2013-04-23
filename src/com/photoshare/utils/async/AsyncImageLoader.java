@@ -57,6 +57,27 @@ public class AsyncImageLoader {
 		});
 	}
 
+	public void consumeAsyncPhotoBean(final AsyncPhotoBean photoBean) {
+		Bitmap bit = null;
+		try {
+			bit = getBitMapFromWeb(photoBean.getUrl());
+			if (bit != null) {
+				bit = PhotoFactory.createConfiguredBitmap(bit,
+						photoBean.getConfig());
+			}
+		} catch (RuntimeException re) {
+			re.printStackTrace();
+			photoBean.getCallback().imageDefault();
+		}
+		// imageCache.put(photoBean.getUrl(),
+		// new SoftReference<Bitmap>(bit));
+		Drawable drawable = new BitmapDrawable(bit);
+		imageCache.put(photoBean.getUrl(),
+				new SoftReference<Drawable>(drawable));
+		photoBean.getCallback().imageLoaded(drawable, photoBean.getUrl());
+		photoBean.setSuccess(true);
+	}
+
 	public void loadImageFromWebUrl(final Executor pool, final String imageUrl,
 			final ImageCallback mCallback, final BitmapDisplayConfig config) {
 

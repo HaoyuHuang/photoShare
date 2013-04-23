@@ -40,7 +40,7 @@ public class PopularPhotosFragment extends BaseFragment {
 	private String titleBarText;
 
 	private int demandPage;
-	private int currentPage;
+	private int currentPage = 1;
 
 	public static PopularPhotosFragment newInstance(int fragmentViewId) {
 		PopularPhotosFragment pp = new PopularPhotosFragment();
@@ -74,39 +74,21 @@ public class PopularPhotosFragment extends BaseFragment {
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
-		if (savedInstanceState != null) {
-			if (savedInstanceState.containsKey(PhotoBean.KEY_PHOTOS)) {
-				photos = savedInstanceState
-						.getParcelableArrayList(PhotoBean.KEY_PHOTOS);
-			}
-			if (savedInstanceState.containsKey(PhotoBean.KEY_PHOTO_TYPE)) {
-				type = RequestPhotoType.SWITCH(savedInstanceState
-						.getString(PhotoBean.KEY_PHOTO_TYPE));
-			}
-			if (savedInstanceState.containsKey(UserInfo.KEY_USER_INFO)) {
-				userInfo = savedInstanceState
-						.getParcelable(UserInfo.KEY_USER_INFO);
-			}
-		}
+		// if (savedInstanceState != null) {
+		// if (savedInstanceState.containsKey(PhotoBean.KEY_PHOTOS)) {
+		// photos = savedInstanceState
+		// .getParcelableArrayList(PhotoBean.KEY_PHOTOS);
+		// }
+		// if (savedInstanceState.containsKey(PhotoBean.KEY_PHOTO_TYPE)) {
+		// type = RequestPhotoType.SWITCH(savedInstanceState
+		// .getString(PhotoBean.KEY_PHOTO_TYPE));
+		// }
+		// if (savedInstanceState.containsKey(UserInfo.KEY_USER_INFO)) {
+		// userInfo = savedInstanceState
+		// .getParcelable(UserInfo.KEY_USER_INFO);
+		// }
+		// }
 		super.onActivityCreated(savedInstanceState);
-		Bundle bundle = getArguments();
-		if (bundle != null) {
-			if (bundle.containsKey(UserInfo.KEY_USER_INFO)) {
-				userInfo = bundle.getParcelable(UserInfo.KEY_USER_INFO);
-			}
-			if (bundle.containsKey(PhotoBean.KEY_PHOTO_TYPE)) {
-				type = RequestPhotoType.SWITCH(bundle
-						.getString(PhotoBean.KEY_PHOTO_TYPE));
-			}
-			if (bundle.containsKey(PhotoBean.KEY_PHOTOS)) {
-				photos = bundle.getParcelableArrayList(PhotoBean.KEY_PHOTOS);
-			}
-		}
-		try {
-			AsyncGetPhotos();
-		} catch (NetworkException e) {
-			AsyncSignIn();
-		}
 	}
 
 	@Override
@@ -116,7 +98,9 @@ public class PopularPhotosFragment extends BaseFragment {
 			if (photos == null) {
 				Utils.logger("Photos is Null");
 			}
-			outState.putString(PhotoBean.KEY_PHOTO_TYPE, type.toString());
+			if (type != null) {
+				outState.putString(PhotoBean.KEY_PHOTO_TYPE, type.toString());
+			}
 			outState.putParcelable(UserInfo.KEY_USER_INFO, userInfo);
 		}
 		super.onSaveInstanceState(outState);
@@ -138,6 +122,18 @@ public class PopularPhotosFragment extends BaseFragment {
 				photos = bundle.getParcelableArrayList(PhotoBean.KEY_PHOTOS);
 			}
 		}
+		titleBarText = getPopularText();
+		initTitleBar("", "", titleBarText, leftBtnVisibility,
+				rightBtnVisibility);
+		if (photos != null && !photos.isEmpty()) {
+			initView();
+		} else {
+			try {
+				AsyncGetPhotos();
+			} catch (NetworkException e) {
+				AsyncSignIn();
+			}
+		}
 	}
 
 	@Override
@@ -146,9 +142,6 @@ public class PopularPhotosFragment extends BaseFragment {
 		if (!hideTitleBarView()) {
 			container.addView(super.onCreateView(inflater, container,
 					savedInstanceState));
-			titleBarText = getPopularText();
-			initTitleBar("", "", titleBarText, leftBtnVisibility,
-					rightBtnVisibility);
 		}
 		return inflater.inflate(R.layout.popular_layout, container, false);
 	}
@@ -231,6 +224,7 @@ public class PopularPhotosFragment extends BaseFragment {
 			Bundle params = (Bundle) getArguments().clone();
 			params.putParcelable(PhotoBean.KEY_PHOTO, photo);
 			params.putParcelable(UserInfo.KEY_USER_INFO, userInfo);
+			params.putParcelableArrayList(PhotoBean.KEY_PHOTOS, photos);
 			forward(getFeedsItemFragment(), params);
 		}
 

@@ -20,7 +20,6 @@ import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -609,5 +608,15 @@ public final class Utils {
 		}
 		return re;
 	}
-	
+
+	public static boolean isBlank(String str) {
+		if (str == null)
+			return true;
+		if (str.isEmpty())
+			return true;
+		if ("".equals(str))
+			return true;
+		return false;
+	}
+
 }

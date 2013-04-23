@@ -23,7 +23,7 @@ import com.photoshare.utils.async.AsyncUtils;
 public class BasicValve implements Valve {
 
 	public BasicValve() {
-		
+
 	}
 
 	private AsyncUtils async = AsyncUtils.getInstance();
@@ -56,6 +56,8 @@ public class BasicValve implements Valve {
 	public void invoke(final RequestMsg<? extends RequestParam> request,
 			final AbstractRequestListener<String> listener, ValveContext context)
 			throws ValveException {
+		System.out.println("BasicValve invoked");
+//		context.invokeNext(request, listener);
 		async = AsyncUtils.getInstance();
 		if (request == null)
 			return;

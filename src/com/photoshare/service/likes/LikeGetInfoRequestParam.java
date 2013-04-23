@@ -40,7 +40,7 @@ public class LikeGetInfoRequestParam extends RequestParam {
 
 	private long pid;
 
-	private int currentPage;
+	private int currentPage = 1;
 
 	private int demandPage;
 

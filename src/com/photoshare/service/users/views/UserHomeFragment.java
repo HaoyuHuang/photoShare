@@ -36,6 +36,7 @@ import com.photoshare.service.users.UserGetInfoResponseBean;
 import com.photoshare.service.users.UserGetOtherInfoRequestParam;
 import com.photoshare.service.users.UserInfo;
 import com.photoshare.tabHost.R;
+import com.photoshare.validate.Validator;
 import com.photoshare.view.OtherHomeTitleBarView;
 
 /**
@@ -82,14 +83,19 @@ public class UserHomeFragment extends BaseFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
+	}
+
+	@Override
+	public void onResume() {
 		initViews();
+		super.onResume();
 	}
 
 	/**
 	 * Init the popular Photo View
 	 */
 	private void initPopularPhotoView() {
-//		Tag = getPopularFragment();
+		// Tag = getPopularFragment();
 		popularView = new PopularPhotosView(getActivity().findViewById(
 				R.id.userHomeWrapperId), photos, async, getActivity());
 		popularView.registerCallback(photoCallback);
@@ -100,7 +106,7 @@ public class UserHomeFragment extends BaseFragment {
 
 		PhotosGetInfoRequestParam param = new PhotosGetInfoRequestParam.PhotoRequestBuilder()
 				.Field(PhotosGetInfoRequestParam.FIELD_DEFAULT).Method(type)
-				.CurrentPage(0).UserId(userInfo.getUid()).DemandPage(10)
+				.CurrentPage(1).UserId(userInfo.getUid()).DemandPage(10)
 				.build();
 
 		AbstractRequestListener<PhotosGetInfoResponseBean> listener = new AbstractRequestListener<PhotosGetInfoResponseBean>() {
@@ -174,6 +180,8 @@ public class UserHomeFragment extends BaseFragment {
 		if (bundle != null) {
 			if (bundle.containsKey(UserInfo.KEY_USER_INFO)) {
 				userInfo = bundle.getParcelable(UserInfo.KEY_USER_INFO);
+				System.out.println("user Info callback");
+				System.out.println(userInfo);
 			}
 			if (bundle.containsKey(PhotoBean.KEY_PHOTO_TYPE)) {
 				type = RequestPhotoType.SWITCH(bundle
@@ -184,14 +192,7 @@ public class UserHomeFragment extends BaseFragment {
 			}
 		}
 		type = RequestPhotoType.MyPhotos;
-		initVOtherHomeTitleBarViews();
-		try {
-			AsyncGetOthersInfo();
-		} catch (NetworkException e1) {
-			e1.printStackTrace();
-			AsyncSignIn();
-		}
-
+		DoGetUserInfoPart();
 	}
 
 	@Override
@@ -230,6 +231,7 @@ public class UserHomeFragment extends BaseFragment {
 		param.putParcelable(UserInfo.KEY_USER_INFO, userInfo);
 		param.putString(UserInfo.KEY_FOLLOW_TYPE,
 				FollowType.FOLLOWER.toString());
+		param.putParcelableArrayList(PhotoBean.KEY_PHOTOS, photos);
 		forward(getFollowFragment(), param);
 	}
 
@@ -238,6 +240,7 @@ public class UserHomeFragment extends BaseFragment {
 		param.putParcelable(UserInfo.KEY_USER_INFO, userInfo);
 		param.putString(UserInfo.KEY_FOLLOW_TYPE,
 				FollowType.FOLLOWER.toString());
+		param.putParcelableArrayList(PhotoBean.KEY_PHOTOS, photos);
 		forward(getFollowFragment(), param);
 	}
 
@@ -247,7 +250,7 @@ public class UserHomeFragment extends BaseFragment {
 
 	private void OnLikeCntClicked() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	/**
@@ -384,19 +387,16 @@ public class UserHomeFragment extends BaseFragment {
 
 			@Override
 			public void onComplete(final UserGetInfoResponseBean bean) {
-				try {
-					AsyncGetPhotos();
-				} catch (NetworkException e) {
-					AsyncSignIn();
-					e.printStackTrace();
-				}
 				if (getActivity() != null) {
 					getActivity().runOnUiThread(new Runnable() {
 
 						public void run() {
-							if (homeTitle != null && bean.getUserInfo() != null) {
+							if (homeTitle != null && bean.getUserInfo() != null
+									&& Validator.isValid(bean.getUserInfo())) {
+								userInfo = bean.getUserInfo();
 								homeTitle.applyData(bean.getUserInfo());
 							}
+							DoGetPhotoPart();
 						}
 
 					});
@@ -427,6 +427,34 @@ public class UserHomeFragment extends BaseFragment {
 		return true;
 	}
 
+	private void DoGetUserInfoPart() {
+		initVOtherHomeTitleBarViews();
+		try {
+			if (userInfo != null && Validator.isValid(userInfo)) {
+				homeTitle.applyData(userInfo);
+				DoGetPhotoPart();
+			} else {
+				AsyncGetOthersInfo();
+			}
+		} catch (NetworkException e1) {
+			e1.printStackTrace();
+			AsyncSignIn();
+		}
+	}
+
+	private void DoGetPhotoPart() {
+		try {
+			if (photos != null && !photos.isEmpty()) {
+				initPopularPhotoView();
+			} else {
+				AsyncGetPhotos();
+			}
+		} catch (NetworkException e) {
+			AsyncSignIn();
+			e.printStackTrace();
+		}
+	}
+
 	/**
 	 * Popular Photo Callback
 	 */
@@ -435,6 +463,8 @@ public class UserHomeFragment extends BaseFragment {
 		public void OnImageClick(PhotoBean photo) {
 			Bundle params = (Bundle) getArguments().clone();
 			params.putParcelable(PhotoBean.KEY_PHOTO, photo);
+			params.putParcelableArrayList(PhotoBean.KEY_PHOTOS, photos);
+			params.putParcelable(UserInfo.KEY_USER_INFO, userInfo);
 			forward(getFeedsItemFragment(), params);
 		}
 

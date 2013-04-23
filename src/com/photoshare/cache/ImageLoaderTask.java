@@ -29,7 +29,7 @@ public class ImageLoaderTask extends AsyncTask<TaskParam, Void, Bitmap> {
 	}
 	
 	private Bitmap loadImageBytes(byte[] bytes,String name){
-		return BitmapCache.getInstance().getBitmap(bytes,name);
+		return BitmapRefCache.getInstance().getBitmap(bytes,name);
 	}
 	
 	private Bitmap loadImageFile(final String filename,
@@ -37,7 +37,7 @@ public class ImageLoaderTask extends AsyncTask<TaskParam, Void, Bitmap> {
 		InputStream is = null;
 		try {
 			
-			Bitmap bmp = BitmapCache.getInstance().getBitmap(filename,
+			Bitmap bmp = BitmapRefCache.getInstance().getBitmap(filename,
 					param.getAssetManager());
 			return bmp;
 		} catch (Exception e) {

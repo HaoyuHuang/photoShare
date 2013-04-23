@@ -22,6 +22,7 @@ public class StoreValve implements Valve {
 	public void invoke(RequestMsg<? extends RequestParam> request,
 			AbstractRequestListener<String> listener, ValveContext context)
 			throws ValveException {
+		context.invokeNext(request, listener);
 		OutboundPipeline.getInstance().add(request, listener);
 	}
 

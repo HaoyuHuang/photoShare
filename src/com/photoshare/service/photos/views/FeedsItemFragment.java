@@ -101,8 +101,7 @@ public class FeedsItemFragment extends BaseFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.simple_list_item_feeds, container,
-				false);
+		return inflater.inflate(R.layout.photo_layout, container, false);
 	}
 
 	@Override
@@ -130,14 +129,12 @@ public class FeedsItemFragment extends BaseFragment {
 		return getString(R.string.ffeedsItemFragment);
 	}
 
-	private void AsyncLikePhoto(PhotoBean like) throws NetworkException {
+	private void AsyncLikePhoto(final PhotoBean photo) throws NetworkException {
 		PhotoLikeRequestParam param = new PhotoLikeRequestParam.LikeBuilder()
-				.UserId(user.getUserInfo().getUid()).PhotoId(like.getPid())
-				.isLike(like.isLike()).build();
-		mNotificationDisplayer.setTag(getLikeTag());
-		mNotificationDisplayer.setTicker(getLikeTicker());
-		mNotificationDisplayer.displayNotification();
-
+				.UserId(user.getUserInfo().getUid()).PhotoId(photo.getPid())
+				.isLike(photo.isLike()).build();
+		// mNotificationDisplayer.displayNotification();
+		System.out.println(param);
 		LikeHelper.ICallback mCallback = new LikeHelper.ICallback() {
 
 			public void OnNetworkError(NetworkError error) {
@@ -146,8 +143,7 @@ public class FeedsItemFragment extends BaseFragment {
 					getActivity().runOnUiThread(new Runnable() {
 
 						public void run() {
-							mExceptionHandler.obtainMessage(
-									NetworkError.ERROR_NETWORK).sendToTarget();
+
 						}
 
 					});
@@ -155,12 +151,13 @@ public class FeedsItemFragment extends BaseFragment {
 			}
 
 			public void OnFault(Throwable fault) {
+				mExceptionHandler.obtainMessage(NetworkError.ERROR_NETWORK)
+						.sendToTarget();
 				if (getActivity() != null) {
 					getActivity().runOnUiThread(new Runnable() {
 
 						public void run() {
-							mExceptionHandler.obtainMessage(
-									NetworkError.ERROR_NETWORK).sendToTarget();
+
 						}
 
 					});
@@ -174,7 +171,9 @@ public class FeedsItemFragment extends BaseFragment {
 					getActivity().runOnUiThread(new Runnable() {
 
 						public void run() {
-							photo.setLike(bean.isLike());
+							if (bean != null && bean.getUserId() != 0) {
+								photo.setLike(!bean.isLike());
+							}
 							mNotificationDisplayer.displayNotification();
 							mNotificationDisplayer.cancleNotification();
 						}
@@ -186,6 +185,7 @@ public class FeedsItemFragment extends BaseFragment {
 		try {
 			async.publishLikePhoto(param, mCallback);
 		} catch (ValveException e) {
+			System.out.println(e.getMessage());
 			mExceptionHandler.obtainMessage(NetworkError.ERROR_NETWORK)
 					.sendToTarget();
 		}
