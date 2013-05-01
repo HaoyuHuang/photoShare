@@ -5,6 +5,7 @@ package com.photoshare.service.news;
 
 import android.os.Bundle;
 
+import com.photoshare.common.Builder;
 import com.photoshare.common.RequestParam;
 import com.photoshare.exception.NetworkException;
 import com.photoshare.service.users.UserInfo;
@@ -23,10 +24,10 @@ public class UserGetNewsRequestParam extends RequestParam {
 		return "getNews" + "?method=" + "getUserNews";
 	}
 
-	private static final String ACTION = "/NewsAction_";
+	private static final String ACTION = "/BaseNewsAction_";
 
 	public String getAction() {
-		return ACTION + type.getTag();
+		return ACTION + newsAction.getTag();
 	}
 
 	/**
@@ -34,7 +35,7 @@ public class UserGetNewsRequestParam extends RequestParam {
 	 */
 	public static final String FIELDS_ALL = NewsBean.KEY_EVENT_TIME + ","
 			+ NewsBean.KEY_EVENT_TYPE + "," + NewsBean.KEY_USER_ID + ","
-			+ NewsBean.KEY_USER_NAME + "," + NewsBean.KEY_URLS;
+			+ NewsBean.KEY_USER_NAME;
 
 	/**
 	 * 默认字段<br>
@@ -42,85 +43,80 @@ public class UserGetNewsRequestParam extends RequestParam {
 	 */
 	public static final String FIELD_DEFAULT = NewsBean.KEY_EVENT_TIME + ","
 			+ NewsBean.KEY_EVENT_TYPE + "," + NewsBean.KEY_USER_ID + ","
-			+ NewsBean.KEY_USER_NAME + "," + NewsBean.KEY_URLS;
+			+ NewsBean.KEY_USER_NAME;
 
 	/**
 	 * 需要获取的用户uid的数组
 	 */
 	private long uid;
 
-	private NewsType type;
+	private int datediff;
+
+	private NewsAction newsAction;
 
 	/**
 	 * 需要获取的字段
 	 */
 	private String fields = FIELD_DEFAULT;
 
-	/**
-	 * 构造一个users.getInfo接口请求参数
-	 * 
-	 * @param uids
-	 *            需要获取的用户uid的数组
-	 */
-	public UserGetNewsRequestParam(long uid) {
-		this.uid = uid;
+	public UserGetNewsRequestParam(UserGetNewsBuilder builder) {
+		this.datediff = builder.datediff;
+		this.fields = builder.fields;
+		this.newsAction = builder.newsAction;
+		this.uid = builder.uid;
 	}
 
-	/**
-	 * getUserInfo接口请求参数
-	 * 
-	 * @param uids
-	 *            需要获取的用户uid的数组
-	 * @param fields
-	 *            需要获取的字段
-	 */
-	public UserGetNewsRequestParam(long uid, String fields) {
-		this.uid = uid;
-		this.setFields(fields);
+	public static class UserGetNewsBuilder implements
+			Builder<UserGetNewsRequestParam> {
+
+		private long uid;
+
+		private int datediff;
+
+		private NewsAction newsAction;
+
+		private String fields;
+
+		public UserGetNewsBuilder UserId(long userId) {
+			this.uid = userId;
+			return this;
+		}
+
+		public UserGetNewsBuilder DateDiff(int datediff) {
+			this.datediff = datediff;
+			return this;
+		}
+
+		public UserGetNewsBuilder NewsAction(NewsAction newsAction) {
+			this.newsAction = newsAction;
+			return this;
+		}
+
+		public UserGetNewsBuilder Fields(String fields) {
+			this.fields = fields;
+			return this;
+		}
+
+		public UserGetNewsRequestParam build() {
+			return new UserGetNewsRequestParam(this);
+		}
+
 	}
 
-	/**
-	 * 获取uids
-	 * 
-	 * @return
-	 */
 	public long getUid() {
 		return uid;
 	}
 
-	/**
-	 * 设置uids
-	 * 
-	 * @param uids
-	 */
-	public void setUid(long uid) {
-		this.uid = uid;
+	public int getDatediff() {
+		return datediff;
 	}
 
-	/**
-	 * 获取fields
-	 * 
-	 * @return
-	 */
+	public NewsAction getNewsAction() {
+		return newsAction;
+	}
+
 	public String getFields() {
 		return fields;
-	}
-
-	public NewsType getType() {
-		return type;
-	}
-
-	public void setType(NewsType type) {
-		this.type = type;
-	}
-
-	/**
-	 * 设置fields
-	 * 
-	 * @param fields
-	 */
-	public void setFields(String fields) {
-		this.fields = fields;
 	}
 
 	@Override
@@ -131,9 +127,8 @@ public class UserGetNewsRequestParam extends RequestParam {
 		if (fields != null) {
 			parameters.putString("fields", fields);
 		}
-		parameters.putString(UserInfo.KEY_USER_INFO + "." + UserInfo.KEY_UID,
-				uid + "");
+		parameters.putString(UserInfo.KEY_UID, String.valueOf(uid));
+		parameters.putString("datediff", String.valueOf(datediff));
 		return parameters;
 	}
-
 }

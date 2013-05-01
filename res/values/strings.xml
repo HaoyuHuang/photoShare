@@ -15,10 +15,12 @@
     <string name="like">赞</string>
     <string name="unlike">取消赞</string>
     <string name="love">喜爱</string>
-    <string name="follow">跟随</string>
-    <string name="following">跟随他</string>
+    <string name="follow">被跟随</string>
+    <string name="following">跟随</string>
     <string name="home">家</string>
     <string name="news">新消息</string>
+    <string name="myNewsTitle">我的消息</string>
+    <string name="myFollowerNewsTitle">跟随消息</string>
     <string name="crop">裁剪</string>
     <string name="preferences">偏好</string>
     <string name="friends">朋友</string>
@@ -36,6 +38,8 @@
     <string name="toastStopCroping">停止裁剪喽</string>
     <string name="myphotos">我的照片</string>
     <string name="mylikedphotos">我喜欢的照片</string>
+    <string name="more">更多</string>
+    <string name="decorate">渲染</string>
 
     <!-- Profile Description -->
     <string name="account">账号</string>
@@ -45,6 +49,7 @@
     <string name="name">姓名</string>
     <string name="psuedoname">艺名</string>
     <string name="website">个人网址</string>
+    <string name="personalWebsite">个人\r\n网址</string>
     <string name="bio">简介</string>
     <string name="mail">邮箱</string>
     <string name="phone">电话</string>
@@ -60,11 +65,14 @@
     <string name="editPhotoCaption">标题..</string>
     <string name="uploadPhotoCaption">上传</string>
     <string name="uploadPhotoContent">上传中..</string>
-    
+
+    <!-- News Description -->
+    <string name="newsPrefix">动作</string>
+    <string name="newsSuffix">干了什么</string>
+
     <!-- Decorate Texture -->
-	<string name="textureMarble">marble</string>
-	
-	
+    <string name="textureMarble">marble</string>
+
     <!-- Exception Description -->
     <string name="eNetworkError">网络错误</string>
     <string name="erefreshError">无法刷新获取</string>
@@ -82,6 +90,15 @@
     <string name="eeditProfileError">编辑失败</string>
     <string name="eError">错误消息</string>
     <string name="esignUpMailExistError">邮箱已注册</string>
+
+    <!-- Success Description -->
+    <string name="sOperationSuccess">操作成功</string>
+    <string name="sPutCommentSuccess">评论成功</string>
+    <string name="sGetFeedsSuccess">获取成功</string>
+    <string name="sRefreshSuccess">刷新成功</string>
+    <string name="sPublishPhotoSuccess">发布照片成功</string>
+    <string name="sEditProfileSuccess">修改资料成功</string>
+    <string name="sSuccess">操作成功</string>
 
     <!-- Notification Ticker -->
     <string name="nRefreshTicker">获取数据</string>
@@ -110,6 +127,7 @@
     <!-- Buttons Text Description -->
     <string name="retake">重拍</string>
     <string name="loadMore">加载</string>
+    <string name="save">保存</string>
     <string name="start">开始</string>
     <string name="forward">前进</string>
     <string name="back">返回</string>
@@ -132,6 +150,8 @@
     <!-- Fragment Invoker -->
     <string name="fcameraPhotoFragment">camera</string>
     <string name="fcommentsFragment">comments</string>
+    <string name="fphotoFilterFragment">photoFilterFragment</string>
+    <string name="fCropPhotoFragment">cropPhotoFragment</string>
     <string name="fdecoratedPhotoFragment">decoratedPhoto</string>
     <string name="fdecoratedPhotoUploadFragment">decoratedPhotoUpload</string>
     <string name="fdecoratedPhotoShareFragment">decoratedPhotoShare</string>
@@ -155,6 +175,11 @@
     <string name="fuserHomeFragment">userHome</string>
     <string name="fuserHomeTitleBarFragment">userHomeTitleBar</string>
     <string name="fuserProfileFragment">userProfile</string>
+
+    <!-- Pop Window -->
+    <string name="popMenuSave">保存至图库</string>
+    <string name="popMenuCrop">裁剪</string>
+    <string name="popMenuDecorate">渲染</string>
 
     <!-- 文件目录 -->
     <string name="userDirStr">/sdcard/cgema/usr</string>

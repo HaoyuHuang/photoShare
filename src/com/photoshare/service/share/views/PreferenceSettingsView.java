@@ -158,8 +158,8 @@ public class PreferenceSettingsView {
 		
 		map1.put("friendItem", "寻找朋友");
 		map2.put("friendItem", "邀请朋友");
-		map3.put("friendItem", "跟随的人");
-		map4.put("friendItem", "跟随我的人");
+		map3.put("friendItem", "被跟随");
+		map4.put("friendItem", "跟随");
 
 		FriendsList.add(map1);
 		FriendsList.add(map2);

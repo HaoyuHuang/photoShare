@@ -17,6 +17,7 @@ import com.photoshare.msg.MessageItem;
 import com.photoshare.msg.MessageList;
 import com.photoshare.tabHost.R;
 import com.photoshare.utils.async.AsyncUtils;
+import com.photoshare.view.State;
 
 /**
  * @author Aron
@@ -97,7 +98,7 @@ public class MessageQueueView {
 
 	private MessageQueueItemView.MessageListener messageListener = new MessageQueueItemView.MessageListener() {
 
-		public void OnResend(MessageItem message, IObserver<Boolean> observer) {
+		public void OnResend(MessageItem message, IObserver<State> observer) {
 			// TODO Auto-generated method stub
 			if (listener != null) {
 				listener.OnMsgClicked(message, observer);
@@ -132,8 +133,7 @@ public class MessageQueueView {
 	private OnMsgListener listener;
 
 	public interface OnMsgListener {
-		public void OnMsgClicked(MessageItem message,
-				IObserver<Boolean> observer);
+		public void OnMsgClicked(MessageItem message, IObserver<State> observer);
 
 		public void OnImageLoaded(ImageView image, Drawable drawable, String url);
 

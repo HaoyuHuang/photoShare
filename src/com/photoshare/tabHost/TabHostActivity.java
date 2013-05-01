@@ -92,8 +92,8 @@ public class TabHostActivity extends TabActivity {
 	private void init() {
 		// User.Instance();
 		// AsyncUtils.getInstance();
-		DecorateTextures.offer(new Texture(getMarbleTexture(), PhotoFactory
-				.readBitMap(getApplicationContext(), R.drawable.marble)));
+		// DecorateTextures.offer(new Texture(getMarbleTexture(), PhotoFactory
+		// .readBitMap(getApplicationContext(), R.drawable.marble)));
 		tabHost.addTab(tabHost.newTabSpec(TAB_HOME).setIndicator(TAB_HOME)
 				.setContent(new Intent(this, TabHomeActivity.class)));
 		tabHost.addTab(tabHost.newTabSpec(TAB_POPULAR)

@@ -32,7 +32,19 @@ public class UserGetFollowInfoRequestParam extends RequestParam {
 
 	private String fields = FIELDS_DEFAULT;
 
-	private FollowType type;
+	private FollowAction type;
+
+	private int currentPage;
+
+	private int demandPage;
+
+	private int datediff;
+
+	public static final String KEY_CURRENT_PAGE = "currentPage";
+
+	public static final String KEY_DEMAND_PAGE = "demandPage";
+
+	public static final String KEY_DATE_DIFF = "datediff";
 
 	@Deprecated
 	public String getMethod() {
@@ -78,16 +90,56 @@ public class UserGetFollowInfoRequestParam extends RequestParam {
 				String.valueOf(uid));
 		if (type != null) {
 			bundle.putString("method", type.toString());
+			switch (type) {
+			case DATED_FOLLOWER:
+			case DATED_FOLLOWING:
+				bundle.putString(KEY_DATE_DIFF, String.valueOf(datediff));
+				break;
+			case FOLLOWER:
+			case FOLLOWING:
+				bundle.putString(UserInfo.KEY_USER_INFO + "."
+						+ KEY_CURRENT_PAGE, String.valueOf(currentPage));
+				bundle.putString(
+						UserInfo.KEY_USER_INFO + "." + KEY_DEMAND_PAGE,
+						String.valueOf(demandPage));
+				break;
+			default:
+				break;
+			}
 		}
 		return bundle;
 	}
 
-	public FollowType getType() {
+	public FollowAction getType() {
 		return type;
 	}
 
-	public void setType(FollowType type) {
+	public void setType(FollowAction type) {
 		this.type = type;
+	}
+
+	public int getCurrentPage() {
+		return currentPage;
+	}
+
+	public void setCurrentPage(int currentPage) {
+		this.currentPage = currentPage;
+	}
+
+	public int getDemandPage() {
+		return demandPage;
+	}
+
+	public void setDemandPage(int demandPage) {
+		this.demandPage = demandPage;
+	}
+
+	public int getDatediff() {
+		return datediff;
+	}
+
+	public void setDatediff(int datediff) {
+		this.datediff = datediff;
 	}
 
 }

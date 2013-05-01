@@ -1,5 +1,8 @@
 package com.photoshare.service.comments;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
 import org.json.JSONObject;
 
 import android.os.Bundle;
@@ -10,7 +13,7 @@ import com.photoshare.common.Builder;
 import com.photoshare.exception.NetworkException;
 
 public class CommentInfo implements Parcelable {
-	
+
 	public static final String KEY_COMMENTS = "comments";
 	public static final String KEY_COMMENT = "comment";
 	public static final String KEY_CID = "cid";
@@ -20,6 +23,7 @@ public class CommentInfo implements Parcelable {
 	public static final String KEY_TINY_UHEAD = "tinyurl";
 	public static final String KEY_CONTENT = "content";
 	public static final String KEY_CREATE_TIME = "createTime";
+	public static final String KEY_COMMENT_ACTION = "commentAction";
 
 	private long cid;
 
@@ -117,6 +121,12 @@ public class CommentInfo implements Parcelable {
 		uname = object.optString(KEY_UNAME);
 		tinyHead = object.optString(KEY_TINY_UHEAD);
 		comment = object.optString(KEY_CONTENT);
+		try {
+			comment = URLDecoder.decode(comment, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		createTime = object.optString(KEY_CREATE_TIME);
 
 		return this;

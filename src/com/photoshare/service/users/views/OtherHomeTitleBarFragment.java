@@ -22,7 +22,7 @@ import com.photoshare.exception.ValveException;
 import com.photoshare.fragments.BaseFragment;
 import com.photoshare.fragments.PhotoBarFragment;
 import com.photoshare.service.FollowHelper;
-import com.photoshare.service.follow.FollowType;
+import com.photoshare.service.follow.FollowAction;
 import com.photoshare.service.follow.UserFollowRequestParam;
 import com.photoshare.service.follow.UserFollowResponseBean;
 import com.photoshare.service.users.UserGetInfoResponseBean;
@@ -32,6 +32,7 @@ import com.photoshare.tabHost.R;
 import com.photoshare.view.AppTitleBarView;
 import com.photoshare.view.NotificationDisplayer;
 import com.photoshare.view.OtherHomeTitleBarView;
+import com.photoshare.view.State;
 
 /**
  * @author Aron
@@ -132,16 +133,16 @@ public class OtherHomeTitleBarFragment extends BaseFragment {
 	private void OnFollowClicked() {
 		Bundle param = new Bundle();
 		param.putParcelable(UserInfo.KEY_USER_INFO, userInfo);
-		param.putString(UserInfo.KEY_FOLLOW_TYPE,
-				FollowType.FOLLOWER.toString());
+		param.putString(UserInfo.KEY_FOLLOW_ACTION,
+				FollowAction.FOLLOWER.toString());
 		Command.forward(this, getFollowFragment(), param);
 	}
 
 	private void OnFollowingClicked() {
 		Bundle param = new Bundle();
 		param.putParcelable(UserInfo.KEY_USER_INFO, userInfo);
-		param.putString(UserInfo.KEY_FOLLOW_TYPE,
-				FollowType.FOLLOWER.toString());
+		param.putString(UserInfo.KEY_FOLLOW_ACTION,
+				FollowAction.FOLLOWER.toString());
 		Command.forward(this, getFollowFragment(), param);
 	}
 
@@ -225,8 +226,8 @@ public class OtherHomeTitleBarFragment extends BaseFragment {
 		try {
 			async.publishFollow(param, mCallback);
 		} catch (ValveException e) {
-			mExceptionHandler.obtainMessage(
-					NetworkError.ERROR_NETWORK).sendToTarget();
+			mExceptionHandler.obtainMessage(NetworkError.ERROR_NETWORK)
+					.sendToTarget();
 		}
 	}
 
@@ -321,7 +322,7 @@ public class OtherHomeTitleBarFragment extends BaseFragment {
 			OnFollowClicked();
 		}
 
-		public void OnFollowClick(UserInfo info, IObserver<Boolean> observer) {
+		public void OnFollowClick(UserInfo info, IObserver<State> observer) {
 			try {
 				AsyncOnFollowClick();
 			} catch (NetworkException e) {
@@ -359,7 +360,7 @@ public class OtherHomeTitleBarFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnRightBtnClicked()
 	 */
 	@Override
-	protected void onRightBtnClicked() {
+	protected void onRightBtnClicked(View view) {
 
 	}
 
@@ -369,14 +370,14 @@ public class OtherHomeTitleBarFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnLeftBtnClicked()
 	 */
 	@Override
-	protected void onLeftBtnClicked() {
+	protected void onLeftBtnClicked(View view) {
 		backward(null);
 	}
 
 	@Override
 	protected void onLoginSuccess() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

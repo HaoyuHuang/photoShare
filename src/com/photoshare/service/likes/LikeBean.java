@@ -25,6 +25,7 @@ public class LikeBean implements Parcelable {
 	public static final String KEY_TINY_UHEAD = "tinyHead";
 	public static final String KEY_CREATE_TIME = "createTime";
 	public static final String KEY_IS_LIKE = "isLike";
+	public static final String KEY_LIKE_ACTION = "likeAction";
 
 	private long lid;
 

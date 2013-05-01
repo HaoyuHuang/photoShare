@@ -16,19 +16,25 @@ import android.widget.Toast;
 
 import com.photoshare.command.Command;
 import com.photoshare.common.AbstractRequestListener;
+import com.photoshare.exception.MessageUtils;
 import com.photoshare.exception.NetworkError;
 import com.photoshare.exception.NetworkException;
 import com.photoshare.exception.ValveException;
 import com.photoshare.fragments.BaseFragment;
 import com.photoshare.service.LikeHelper;
+import com.photoshare.service.comments.CommentAction;
+import com.photoshare.service.comments.CommentInfo;
+import com.photoshare.service.likes.LikeAction;
+import com.photoshare.service.likes.LikeBean;
 import com.photoshare.service.likes.PhotoLikeRequestParam;
 import com.photoshare.service.likes.PhotoLikeResponseBean;
 import com.photoshare.service.photos.PhotoBean;
 import com.photoshare.service.photos.PhotosGetInfoRequestParam;
 import com.photoshare.service.photos.PhotosGetInfoResponseBean;
-import com.photoshare.service.photos.RequestPhotoType;
+import com.photoshare.service.photos.PhotoAction;
 import com.photoshare.service.users.UserInfo;
 import com.photoshare.tabHost.R;
+import com.photoshare.utils.User;
 import com.photoshare.utils.Utils;
 import com.photoshare.view.NotificationDisplayer;
 
@@ -42,7 +48,7 @@ public class FeedsFragment extends BaseFragment {
 	private UserInfo userInfo;
 	private int currentPage = 1;
 	private int demandPage = 10;
-	private RequestPhotoType type;
+	private PhotoAction type;
 	private ArrayList<PhotoBean> photos;
 	private NotificationDisplayer mNotificationDisplayer;
 	private String leftBtnText = "";
@@ -57,7 +63,7 @@ public class FeedsFragment extends BaseFragment {
 		return feeds;
 	}
 
-	public RequestPhotoType getType() {
+	public PhotoAction getType() {
 		return type;
 	}
 
@@ -82,7 +88,7 @@ public class FeedsFragment extends BaseFragment {
 					userInfo = bundle.getParcelable(UserInfo.KEY_USER_INFO);
 				}
 				if (bundle.containsKey(PhotoBean.KEY_PHOTO_TYPE)) {
-					type = RequestPhotoType.SWITCH(bundle
+					type = PhotoAction.SWITCH(bundle
 							.getString(PhotoBean.KEY_PHOTO_TYPE));
 				}
 				if (bundle.containsKey(PhotoBean.KEY_PHOTOS)) {
@@ -95,6 +101,7 @@ public class FeedsFragment extends BaseFragment {
 			switch (type) {
 			case MyFeeds:
 				titlebarText = getFeedsText();
+				userInfo = User.Instance().getUserInfo();
 				break;
 			case MyLikedPhotos:
 				titlebarText = getMyLikedPhotoText();
@@ -254,7 +261,13 @@ public class FeedsFragment extends BaseFragment {
 
 	private void AsyncGetFeeds() throws NetworkException {
 
-		PhotosGetInfoRequestParam param = new PhotosGetInfoRequestParam.PhotoRequestBuilder()
+		PhotosGetInfoRequestParam param;
+		if (userInfo == null) {
+			mExceptionHandler.obtainMessage(
+					NetworkError.ERROR_CODE_ILLEGAL_PARAMETER).sendToTarget();
+			return;
+		}
+		param = new PhotosGetInfoRequestParam.PhotoRequestBuilder()
 				.CurrentPage(currentPage).DemandPage(demandPage)
 				.UserId(userInfo.getUid()).Method(type)
 				.Field(PhotosGetInfoRequestParam.FIELDS_ALL).build();
@@ -302,6 +315,9 @@ public class FeedsFragment extends BaseFragment {
 					getActivity().runOnUiThread(new Runnable() {
 
 						public void run() {
+							mSuccessHandler.obtainMessage(
+									MessageUtils.SUCCESS_GET_FEEDS)
+									.sendToTarget();
 							onAsyncGetFeedsComplete(bean);
 						}
 					});
@@ -391,6 +407,8 @@ public class FeedsFragment extends BaseFragment {
 			Bundle args = new Bundle();
 			args.putParcelableArrayList(PhotoBean.KEY_PHOTOS, photos);
 			args.putParcelable(PhotoBean.KEY_PHOTO, photo);
+			args.putInt(CommentInfo.KEY_COMMENT_ACTION,
+					CommentAction.COMMENTS.getCode());
 			forward(getCommentsFragment(), args);
 		}
 
@@ -398,6 +416,8 @@ public class FeedsFragment extends BaseFragment {
 			Bundle args = new Bundle();
 			args.putParcelableArrayList(PhotoBean.KEY_PHOTOS, photos);
 			args.putParcelable(PhotoBean.KEY_PHOTO, photo);
+			args.putInt(LikeBean.KEY_LIKE_ACTION, LikeAction.LIKE.getCode());
+			args.putParcelable(UserInfo.KEY_USER_INFO, userInfo);
 			forward(getLikeFragment(), args);
 		}
 
@@ -461,7 +481,7 @@ public class FeedsFragment extends BaseFragment {
 		this.userInfo = userInfo;
 	}
 
-	public void setType(RequestPhotoType type) {
+	public void setType(PhotoAction type) {
 		this.type = type;
 	}
 
@@ -471,7 +491,7 @@ public class FeedsFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnRightBtnClicked()
 	 */
 	@Override
-	protected void onRightBtnClicked() {
+	protected void onRightBtnClicked(View view) {
 		try {
 			AsyncGetFeeds();
 		} catch (NetworkException e) {
@@ -486,7 +506,7 @@ public class FeedsFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnLeftBtnClicked()
 	 */
 	@Override
-	protected void onLeftBtnClicked() {
+	protected void onLeftBtnClicked(View view) {
 		backward(null);
 	}
 

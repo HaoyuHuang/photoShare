@@ -3,6 +3,9 @@
  */
 package com.photoshare.service.comments;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import android.os.Bundle;
 
 import com.photoshare.common.RequestParam;
@@ -45,8 +48,14 @@ public class PutCommentRequestParam extends RequestParam {
 				+ CommentInfo.KEY_UID, mUserId + "");
 		parameters.putString(CommentInfo.KEY_COMMENT + "."
 				+ CommentInfo.KEY_PID, mPhotoId + "");
+		try {
+			comment = URLEncoder.encode(comment, "utf-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 		parameters.putString(CommentInfo.KEY_COMMENT + "."
 				+ CommentInfo.KEY_CONTENT, comment);
+
 		return parameters;
 	}
 

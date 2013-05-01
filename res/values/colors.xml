@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<color name="main_bg">#c5ccd4</color>
-	
-	<color name="red">#FF1014</color>
-	<color name="white">#FFFFFF</color>
-	<color name="gray">#808080</color>
-	<color name="black">#000000</color>
-	<color name="blue">#1014FF</color>
-	<color name="transparent">#00000000</color>
+
+    <color name="main_bg">#c5ccd4</color>
+    <color name="red">#FF1014</color>
+    <color name="green">#00FF00</color>
+    <color name="white">#FFFFFF</color>
+    <color name="gray">#808080</color>
+    <color name="black">#000000</color>
+    <color name="blue">#1014FF</color>
+    <color name="transparent">#00000000</color>
+    <color name="grey">#ff58616d</color>
+    <color name="lightgrey">#ff888888</color>
+    <color name="blue1">#ff61a8de</color>
+
 </resources>

@@ -3,6 +3,7 @@
  */
 package com.photoshare.service.comments.views;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -36,7 +37,7 @@ public class CommentsInfoView {
 	private EditText comments;
 	private Button mCommentSubmit;
 	private CommentAdapter mCommentAdapter;
-	private PhotoBean photoBean;
+	private ArrayList<CommentInfo> commentsArray;
 	private AsyncUtils async;
 	private int currentPage = 1;
 	private int demandPage = 20;
@@ -50,14 +51,13 @@ public class CommentsInfoView {
 	 * @param async
 	 */
 	public CommentsInfoView(Context context, View baseView,
-			PhotoBean photoBean, AsyncUtils async) {
+			ArrayList<CommentInfo> commentArray, AsyncUtils async) {
 		super();
 		this.context = context;
 		this.baseView = baseView;
-		this.photoBean = photoBean;
+		this.commentsArray = commentArray;
 		this.async = async;
-		currentPage = photoBean.getComments().size();
-		maxPage = photoBean.getCommentCount();
+		currentPage = commentsArray.size();
 	}
 
 	public void applyView() {
@@ -99,7 +99,7 @@ public class CommentsInfoView {
 		 * @param objects
 		 */
 		public CommentAdapter() {
-			super(context, 0, photoBean.getComments());
+			super(context, R.layout.simple_list_item_comment, commentsArray);
 			// TODO Auto-generated constructor stub
 		}
 
@@ -129,13 +129,17 @@ public class CommentsInfoView {
 	}
 
 	public void addComments(List<CommentInfo> comments) {
-		photoBean.getComments().addAll(comments);
+		for (CommentInfo commentInfo : comments) {
+			System.out.println(commentInfo);
+			commentsArray.add(commentInfo);
+		}
 		currentPage += comments.size();
 		notifyDataChanged();
 	}
 
 	public void addComment(CommentInfo comment) {
-		photoBean.getComments().add(comment);
+		System.out.println(comment);
+		commentsArray.add(comment);
 		currentPage += 1;
 		notifyDataChanged();
 	}

@@ -5,8 +5,8 @@ import android.graphics.Bitmap.Config;
 import android.graphics.Color;
 
 /**
- * @author Aron
  * 
+ * @author ��ɪboy QQ 464102961
  */
 public class ImageData {
 	private Bitmap srcBitmap;

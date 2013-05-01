@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.photoshare.common.Builder;
 import com.photoshare.exception.NetworkException;
 import com.photoshare.service.comments.CommentInfo;
 
@@ -39,6 +40,7 @@ public class PhotoBean implements Parcelable {
 	public static final String KEY_CONTENT = "content";
 	public static final String KEY_COMMENTS = "comments";
 	public static final String KEY_PHOTO = "photo";
+	public static final String KEY_SRC_PHOTO = "bitmapPhoto";
 	public static final String KEY_PHOTOS = "photos";
 	public static final String KEY_PHOTO_TYPE = "type";
 	public static final String ABSOLUTE_PATH_TAG = "path";
@@ -111,6 +113,145 @@ public class PhotoBean implements Parcelable {
 
 	}
 
+	public PhotoBean(PhotoBeanBuilder builder) {
+		this.pid = builder.pid;
+		this.fileName = builder.fileName;
+		this.uid = builder.uid;
+		this.uname = builder.uname;
+		this.tinyHeadUrl = builder.tinyHeadUrl;
+		this.caption = builder.caption;
+		this.createTime = builder.createTime;
+		this.likesCount = builder.likesCount;
+		this.commentCount = builder.commentCount;
+		this.urlTiny = builder.urlTiny;
+		this.urlHead = builder.urlHead;
+		this.urlLarge = builder.urlLarge;
+		this.absolutePath = builder.absolutePath;
+		this.isLike = builder.isLike;
+		this.comments = builder.comments;
+		this.content = builder.content;
+	}
+
+	public static class PhotoBeanBuilder implements Builder<PhotoBean> {
+
+		private long pid;
+
+		private String fileName;
+
+		private long uid;
+
+		private String uname;
+
+		private String tinyHeadUrl;
+
+		private String caption;
+
+		private String createTime;
+
+		private int likesCount;
+
+		private int commentCount;
+
+		private String urlTiny;
+
+		private String urlHead;
+
+		private String urlLarge;
+
+		private String absolutePath;
+
+		private boolean isLike;
+
+		private ArrayList<CommentInfo> comments = new ArrayList<CommentInfo>();
+
+		private byte[] content;
+
+		public PhotoBeanBuilder UserId(long uid) {
+			this.uid = uid;
+			return this;
+		}
+
+		public PhotoBeanBuilder PhotoId(long pid) {
+			this.pid = pid;
+			return this;
+		}
+
+		public PhotoBeanBuilder FileName(String fileName) {
+			this.fileName = fileName;
+			return this;
+		}
+
+		public PhotoBeanBuilder UserName(String userName) {
+			this.uname = userName;
+			return this;
+		}
+
+		public PhotoBeanBuilder tinyHeadUrl(String tinyHeadUrl) {
+			this.tinyHeadUrl = tinyHeadUrl;
+			return this;
+		}
+
+		public PhotoBeanBuilder Caption(String caption) {
+			this.caption = caption;
+			return this;
+		}
+
+		public PhotoBeanBuilder CreateTime(String createTime) {
+			this.createTime = createTime;
+			return this;
+		}
+
+		public PhotoBeanBuilder LikesCount(int likesCount) {
+			this.likesCount = likesCount;
+			return this;
+		}
+
+		public PhotoBeanBuilder CommentsCount(int commentsCount) {
+			this.commentCount = commentsCount;
+			return this;
+		}
+
+		public PhotoBeanBuilder TinyPhotoUrl(String tinyUrl) {
+			this.urlTiny = tinyUrl;
+			return this;
+		}
+
+		public PhotoBeanBuilder PhotoUrl(String url) {
+			this.urlHead = url;
+			return this;
+		}
+
+		public PhotoBeanBuilder LargePhotoUrl(String largePhotoUrl) {
+			this.urlLarge = largePhotoUrl;
+			return this;
+		}
+
+		public PhotoBeanBuilder AbsolutePath(String absolutePath) {
+			this.absolutePath = absolutePath;
+			return this;
+		}
+
+		public PhotoBeanBuilder IsLike(boolean isLike) {
+			this.isLike = isLike;
+			return this;
+		}
+
+		public PhotoBeanBuilder Comments(ArrayList<CommentInfo> comments) {
+			this.comments = comments;
+			return this;
+		}
+
+		public PhotoBeanBuilder Content(byte[] content) {
+			this.content = content;
+			return this;
+		}
+
+		public PhotoBean build() {
+			return new PhotoBean(this);
+		}
+
+	}
+
 	public PhotoBean(long pid) {
 		this.pid = pid;
 	}
@@ -154,10 +295,10 @@ public class PhotoBean implements Parcelable {
 		sb.append(KEY_UID).append(" = ").append(uid).append("\r\n");
 		sb.append(KEY_UNAME).append(" = ").append(uname).append("\r\n");
 		sb.append(KEY_CAPTION).append(" = ").append(caption).append("\r\n");
-//		sb.append(KEY_CREATE_TIME).append(" = ").append(sdf.format(createTime))
-//				.append("\r\n");
+		// sb.append(KEY_CREATE_TIME).append(" = ").append(sdf.format(createTime))
+		// .append("\r\n");
 		sb.append(KEY_CREATE_TIME).append(" = ").append(createTime)
-		.append("\r\n");
+				.append("\r\n");
 		sb.append(KEY_LIKES_COUNT).append(" = ").append(likesCount)
 				.append("\r\n");
 		sb.append(KEY_COMMENT_COUNT).append(" = ").append(commentCount)

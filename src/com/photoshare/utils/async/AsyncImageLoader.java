@@ -29,9 +29,10 @@ public class AsyncImageLoader {
 			final String imageUrl, final ImageCallback mCallback,
 			final BitmapDisplayConfig config) {
 
-		Drawable drawable = get(imageUrl);
+		Drawable drawable = get(imageUrl, config);
 
 		if (drawable != null) {
+			drawable = PhotoFactory.createConfiguredDrawable(drawable, config);
 			mCallback.imageLoaded(drawable, imageUrl);
 			return;
 		}
@@ -50,6 +51,9 @@ public class AsyncImageLoader {
 					bit = PhotoFactory.createConfiguredBitmap(bit, config);
 				}
 				Drawable drawable = new BitmapDrawable(bit);
+				if (imageCache.size() > 5) {
+					imageCache.clear();
+				}
 				imageCache.put(imageUrl, new SoftReference<Drawable>(drawable));
 				mCallback.imageLoaded(drawable, imageUrl);
 			}
@@ -81,7 +85,7 @@ public class AsyncImageLoader {
 	public void loadImageFromWebUrl(final Executor pool, final String imageUrl,
 			final ImageCallback mCallback, final BitmapDisplayConfig config) {
 
-		Drawable drawable = get(imageUrl);
+		Drawable drawable = get(imageUrl, config);
 
 		if (drawable != null) {
 			mCallback.imageLoaded(drawable, imageUrl);
@@ -97,26 +101,34 @@ public class AsyncImageLoader {
 					bit = getBitMapFromWeb(imageUrl);
 					if (bit != null) {
 						bit = PhotoFactory.createConfiguredBitmap(bit, config);
+						// BitmapDiskCache.cache(bit, imageUrl);
 					}
 				} catch (RuntimeException re) {
 					re.printStackTrace();
 					mCallback.imageDefault();
 				}
 				Drawable drawable = new BitmapDrawable(bit);
+				clearCache();
+				PhotoFactory.savePhotoURLtoDiskCache(bit, imageUrl);
 				imageCache.put(imageUrl, new SoftReference<Drawable>(drawable));
 				mCallback.imageLoaded(drawable, imageUrl);
 			}
-
 		});
 	}
 
+	private void clearCache() {
+		if (imageCache.size() > 2) {
+			imageCache.clear();
+		}
+	}
+	
 	public void docorateImage(final Executor pool,
 			final DecoratePhotoWrapper photoWrapper,
 			final ImageCallback mCallback) {
 		pool.execute(new Runnable() {
 
 			public void run() {
-				// TODO Auto-generated method stub
+				// // TODO Auto-generated method stub
 				Bitmap photo = photoWrapper.getRenderedPhoto();
 				if (mCallback != null) {
 					BitmapDrawable drawable = new BitmapDrawable(photo);
@@ -126,14 +138,14 @@ public class AsyncImageLoader {
 		});
 	}
 
-	private Drawable get(final String imageUrl) {
+	private Drawable get(final String imageUrl, final BitmapDisplayConfig config) {
 		if (imageCache.containsKey(imageUrl)) {
 			SoftReference<Drawable> softReference = imageCache.get(imageUrl);
 			if (softReference.get() != null) {
 				return softReference.get();
 			}
 		}
-		return null;
+		return PhotoFactory.getDrawableFromDisk(imageUrl, config);
 	}
 
 	private Bitmap getBitMapFromWeb(String path) throws RuntimeException {

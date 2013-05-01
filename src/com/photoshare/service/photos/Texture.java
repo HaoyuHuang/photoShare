@@ -7,10 +7,16 @@ public class Texture {
 
 	private final Bitmap texture;
 
-	public Texture(String name, Bitmap texture) {
+	private final int width;
+
+	private final int height;
+
+	public Texture(String name, Bitmap texture, int width, int height) {
 		super();
 		this.name = name;
 		this.texture = texture;
+		this.width = width;
+		this.height = height;
 	}
 
 	public String getName() {
@@ -19,6 +25,14 @@ public class Texture {
 
 	public Bitmap getTexture() {
 		return texture;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
 	}
 
 }

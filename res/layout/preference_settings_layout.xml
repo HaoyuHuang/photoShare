@@ -13,9 +13,7 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:orientation="vertical"
-        android:scrollbarDefaultDelayBeforeFade="10"
-        android:scrollbarFadeDuration="3"
-        android:scrollbars="vertical" >
+         >
 
         <LinearLayout
             android:id="@+id/linearLayout1"
@@ -30,7 +28,7 @@
         <com.photoshare.view.listview.CornerListView
             android:id="@+id/personalSettingFriend"
             android:layout_width="fill_parent"
-            android:layout_height="160dip"
+            android:layout_height="176dip"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:background="@drawable/shape_bg_listview"
@@ -53,7 +51,7 @@
         <com.photoshare.view.listview.CornerListView
             android:id="@+id/personalSettingPhotos"
             android:layout_width="fill_parent"
-            android:layout_height="82dip"
+            android:layout_height="88dip"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:background="@drawable/shape_bg_listview"
@@ -81,6 +79,15 @@
             android:layout_marginRight="15dp"
             android:background="@drawable/shape_bg_listview"
             android:cacheColorHint="@null" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="5dp"
+            android:paddingLeft="25dp"
+            android:paddingTop="15dp" >
+        </LinearLayout>
     </LinearLayout>
 
 </ScrollView>

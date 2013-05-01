@@ -15,8 +15,9 @@ import com.photoshare.service.users.UserInfo;
 import com.photoshare.tabHost.R;
 import com.photoshare.utils.async.AsyncImageLoader.ImageCallback;
 import com.photoshare.utils.async.AsyncUtils;
-import com.photoshare.view.UserBooleanBtn;
-import com.photoshare.view.UserBooleanBtn.OnObserverClickListener;
+import com.photoshare.view.State;
+import com.photoshare.view.UserStateBtn;
+import com.photoshare.view.UserStateBtn.OnObserverClickListener;
 import com.photoshare.view.UserTextView;
 
 /**
@@ -28,7 +29,7 @@ public class FollowItemView {
 	private UserTextView userNameView;
 	private TextView userPseudoName;
 	private ImageView userHead;
-	private UserBooleanBtn userFollow;
+	private UserStateBtn userFollow;
 	private UserInfo followerInfo;
 	private View baseView;
 	private AsyncUtils async;
@@ -53,13 +54,13 @@ public class FollowItemView {
 		userPseudoName = (TextView) baseView
 				.findViewById(R.id.followItemPseudoName);
 
-		userFollow = new UserBooleanBtn(baseView, R.id.followItembtn,
-				followerInfo.isFollowing(), MsgType.FOLLOW.getEnabledString(),
-				MsgType.FOLLOW.getIntermediateString(),
-				MsgType.FOLLOW.getDisabledString());
+		userFollow = new UserStateBtn(baseView, R.id.followItembtn,
+				followerInfo.isFollowing(), MsgType.FOLLOW.getStartText(),
+				MsgType.FOLLOW.getPendingText(),
+				MsgType.FOLLOW.getSuccessText(), MsgType.FOLLOW.getFailText());
 		userFollow.registerListener(new OnObserverClickListener() {
 
-			public void OnClick(IObserver<Boolean> observer) {
+			public void OnClick(IObserver<State> observer) {
 				// TODO Auto-generated method stub
 				if (mCallback != null) {
 					mCallback.OnFollowClick(followerInfo, observer);
@@ -109,7 +110,7 @@ public class FollowItemView {
 	public interface ICallback {
 		public void OnNameClick(UserInfo info);
 
-		public void OnFollowClick(UserInfo info, IObserver<Boolean> observer);
+		public void OnFollowClick(UserInfo info, IObserver<State> observer);
 
 		public void OnUserHeadLoaded(ImageView image, Drawable drawable,
 				String url);

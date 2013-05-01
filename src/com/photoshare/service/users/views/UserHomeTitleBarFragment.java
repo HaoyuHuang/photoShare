@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.photoshare.fragments.BaseFragment;
-import com.photoshare.service.follow.FollowType;
+import com.photoshare.service.follow.FollowAction;
 import com.photoshare.service.users.UserInfo;
 import com.photoshare.tabHost.R;
 import com.photoshare.view.UserHomeTitleBarView;
@@ -66,16 +66,16 @@ public class UserHomeTitleBarFragment extends BaseFragment {
 		public void OnFollowingCntClick() {
 			Bundle param = generate();
 			param.putParcelable(UserInfo.KEY_USER_INFO, user.getUserInfo());
-			param.putString(UserInfo.KEY_FOLLOW_TYPE,
-					FollowType.FOLLOWING.toString());
+			param.putString(UserInfo.KEY_FOLLOW_ACTION,
+					FollowAction.FOLLOWING.toString());
 			forward(getFollowingFragment(), param);
 		}
 
 		public void OnFollowerCntClick() {
 			Bundle param = generate();
 			param.putParcelable(UserInfo.KEY_USER_INFO, user.getUserInfo());
-			param.putString(UserInfo.KEY_FOLLOW_TYPE,
-					FollowType.FOLLOWER.toString());
+			param.putString(UserInfo.KEY_FOLLOW_ACTION,
+					FollowAction.FOLLOWER.toString());
 			forward(getFollowingFragment(), param);
 		}
 
@@ -125,7 +125,7 @@ public class UserHomeTitleBarFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnRightBtnClicked()
 	 */
 	@Override
-	protected void onRightBtnClicked() {
+	protected void onRightBtnClicked(View view) {
 		forward(getPreferencesSettingsFragment(), null);
 	}
 
@@ -135,7 +135,7 @@ public class UserHomeTitleBarFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnLeftBtnClicked()
 	 */
 	@Override
-	protected void onLeftBtnClicked() {
+	protected void onLeftBtnClicked(View view) {
 		// do nothing
 	}
 

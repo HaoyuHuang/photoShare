@@ -24,4 +24,11 @@
     <dimen name="largeImageWidth">720dp</dimen>
     <dimen name="largeImageHeight">600dp</dimen>
 
+    <!-- Pop Menu Dimention -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="popmenu_width">100.0dip</dimen>
+    <dimen name="popmenu_yoff">5.0dip</dimen>
+    <dimen name="dip2pix">1.0dip</dimen>
+
 </resources>

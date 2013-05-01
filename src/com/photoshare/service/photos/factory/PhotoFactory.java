@@ -1,13 +1,16 @@
 package com.photoshare.service.photos.factory;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -22,6 +25,9 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader.TileMode;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.provider.MediaStore;
 import android.util.Log;
 
 import com.photoshare.service.photos.filter.BrightContrastFilter;
@@ -41,8 +47,13 @@ import com.photoshare.service.photos.filter.OilPaintingFilter;
 import com.photoshare.service.photos.filter.SoftGlowFilter;
 import com.photoshare.service.photos.filter.SwirlFilter;
 import com.photoshare.service.photos.filter.VignetteFilter;
+import com.photoshare.utils.FileTools;
+import com.photoshare.utils.User;
+import com.photoshare.utils.Utils;
 
 public class PhotoFactory {
+
+	private static final int inSampleSize = 8;
 
 	public static Bitmap oldRemeber(Bitmap raw) {
 		Bitmap bmp = raw.copy(Bitmap.Config.RGB_565, true);
@@ -82,10 +93,101 @@ public class PhotoFactory {
 		return bitmap;
 	}
 
+	public static String savePhototoImageStore(Context context, Bitmap source,
+			String title, String description) {
+		ContentResolver contentResolver = context.getContentResolver();
+		String url = MediaStore.Images.Media.insertImage(contentResolver,
+				source, title, description);
+		return url;
+	}
+
 	public static Bitmap createHalfToneBitmap(Bitmap bitmap, Bitmap texture) {
 		HalfToneFilter filter = new HalfToneFilter(bitmap, texture);
 		ImageData data = filter.process();
 		return data.getDstBitmap();
+	}
+
+	public static Drawable getDrawable(Context ctx, int id,
+			BitmapDisplayConfig config) {
+		BitmapFactory.Options opts = new BitmapFactory.Options();
+		opts.inJustDecodeBounds = true;
+		BitmapFactory.decodeResource(ctx.getResources(), id, opts);
+		opts.inSampleSize = inSampleSize;
+		opts.inJustDecodeBounds = false;
+		Bitmap bitmap = null;
+		try {
+			bitmap = BitmapFactory.decodeResource(ctx.getResources(), id, opts);
+			if (config != null && bitmap != null) {
+				bitmap = createConfiguredBitmap(bitmap, config);
+			}
+		} catch (OutOfMemoryError e) {
+			e.printStackTrace();
+		}
+		if (bitmap == null) {
+			return null;
+		}
+		return new BitmapDrawable(bitmap);
+	}
+
+	public static Drawable getDrawableFromDisk(String fileName,
+			BitmapDisplayConfig config) {
+		StringBuilder dir = new StringBuilder();
+		dir.append(Utils.getSDPath());
+		dir.append(File.separator);
+		dir.append(Utils.APP_NAME);
+		dir.append(File.separator);
+		dir.append(Utils.DIR_CACHE);
+		dir.append(File.separator);
+		if (fileName.contains(User.SERVER_IP)) {
+			fileName = fileName.substring(User.SERVER_IP.length());
+			fileName = fileName.replace("/", "-");
+		}
+		dir.append(fileName);
+		if (!FileTools.fileExist(fileName)) {
+			return null;
+		}
+		BitmapFactory.Options opts = new BitmapFactory.Options();
+		opts.inSampleSize = inSampleSize;
+		opts.inJustDecodeBounds = false;
+		Bitmap bitmap = null;
+		try {
+			bitmap = BitmapFactory.decodeFile(dir.toString(), opts);
+			if (config != null && bitmap != null) {
+				bitmap = createConfiguredBitmap(bitmap, config);
+			}
+		} catch (OutOfMemoryError e) {
+			e.printStackTrace();
+		}
+		if (bitmap == null) {
+			return null;
+		}
+		return new BitmapDrawable(bitmap);
+	}
+
+	public static File savePhotoURLtoDiskCache(Bitmap source, String fileName) {
+		if (source == null) {
+			return null;
+		}
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		source.compress(CompressFormat.PNG, 100, baos);
+		StringBuilder dir = new StringBuilder();
+		StringBuilder fileNameBuilder = new StringBuilder();
+		dir.append(Utils.getSDPath());
+		dir.append(File.separator);
+		dir.append(Utils.APP_NAME);
+		dir.append(File.separator);
+		dir.append(Utils.DIR_CACHE);
+		FileTools.makeDir(dir.toString());
+		if (fileName.contains(User.SERVER_IP)) {
+			fileName = fileName.substring(User.SERVER_IP.length());
+			fileName = fileName.replace("/", "-");
+		}
+		System.out.println(fileName);
+		fileNameBuilder.append(fileName);
+		FileTools.makeFile(dir.toString(), fileNameBuilder.toString());
+		File file = Utils.getFileFromBytes(baos.toByteArray(), dir.toString(),
+				fileName.toString());
+		return file;
 	}
 
 	public static Bitmap createBitmapWithWatermark(Bitmap src, Bitmap watermark) {
@@ -114,6 +216,16 @@ public class PhotoFactory {
 			BitmapDisplayConfig config) {
 		return Bitmap.createScaledBitmap(bitmap, config.getPhotoType()
 				.getWidth(), config.getPhotoType().getHeight(), true);
+	}
+
+	public static Drawable createConfiguredDrawable(Drawable drawable,
+			BitmapDisplayConfig config) {
+		BitmapDrawable source = (BitmapDrawable) drawable;
+		Bitmap bitmap = source.getBitmap();
+		Bitmap dest = Bitmap.createScaledBitmap(bitmap, config.getPhotoType()
+				.getWidth(), config.getPhotoType().getHeight(), true);
+		source = new BitmapDrawable(dest);
+		return source;
 	}
 
 	/**
@@ -181,7 +293,7 @@ public class PhotoFactory {
 	 * @param height
 	 * @return
 	 */
-	public static Bitmap createBitmapBySize(Bitmap bitmap, int width, int height) {
+	public static Bitmap createScaledBitmap(Bitmap bitmap, int width, int height) {
 		return Bitmap.createScaledBitmap(bitmap, width, height, true);
 	}
 
@@ -204,6 +316,41 @@ public class PhotoFactory {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * @param bmp
+	 * @param path
+	 * @param filename
+	 * @param quality
+	 * @return
+	 */
+	public static String saveImage(Bitmap bmp, String path, String filename,
+			int quality) {
+		String url = "";
+		if (bmp != null) {
+			try {
+				/* 文件不存在就创建 */
+				File f = new File(path);
+				if (!f.exists()) {
+					f.mkdir();
+				}
+				/* 保存相片文件 */
+				File n = null;
+				n = new File(f, filename + ".jpg");
+				url = filename + ".jpg";
+				FileOutputStream bos = new FileOutputStream(n.getAbsolutePath());
+				/* 文件转换 */
+				bmp.compress(Bitmap.CompressFormat.JPEG, quality, bos);
+				/* 调用flush()方法，更新BufferStream */
+				bos.flush();
+				/* 结束OutputStream */
+				bos.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return url;
 	}
 
 	/**
@@ -410,7 +557,7 @@ public class PhotoFactory {
 			output[i] = pixel;
 		}
 
-		return Bitmap.createBitmap(output, width, height, Config.ARGB_8888);
+		return Bitmap.createBitmap(output, width, height, Config.RGB_565);
 	}
 
 	public static Bitmap createPencilBitmap(Bitmap bitmap) {
@@ -477,7 +624,7 @@ public class PhotoFactory {
 						+ (gray << 8) + gray;
 			}
 		}
-		return Bitmap.createBitmap(pixels, width, height, Config.ARGB_8888);
+		return Bitmap.createBitmap(pixels, width, height, Config.RGB_565);
 	}
 
 	/**
@@ -509,6 +656,7 @@ public class PhotoFactory {
 	public static Bitmap readBitMap(Context context, int resId) {
 		BitmapFactory.Options opt = new BitmapFactory.Options();
 		opt.inPreferredConfig = Bitmap.Config.RGB_565;
+		opt.inSampleSize = inSampleSize;
 		opt.inPurgeable = true;
 		opt.inInputShareable = true;
 		InputStream is = context.getResources().openRawResource(resId);

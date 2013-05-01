@@ -33,6 +33,9 @@ public class AppTitleBarView {
 	private View errorView;
 	private TextView errorText;
 
+	private View successView;
+	private TextView successText;
+
 	public static String LEFT_BTN_TEXT = "leftBtnText";
 	public static String RIGHT_BTN_TEXT = "rightBtnText";
 	public static String TITLE_BAR_TEXT = "titlebarText";
@@ -97,7 +100,7 @@ public class AppTitleBarView {
 
 			public void onClick(View v) {
 				if (titleBarBtnClickedListener != null) {
-					titleBarBtnClickedListener.OnLeftBtnClick();
+					titleBarBtnClickedListener.OnLeftBtnClick(v);
 				}
 
 			}
@@ -109,7 +112,7 @@ public class AppTitleBarView {
 
 			public void onClick(View v) {
 				if (titleBarBtnClickedListener != null) {
-					titleBarBtnClickedListener.OnRightBtnClick();
+					titleBarBtnClickedListener.OnRightBtnClick(v);
 				}
 			}
 		});
@@ -118,6 +121,9 @@ public class AppTitleBarView {
 
 		errorView = baseView.findViewById(R.id.errorViewLayoutId);
 		errorText = (TextView) baseView.findViewById(R.id.errorView);
+
+		successView = baseView.findViewById(R.id.successViewLayoutId);
+		successText = (TextView) baseView.findViewById(R.id.successView);
 	}
 
 	public void setLeftBtnText(String leftBtnText) {
@@ -134,11 +140,11 @@ public class AppTitleBarView {
 		this.titlebarText = titlebarText;
 		this.titlebarTextView.setText(this.titlebarText);
 	}
-	
+
 	public void setTitleLeftButtonVisibility(int visibility) {
 		this.titlebarLeftButton.setVisibility(visibility);
 	}
-	
+
 	public void setTitleRightButtonVisibility(int visibility) {
 		this.titlebarRightButton.setVisibility(visibility);
 	}
@@ -149,6 +155,33 @@ public class AppTitleBarView {
 
 	public void setTitleRightButtonBackground(int rid) {
 		this.titlebarRightButton.setBackgroundResource(rid);
+	}
+
+	public void displaySuccessView(String successMsg) {
+		successText.setText(successMsg);
+		Log.e("displaySucess", successMsg);
+		Animation anim = AnimationUtils.loadAnimation(context,
+				R.anim.success_pop_out);
+		anim.setAnimationListener(new AnimationListener() {
+
+			public void onAnimationStart(Animation animation) {
+				// TODO Auto-generated method stub
+
+			}
+
+			public void onAnimationRepeat(Animation animation) {
+				// TODO Auto-generated method stub
+
+			}
+
+			public void onAnimationEnd(Animation animation) {
+				Log.i("animationOver", "over");
+				successView.setVisibility(View.GONE);
+			}
+		});
+		successView.setVisibility(View.VISIBLE);
+		successText.setVisibility(View.VISIBLE);
+		successView.startAnimation(anim);
 	}
 
 	public void displayErrorView(String errorMsg) {
@@ -179,9 +212,9 @@ public class AppTitleBarView {
 	}
 
 	public interface OnTitleBarBtnClickedListener {
-		public void OnLeftBtnClick();
+		public void OnLeftBtnClick(View view);
 
-		public void OnRightBtnClick();
+		public void OnRightBtnClick(View view);
 	}
 
 	private OnTitleBarBtnClickedListener titleBarBtnClickedListener;

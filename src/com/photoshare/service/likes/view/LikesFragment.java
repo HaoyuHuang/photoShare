@@ -17,6 +17,7 @@ import com.photoshare.common.AbstractRequestListener;
 import com.photoshare.exception.NetworkError;
 import com.photoshare.exception.NetworkException;
 import com.photoshare.fragments.BaseFragment;
+import com.photoshare.service.likes.LikeAction;
 import com.photoshare.service.likes.LikeBean;
 import com.photoshare.service.likes.LikeGetInfoRequestParam;
 import com.photoshare.service.likes.LikeGetInfoResponseBean;
@@ -34,12 +35,15 @@ public class LikesFragment extends BaseFragment {
 
 	private LikesView likesView;
 	private PhotoBean photo;
-	private ArrayList<LikeBean> beans;
+	private ArrayList<LikeBean> beans = new ArrayList<LikeBean>();
 	private String leftBtnText = "";
 	private String rightBtnText = "";
 	private String titlebarText = "";
 	private int leftBtnVisibility = View.VISIBLE;
 	private int rightBtnVisibility = View.GONE;
+	private LikeAction likeAction;
+	private int currentPage;
+	private int demandPage;
 
 	public static LikesFragment newInstance(int fragmentViewId) {
 		LikesFragment lf = new LikesFragment();
@@ -60,16 +64,24 @@ public class LikesFragment extends BaseFragment {
 			titlebarText = getLikeTitleText();
 			initTitleBar(leftBtnText, rightBtnText, titlebarText,
 					leftBtnVisibility, rightBtnVisibility);
-			if (beans != null) {
-				likesView = new LikesView(getActivity(), getActivity()
-						.findViewById(R.id.likeListLayoutId), beans, async);
-				likesView.registerCallback(mCallback);
-				likesView.applyView();
-			} else {
-				AsyncGetLikeInfo();
+			likesView = new LikesView(getActivity(), getActivity()
+					.findViewById(R.id.likeListLayoutId), beans, async);
+			likesView.registerCallback(mCallback);
+			likesView.applyView();
+			if (likeAction != null) {
+				switch (likeAction) {
+				case DATED_LIKE:
+					AsyncGetLikeInfoByDateDiff(15);
+					break;
+				case LIKE:
+					AsyncGetLikeInfoByPage(currentPage, demandPage);
+					break;
+				default:
+					break;
+				}
 			}
 		} catch (NetworkException e) {
-
+			AsyncSignIn();
 		}
 	}
 
@@ -84,6 +96,10 @@ public class LikesFragment extends BaseFragment {
 			}
 			if (bundle.containsKey(AppTitleBarView.LEFT_BTN_TEXT)) {
 				leftBtnText = bundle.getString(AppTitleBarView.LEFT_BTN_TEXT);
+			}
+			if (bundle.containsKey(LikeBean.KEY_LIKE_ACTION)) {
+				likeAction = LikeAction.SWITCH(bundle
+						.getInt(LikeBean.KEY_LIKE_ACTION));
 			}
 		}
 		initViews();
@@ -108,14 +124,21 @@ public class LikesFragment extends BaseFragment {
 		if (outState != null) {
 			outState.putParcelableArrayList(LikeBean.KEY_LIKES, beans);
 			outState.putString(AppTitleBarView.LEFT_BTN_TEXT, leftBtnText);
+			if (likeAction != null) {
+				outState.putInt(LikeBean.KEY_LIKE_ACTION, likeAction.getCode());
+			}
 		}
 		super.onSaveInstanceState(outState);
 	}
 
-	private void AsyncGetLikeInfo() throws NetworkException {
+	private void AsyncGetLikeInfoByPage(int currentPage, int demandPage)
+			throws NetworkException {
 		Utils.logger("LikeFragment: " + photo.getPid());
 		LikeGetInfoRequestParam param = new LikeGetInfoRequestParam(
 				photo.getPid());
+		param.setLikeAction(likeAction);
+		param.setCurrentPage(currentPage);
+		param.setDemandPage(demandPage);
 		AbstractRequestListener<LikeGetInfoResponseBean> listener = new AbstractRequestListener<LikeGetInfoResponseBean>() {
 
 			@Override
@@ -148,7 +171,63 @@ public class LikesFragment extends BaseFragment {
 			}
 
 			@Override
-			public void onComplete(LikeGetInfoResponseBean bean) {
+			public void onComplete(final LikeGetInfoResponseBean bean) {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
+
+						public void run() {
+							if (bean != null && bean.getLikesBean() != null) {
+								likesView.addLikeBean(bean.getLikesBean());
+							}
+						}
+
+					});
+				}
+			}
+		};
+		async.getLikesInfo(param, listener);
+	}
+
+	private void AsyncGetLikeInfoByDateDiff(int datediff)
+			throws NetworkException {
+		Utils.logger("LikeFragment: " + photo.getPid());
+		LikeGetInfoRequestParam param = new LikeGetInfoRequestParam(
+				photo.getPid());
+		param.setLikeAction(likeAction);
+		param.setDatediff(datediff);
+		AbstractRequestListener<LikeGetInfoResponseBean> listener = new AbstractRequestListener<LikeGetInfoResponseBean>() {
+
+			@Override
+			public void onNetworkError(NetworkError networkError) {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
+
+						public void run() {
+							mExceptionHandler.obtainMessage(
+									NetworkError.ERROR_REFRESH_DATA)
+									.sendToTarget();
+						}
+
+					});
+				}
+			}
+
+			@Override
+			public void onFault(Throwable fault) {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
+
+						public void run() {
+							mExceptionHandler.obtainMessage(
+									NetworkError.ERROR_NETWORK).sendToTarget();
+						}
+
+					});
+				}
+			}
+
+			@Override
+			public void onComplete(final LikeGetInfoResponseBean bean) {
 				if (bean != null) {
 					beans = bean.getLikesBean();
 				}
@@ -156,7 +235,9 @@ public class LikesFragment extends BaseFragment {
 					getActivity().runOnUiThread(new Runnable() {
 
 						public void run() {
-							initViews();
+							if (bean != null && bean.getLikesBean() != null) {
+								likesView.addLikeBean(bean.getLikesBean());
+							}
 						}
 
 					});
@@ -206,7 +287,7 @@ public class LikesFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnRightBtnClicked()
 	 */
 	@Override
-	protected void onRightBtnClicked() {
+	protected void onRightBtnClicked(View view) {
 
 	}
 
@@ -216,7 +297,7 @@ public class LikesFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnLeftBtnClicked()
 	 */
 	@Override
-	protected void onLeftBtnClicked() {
+	protected void onLeftBtnClicked(View view) {
 		backward(null);
 	}
 

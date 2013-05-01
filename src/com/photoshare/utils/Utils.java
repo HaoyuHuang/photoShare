@@ -51,10 +51,12 @@ public final class Utils {
 	public static final String DIR_FOLLOWER = "follower";
 	public static final String DIR_NEWS = "news";
 	public static final String DIR_USR = "usr";
+	public static final String DIR_CACHE = "cache";
 	public static final String DIR_FEED = "feed";
 	public static final String DIR_MSG = "message";
 	public static final String DIR_MY_PHOTOS = "myPhotos";
 	public static final String DIR_USER_INFO = "userinfo";
+	public static final String DIR_UPLOAD_PHOTOS = "upload";
 
 	public static final String ENCODE_UTF_8 = "utf-8";
 
@@ -63,6 +65,18 @@ public final class Utils {
 
 	public static void logger(String message) {
 		Log.i(LOG_TAG, message);
+	}
+
+	/**
+	 * @return
+	 */
+	public static String getSDPath() {
+		boolean hasSDCard = Environment.getExternalStorageState().equals(
+				Environment.MEDIA_MOUNTED);
+		if (hasSDCard) {
+			return Environment.getExternalStorageDirectory().toString();
+		} else
+			return Environment.getDownloadCacheDirectory().toString();
 	}
 
 	/**
@@ -217,6 +231,33 @@ public final class Utils {
      * 
      * 
      * */
+	public static File getFileFromBytes(byte[] b, String OutputDir,
+			String OutputFileName) {
+		BufferedOutputStream bos = null;
+		File file = null;
+		try {
+			file = new File(OutputDir, OutputFileName);
+			FileOutputStream fos = new FileOutputStream(file);
+			bos = new BufferedOutputStream(fos);
+			bos.write(b);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (bos != null) {
+				try {
+					bos.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return file;
+	}
+
+	/**
+     * 
+     * 
+     * */
 	public static File getFileFromBytes(byte[] b, String OutputFile) {
 		BufferedOutputStream bos = null;
 		File file = null;
@@ -226,13 +267,13 @@ public final class Utils {
 			bos = new BufferedOutputStream(fos);
 			bos.write(b);
 		} catch (Exception e) {
-
+			e.printStackTrace();
 		} finally {
 			if (bos != null) {
 				try {
 					bos.close();
 				} catch (IOException e) {
-
+					e.printStackTrace();
 				}
 			}
 		}

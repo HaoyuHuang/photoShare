@@ -53,7 +53,7 @@ public class CommentItemView {
 			userDate.setText(comment.getCreateTime());
 			try {
 				userNameView = new UserTextView(
-						(TextView) baseView.findViewById(R.id.newsPopularName),
+						(TextView) baseView.findViewById(R.id.commentUserName),
 						new UserInfo.UserInfoBuilder().ID(comment.getUid())
 								.Name(comment.getUname()).build(),
 						comment.getUname());

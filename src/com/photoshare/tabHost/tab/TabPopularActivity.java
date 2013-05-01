@@ -10,7 +10,7 @@ import com.photoshare.fragments.BaseFragment;
 import com.photoshare.fragments.stacktrace.TraceElement;
 import com.photoshare.fragments.stacktrace.TracePhase;
 import com.photoshare.service.photos.PhotoBean;
-import com.photoshare.service.photos.RequestPhotoType;
+import com.photoshare.service.photos.PhotoAction;
 import com.photoshare.service.photos.views.PopularPhotosFragment;
 import com.photoshare.service.users.UserInfo;
 import com.photoshare.tabHost.BaseActivity;
@@ -74,7 +74,7 @@ public class TabPopularActivity extends BaseActivity {
 			args.putParcelableArrayList(PhotoBean.KEY_PHOTOS, mPopularPhotos);
 			args.putParcelable(UserInfo.KEY_USER_INFO, user.getUserInfo());
 			args.putString(PhotoBean.KEY_PHOTO_TYPE,
-					RequestPhotoType.PopularPhotos.toString());
+					PhotoAction.PopularPhotos.toString());
 			Command.forwardTab((BaseFragment) getFragmentManager()
 					.findFragmentById(R.id.TabPopularLayoutHolderId),
 					getPopularFragment(), args);
@@ -91,7 +91,7 @@ public class TabPopularActivity extends BaseActivity {
 
 		ppf = PopularPhotosFragment.newInstance(R.id.TabPopularLayoutHolderId);
 		ppf.setUserInfo(user.getUserInfo());
-		ppf.setType(RequestPhotoType.PopularPhotos);
+		ppf.setType(PhotoAction.PopularPhotos);
 		ppf.setPhotos(mPopularPhotos);
 		TraceElement element = new TraceElement(getPopularFragment(), null);
 		stack.setCurrentPhase(TracePhase.POPULAR);

@@ -17,10 +17,12 @@ public class LikeGetInfoRequestParam extends RequestParam {
 	@Deprecated
 	private static final String METHOD = "likesGetInfo.do";
 
-	private static final String ACTION = "/LikeGetInfoAction";
+	private static final String ACTION = "/LikeGetInfoAction_";
+
+	private LikeAction likeAction;
 
 	public String getAction() {
-		return ACTION;
+		return ACTION + likeAction.getTag();
 	}
 
 	/**
@@ -44,9 +46,13 @@ public class LikeGetInfoRequestParam extends RequestParam {
 
 	private int demandPage;
 
+	private int datediff;
+
 	public static final String CURRENT_PAGE = "currentPage";
 
 	public static final String DEMAND_PAGE = "demandPage";
+
+	public static final String DATE_DIFF = "datediff";
 
 	private String fields = FIELDS_DEFAULT;
 
@@ -67,8 +73,21 @@ public class LikeGetInfoRequestParam extends RequestParam {
 		if (fields != null) {
 			parameters.putString("fields", fields);
 		}
-		parameters.putString(LikeBean.KEY_LIKE + "." + LikeBean.KEY_PID, pid
-				+ "");
+		parameters.putString(LikeBean.KEY_LIKE + "." + LikeBean.KEY_PID,
+				String.valueOf(pid));
+		switch (likeAction) {
+		case DATED_LIKE:
+			parameters.putString(DATE_DIFF, String.valueOf(datediff));
+			break;
+		case LIKE:
+			parameters.putString(LikeBean.KEY_LIKE + "." + CURRENT_PAGE,
+					String.valueOf(currentPage));
+			parameters.putString(LikeBean.KEY_LIKE + "." + DEMAND_PAGE,
+					String.valueOf(demandPage));
+			break;
+		default:
+			break;
+		}
 		return parameters;
 	}
 
@@ -86,6 +105,22 @@ public class LikeGetInfoRequestParam extends RequestParam {
 
 	public void setDemandPage(int demandPage) {
 		this.demandPage = demandPage;
+	}
+
+	public int getDatediff() {
+		return datediff;
+	}
+
+	public void setDatediff(int datediff) {
+		this.datediff = datediff;
+	}
+
+	public LikeAction getLikeAction() {
+		return likeAction;
+	}
+
+	public void setLikeAction(LikeAction likeAction) {
+		this.likeAction = likeAction;
 	}
 
 }

@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 
 import com.photoshare.fragments.stacktrace.TraceConfig;
 import com.photoshare.service.photos.PhotoBean;
-import com.photoshare.service.photos.RequestPhotoType;
+import com.photoshare.service.photos.PhotoAction;
 import com.photoshare.service.users.UserInfo;
 import com.photoshare.tabHost.R;
 import com.photoshare.view.PhotoBarView;
@@ -27,7 +27,7 @@ import com.photoshare.view.PhotoBarView;
 public class PhotoBarFragment extends BaseFragment {
 	private PhotoBarView photoBar;
 	private UserInfo userInfo;
-	private RequestPhotoType type;
+	private PhotoAction type;
 	private ArrayList<PhotoBean> photos;
 
 	@Override
@@ -62,7 +62,7 @@ public class PhotoBarFragment extends BaseFragment {
 		return pf;
 	}
 
-	public RequestPhotoType getType() {
+	public PhotoAction getType() {
 		return type;
 	}
 
@@ -81,7 +81,7 @@ public class PhotoBarFragment extends BaseFragment {
 				userInfo = bundle.getParcelable(UserInfo.KEY_USER_INFO);
 			}
 			if (bundle.containsKey(PhotoBean.KEY_PHOTO_TYPE)) {
-				type = RequestPhotoType.SWITCH(bundle
+				type = PhotoAction.SWITCH(bundle
 						.getString(PhotoBean.KEY_PHOTO_TYPE));
 			}
 			if (bundle.containsKey(PhotoBean.KEY_PHOTOS)) {
@@ -94,7 +94,7 @@ public class PhotoBarFragment extends BaseFragment {
 		photoBar.applyView();
 		ShowPopularView();
 	}
-	
+
 	private void ShowPopularView() {
 		Bundle bundle = new Bundle();
 		bundle.putParcelable(UserInfo.KEY_USER_INFO, userInfo);
@@ -103,12 +103,11 @@ public class PhotoBarFragment extends BaseFragment {
 		bundle.putBoolean(TraceConfig.getTrackBackward(), true);
 		ShowPopularFragment(getLayoutHolderId(), bundle);
 	}
-	
+
 	private void ShowFeedsView() {
 		Bundle bundle = new Bundle();
 		bundle.putParcelable(UserInfo.KEY_USER_INFO, userInfo);
-		bundle.putString(PhotoBean.KEY_PHOTO_TYPE,
-				type.toString());
+		bundle.putString(PhotoBean.KEY_PHOTO_TYPE, type.toString());
 		if (photos != null) {
 			bundle.putParcelableArrayList(PhotoBean.KEY_PHOTOS, photos);
 		}
@@ -121,12 +120,11 @@ public class PhotoBarFragment extends BaseFragment {
 		public void ShowProfile(UserInfo info) {
 			forward(getProfileFragment(), info.params());
 		}
-		
+
 		public void ShowPopularItems() {
 			ShowPopularView();
 		}
 
-		
 		public void ShowFeedsItem() {
 			ShowFeedsView();
 		}
@@ -151,7 +149,7 @@ public class PhotoBarFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnRightBtnClicked()
 	 */
 	@Override
-	protected void onRightBtnClicked() {
+	protected void onRightBtnClicked(View view) {
 		// do nothing
 	}
 
@@ -161,14 +159,14 @@ public class PhotoBarFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnLeftBtnClicked()
 	 */
 	@Override
-	protected void onLeftBtnClicked() {
+	protected void onLeftBtnClicked(View view) {
 		// do nothing
 	}
 
 	@Override
 	protected void onLoginSuccess() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

@@ -18,7 +18,7 @@ import com.photoshare.exception.NetworkError;
 import com.photoshare.exception.NetworkException;
 import com.photoshare.fragments.BaseFragment;
 import com.photoshare.service.photos.PhotoBean;
-import com.photoshare.service.photos.RequestPhotoType;
+import com.photoshare.service.photos.PhotoAction;
 import com.photoshare.service.photos.PhotosGetInfoRequestParam;
 import com.photoshare.service.photos.PhotosGetInfoResponseBean;
 import com.photoshare.service.users.UserInfo;
@@ -34,7 +34,7 @@ public class PopularPhotosFragment extends BaseFragment {
 	private PopularPhotosView popularView;
 	private UserInfo userInfo;
 	private ArrayList<PhotoBean> photos;
-	private RequestPhotoType type;
+	private PhotoAction type;
 	private int leftBtnVisibility = View.INVISIBLE;
 	private int rightBtnVisibility = View.INVISIBLE;
 	private String titleBarText;
@@ -52,7 +52,7 @@ public class PopularPhotosFragment extends BaseFragment {
 		return userInfo;
 	}
 
-	public RequestPhotoType getType() {
+	public PhotoAction getType() {
 		return type;
 	}
 
@@ -64,7 +64,7 @@ public class PopularPhotosFragment extends BaseFragment {
 		this.userInfo = userInfo;
 	}
 
-	public void setType(RequestPhotoType type) {
+	public void setType(PhotoAction type) {
 		this.type = type;
 	}
 
@@ -115,7 +115,7 @@ public class PopularPhotosFragment extends BaseFragment {
 				userInfo = bundle.getParcelable(UserInfo.KEY_USER_INFO);
 			}
 			if (bundle.containsKey(PhotoBean.KEY_PHOTO_TYPE)) {
-				type = RequestPhotoType.SWITCH(bundle
+				type = PhotoAction.SWITCH(bundle
 						.getString(PhotoBean.KEY_PHOTO_TYPE));
 			}
 			if (bundle.containsKey(PhotoBean.KEY_PHOTOS)) {
@@ -272,7 +272,7 @@ public class PopularPhotosFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnRightBtnClicked()
 	 */
 	@Override
-	protected void onRightBtnClicked() {
+	protected void onRightBtnClicked(View view) {
 
 	}
 
@@ -282,7 +282,7 @@ public class PopularPhotosFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnLeftBtnClicked()
 	 */
 	@Override
-	protected void onLeftBtnClicked() {
+	protected void onLeftBtnClicked(View view) {
 
 	}
 

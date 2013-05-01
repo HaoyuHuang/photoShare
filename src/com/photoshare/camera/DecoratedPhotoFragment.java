@@ -312,7 +312,7 @@ public class DecoratedPhotoFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnRightBtnClicked()
 	 */
 	@Override
-	protected void onRightBtnClicked() {
+	protected void onRightBtnClicked(View view) {
 		if (!isCroping) {
 			startCroping();
 			isCroping = true;
@@ -322,15 +322,15 @@ public class DecoratedPhotoFragment extends BaseFragment {
 				new DrawLine());
 		pf.polygonFill(Config.pointList);
 
-		Utils.showOptionWindow(getActivity(), "", "",
+		Utils.showOptionWindow(getActivity(), "裁剪完成?", "",
 				new Utils.OnOptionListener() {
 
 					public void onOK() {
 						Bundle param = new Bundle();
 						param.putParcelable(PhotoBean.KEY_PHOTO, mBitmap);
-//						mZoomView.invalidate();
-//						mZoomView.operateType = 1;
-//						Config.pointList.clear();
+						// mZoomView.invalidate();
+						// mZoomView.operateType = 1;
+						// Config.pointList.clear();
 						forward(getDecoratedPhotoUploadFragment(), param);
 					}
 
@@ -358,7 +358,7 @@ public class DecoratedPhotoFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnLeftBtnClicked()
 	 */
 	@Override
-	protected void onLeftBtnClicked() {
+	protected void onLeftBtnClicked(View view) {
 		if (isCroping) {
 			leftBtnText = getCancleText();
 			rightBtnText = getStartText();

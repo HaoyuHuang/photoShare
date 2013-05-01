@@ -21,6 +21,7 @@ public class FeedItemView {
 	private View baseView;
 	private UserTextView mFeedUserName;
 	private ImageView mFeedUserHead;
+	private TextView mFeedCaption;
 	private TextView mFeedDate;
 	private TextView mFeedFavor;
 	private UserTextView mFeedLike;
@@ -28,16 +29,34 @@ public class FeedItemView {
 	private ImageView mFeedPhoto;
 	private AsyncUtils async;
 	private PhotoBean photo;
+	private boolean isDetailed = false;
+	private BitmapDisplayConfig config = BitmapDisplayConfig.LARGE;
 
 	/**
-	 * @param mFeedPhoto
+	 * @param baseView
 	 * @param async
+	 * @param photo
 	 */
 	public FeedItemView(View baseView, AsyncUtils async, PhotoBean photo) {
 		super();
 		this.baseView = baseView;
 		this.async = async;
 		this.photo = photo;
+	}
+
+	/**
+	 * @param baseView
+	 * @param async
+	 * @param photo
+	 * @param isDetailed
+	 */
+	public FeedItemView(View baseView, AsyncUtils async, PhotoBean photo,
+			boolean isDetailed) {
+		super();
+		this.baseView = baseView;
+		this.async = async;
+		this.photo = photo;
+		this.isDetailed = isDetailed;
 	}
 
 	public void applyView() {
@@ -50,13 +69,14 @@ public class FeedItemView {
 		mFeedUserName.apply();
 
 		mFeedUserHead = (ImageView) baseView.findViewById(R.id.feedsUserHead);
+		mFeedCaption = (TextView) baseView.findViewById(R.id.feedsPhotoCaption);
 
 		mFeedComment = new UserTextView(
 				(TextView) baseView.findViewById(R.id.feedComment), null, "评论"
 						+ photo.getCommentCount());
 		mFeedComment.registerListener(OnCommentClickListener);
 		mFeedComment.apply();
-		
+
 		mFeedDate = (TextView) baseView.findViewById(R.id.feedsDate);
 
 		mFeedLike = new UserTextView(
@@ -79,13 +99,22 @@ public class FeedItemView {
 
 		mFeedDate.setText(photo.getCreateTime());
 
+		if (isDetailed) {
+			if (mFeedCaption != null) {
+				mFeedCaption.setText(photo.getCaption());
+			}
+		} else {
+			if (mFeedCaption != null) {
+				mFeedCaption.setVisibility(View.GONE);
+			}
+		}
+
 		load();
 	}
 
 	private void load() {
 
 		String url = photo.getUrlLarge();
-		BitmapDisplayConfig config = new BitmapDisplayConfig(PhotoType.LARGE);
 
 		if (url == null) {
 			async.loadDrawableFromFile(photo.getAbsolutePath(),
@@ -105,7 +134,7 @@ public class FeedItemView {
 							}
 						}
 
-					}, config);
+					}, BitmapDisplayConfig.LARGE);
 		} else {
 			async.loadDrawableFromWeb(url,
 					new AsyncImageLoader.ImageCallback() {
@@ -124,14 +153,14 @@ public class FeedItemView {
 							}
 						}
 
-					}, config);
+					}, BitmapDisplayConfig.LARGE);
 			mFeedPhoto.setOnLongClickListener(new OnLongClickListener() {
 
 				public boolean onLongClick(View arg0) {
 					if (mCallback != null) {
 						mCallback.OnLikeClick(photo);
 					}
-//					showLike();
+					// showLike();
 					return true;
 				}
 
@@ -155,11 +184,9 @@ public class FeedItemView {
 						}
 					}
 
-				}, new BitmapDisplayConfig(PhotoType.SMALL));
+				}, BitmapDisplayConfig.SMALL);
 
 	}
-
-	
 
 	private UserTextView.UserTextOnClickListener OnNameClickListener = new UserTextView.UserTextOnClickListener() {
 

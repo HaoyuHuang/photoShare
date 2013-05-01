@@ -15,7 +15,8 @@ import com.photoshare.service.photos.factory.BitmapDisplayConfig;
 import com.photoshare.tabHost.R;
 import com.photoshare.utils.async.AsyncImageLoader.ImageCallback;
 import com.photoshare.utils.async.AsyncUtils;
-import com.photoshare.view.UserBooleanBtn;
+import com.photoshare.view.State;
+import com.photoshare.view.UserStateBtn;
 
 /**
  * @author Aron
@@ -26,7 +27,7 @@ public class MessageQueueItemView {
 	private ImageView msgPhoto;
 	private TextView msgName;
 	private TextView msgDecription;
-	private UserBooleanBtn msgBtn;
+	private UserStateBtn msgBtn;
 	private MessageItem item;
 	private AsyncUtils async;
 
@@ -44,9 +45,10 @@ public class MessageQueueItemView {
 	}
 
 	public void applyView() {
-		msgBtn = new UserBooleanBtn(baseView, R.id.itemMessageBtn, true, item
-				.getMsgType().getEnabledString(), item.getMsgType()
-				.getIntermediateString(), item.getMsgType().getDisabledString());
+		msgBtn = new UserStateBtn(baseView, R.id.itemMessageBtn, true, item
+				.getMsgType().getStartText(), item.getMsgType()
+				.getPendingText(), item.getMsgType().getSuccessText(), item
+				.getMsgType().getFailText());
 		msgBtn.registerListener(listener);
 		msgDecription = (TextView) baseView
 				.findViewById(R.id.itemMessageDescription);
@@ -91,9 +93,9 @@ public class MessageQueueItemView {
 
 	}
 
-	private UserBooleanBtn.OnObserverClickListener listener = new UserBooleanBtn.OnObserverClickListener() {
+	private UserStateBtn.OnObserverClickListener listener = new UserStateBtn.OnObserverClickListener() {
 
-		public void OnClick(IObserver<Boolean> observer) {
+		public void OnClick(IObserver<State> observer) {
 			if (msgListener != null) {
 				msgListener.OnResend(item, msgBtn);
 			}
@@ -103,7 +105,7 @@ public class MessageQueueItemView {
 	private MessageListener msgListener;
 
 	public interface MessageListener {
-		public void OnResend(MessageItem message, IObserver<Boolean> observer);
+		public void OnResend(MessageItem message, IObserver<State> observer);
 
 		public void OnImageLoaded(ImageView imageView, Drawable drawable,
 				String url);

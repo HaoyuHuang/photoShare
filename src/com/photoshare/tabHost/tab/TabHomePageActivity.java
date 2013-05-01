@@ -12,7 +12,7 @@ import com.photoshare.fragments.BaseFragment;
 import com.photoshare.fragments.stacktrace.TraceElement;
 import com.photoshare.fragments.stacktrace.TracePhase;
 import com.photoshare.service.photos.PhotoBean;
-import com.photoshare.service.photos.RequestPhotoType;
+import com.photoshare.service.photos.PhotoAction;
 import com.photoshare.service.share.views.PreferenceSettingsFragment;
 import com.photoshare.service.users.UserInfo;
 import com.photoshare.service.users.views.UserHomeFragment;
@@ -54,7 +54,7 @@ public class TabHomePageActivity extends BaseActivity {
 			args.putParcelableArrayList(PhotoBean.KEY_PHOTOS,
 					photos.getPhotos());
 			args.putString(PhotoBean.KEY_PHOTO_TYPE,
-					RequestPhotoType.MyPhotos.toString());
+					PhotoAction.MyPhotos.toString());
 			Command.forwardTab((BaseFragment) getFragmentManager()
 					.findFragmentById(R.id.TabHomePageLayoutHolderId2),
 					getPreferenceSettingsFragment(), args);
@@ -77,7 +77,7 @@ public class TabHomePageActivity extends BaseActivity {
 		Bundle args = new Bundle();
 		args.putParcelable(UserInfo.KEY_USER_INFO, user.getUserInfo());
 		args.putParcelableArrayList(PhotoBean.KEY_PHOTOS, photos.getPhotos());
-		args.putString(PhotoBean.KEY_PHOTO_TYPE, RequestPhotoType.MyPhotos.toString());
+		args.putString(PhotoBean.KEY_PHOTO_TYPE, PhotoAction.MyPhotos.toString());
 		uhf.setArguments(args);
 		TraceElement element = new TraceElement(
 				getPreferenceSettingsFragment(), args);

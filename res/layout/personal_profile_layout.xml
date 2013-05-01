@@ -1,98 +1,200 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/personalProfileId"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_weight="0.97" >
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
 
-    <EditText
-        android:id="@+id/mEditPseudoName"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="18dp"
-        android:ems="10"
-        android:hint="@string/psuedoname"
-        android:inputType="textPersonName" />
-
-    <EditText
-        android:id="@+id/mEditWebsite"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/mEditPseudoName"
-        android:layout_centerHorizontal="true"
-        android:ems="10"
-        android:hint="@string/website" />
-
-    <EditText
-        android:id="@+id/mEditBio"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/mEditWebsite"
-        android:layout_centerHorizontal="true"
-        android:ems="10"
-        android:hint="@string/bio"
-        android:inputType="textPostalAddress"
-        android:lines="@integer/mEditBioLine" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:text="@string/privateinfo"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <EditText
-        android:id="@+id/mEditMail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView2"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp"
-        android:ems="10"
-        android:hint="@string/mail"
-        android:inputType="textEmailAddress" />
-
-    <EditText
-        android:id="@+id/mEditPhone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/mEditMail"
-        android:layout_centerHorizontal="true"
-        android:ems="10"
-        android:hint="@string/phone"
-        android:inputType="number" />
-
-    <EditText
-        android:id="@+id/mEditBirthday"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/mEditPhone"
-        android:layout_centerHorizontal="true"
-        android:ems="10"
-        android:hint="@string/birthday"
-        android:inputType="date" />
+        android:orientation="vertical"
+        android:paddingBottom="15dp"
+        android:paddingLeft="25dp"
+        android:paddingTop="15dp" />
 
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
+        android:layout_marginLeft="10dp"
         android:text="@string/publicinfo"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/black" />
 
-    <Button
-        android:id="@+id/mEditSubmit"
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="25dp"
+        android:weightSum="8" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="@string/psuedoname"
+            android:textColor="@color/black"
+            android:textStyle="italic" />
+
+        <EditText
+            android:id="@+id/mEditPseudoName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/psuedoname"
+            android:inputType="textPersonName" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="25dp"
+        android:weightSum="8" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="@string/personalWebsite"
+            android:textColor="@color/black"
+            android:textStyle="italic" />
+
+        <EditText
+            android:id="@+id/mEditWebsite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/website" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="25dp"
+        android:weightSum="8" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="@string/bio"
+            android:textColor="@color/black"
+            android:textStyle="italic" />
+
+        <EditText
+            android:id="@+id/mEditBio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/bio"
+            android:inputType="textPostalAddress"
+            android:lines="@integer/mEditBioLine" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="15dp"
+        android:paddingLeft="25dp"
+        android:paddingTop="15dp" />
+
+    <TextView
+        android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/mEditBirthday"
-        android:layout_marginRight="22dp"
-        android:hint="@string/submit"
-        android:text="@string/submit" />
+        android:paddingLeft="10dp"
+        android:text="@string/privateinfo"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/black" />
 
-</RelativeLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="25dp"
+        android:weightSum="8" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="@string/mail"
+            android:textColor="@color/black"
+            android:textStyle="italic" />
+
+        <EditText
+            android:id="@+id/mEditMail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:ems="10"
+            android:hint="@string/mail"
+            android:inputType="textEmailAddress" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="25dp"
+        android:weightSum="8" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="@string/phone"
+            android:textColor="@color/black"
+            android:textStyle="italic" />
+
+        <EditText
+            android:id="@+id/mEditPhone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/phone"
+            android:inputType="number" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="25dp"
+        android:weightSum="8" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="@string/birthday"
+            android:textColor="@color/black"
+            android:textStyle="italic" />
+
+        <EditText
+            android:id="@+id/mEditBirthday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/birthday"
+            android:inputType="date" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/mEditSubmit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="22dp"
+            android:background="@drawable/submit" />
+    </RelativeLayout>
+
+</LinearLayout>

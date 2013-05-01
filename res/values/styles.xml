@@ -27,4 +27,50 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
+    <!--
+        Base application theme, dependent on API level. This theme is replaced
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+    -->
+    <style name="AppBaseTheme" parent="android:Theme.Light">
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        -->
+    </style>
+
+    <!-- Application theme. -->
+    <style name="AppTheme" parent="AppBaseTheme">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    </style>
+
+    <style name="header">
+        <item name="android:gravity">center_vertical|center_horizontal</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:background">@drawable/mmtitle_bg</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">50.0dip</item>
+    </style>
+
+    <style name="text_title">
+        <item name="android:ellipsize">end</item>
+        <item name="android:gravity">center</item>
+        <item name="android:shadowColor">#ff404040</item>
+        <item name="android:shadowDx">1.2</item>
+        <item name="android:shadowDy">1.2</item>
+        <item name="android:shadowRadius">1.0</item>
+        <item name="android:textColor">#ffffffff</item>
+        <item name="android:textSize">18.0dip</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="btn_title">
+        <item name="android:gravity">center</item>
+        <item name="android:background">@null</item>
+        <item name="android:visibility">gone</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:minWidth">75.0dip</item>
+    </style>
+
 </resources>

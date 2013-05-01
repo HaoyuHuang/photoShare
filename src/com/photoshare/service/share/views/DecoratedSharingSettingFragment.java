@@ -78,7 +78,7 @@ public class DecoratedSharingSettingFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnRightBtnClicked()
 	 */
 	@Override
-	protected void onRightBtnClicked() {
+	protected void onRightBtnClicked(View view) {
 		// TODO Auto-generated method stub
 
 	}
@@ -89,7 +89,7 @@ public class DecoratedSharingSettingFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnLeftBtnClicked()
 	 */
 	@Override
-	protected void onLeftBtnClicked() {
+	protected void onLeftBtnClicked(View view) {
 		// TODO Auto-generated method stub
 
 	}
@@ -97,6 +97,6 @@ public class DecoratedSharingSettingFragment extends BaseFragment {
 	@Override
 	protected void onLoginSuccess() {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

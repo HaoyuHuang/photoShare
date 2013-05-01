@@ -10,11 +10,14 @@ import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.photoshare.service.news.NewsBean;
+import com.photoshare.service.news.NewsViewBean;
 import com.photoshare.service.photos.PhotoBean;
 import com.photoshare.service.users.UserInfo;
 import com.photoshare.tabHost.R;
@@ -26,7 +29,7 @@ import com.photoshare.utils.async.AsyncUtils;
  */
 public class NewsView {
 
-	private ArrayList<NewsBean> newsList;
+	private ArrayList<NewsViewBean> newsList;
 	private ListView mNewsListView;
 	private View baseView;
 	private Context context;
@@ -38,7 +41,7 @@ public class NewsView {
 	 * @param context
 	 * @param async
 	 */
-	public NewsView(ArrayList<NewsBean> newsList, View baseView,
+	public NewsView(ArrayList<NewsViewBean> newsList, View baseView,
 			Context context, AsyncUtils async) {
 		super();
 		this.newsList = newsList;
@@ -49,41 +52,71 @@ public class NewsView {
 
 	public void applyView() {
 		mNewsListView = (ListView) baseView.findViewById(R.id.newsListView);
+		if (mNewsListView == null) {
+			System.out.println("nulll List View -----------------------------");
+			return;
+		}
 		NewsAdapter adapter = new NewsAdapter();
+		if (newsList == null) {
+			System.out.println("List null ------------------------");
+			return;
+		}
 		mNewsListView.setAdapter(adapter);
+		mNewsListView.setOnItemClickListener(new OnItemClickListener() {
+
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				System.out.println("onNewsClickListener");
+				if (onNewsClickListener != null) {
+					System.out.println("onNewsClickListener");
+					onNewsClickListener.onNewsItemClick(newsList.get(arg2));
+				}
+			}
+
+		});
 	}
 
-	private class NewsAdapter extends ArrayAdapter<NewsBean> {
+	private class NewsAdapter extends ArrayAdapter<NewsViewBean> {
 
 		/**
 		 * @param context
 		 * @param textViewResourceId
 		 */
 		public NewsAdapter() {
-			super(context, 0, newsList);
+			super(context, R.layout.simple_list_item_news, newsList);
 		}
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			// TODO Auto-generated method stub
 			View rowView = convertView;
+			NewsItemView item = null;
+			LayoutInflater inflater = (LayoutInflater) context
+					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 			if (rowView == null) {
-				LayoutInflater inflater = (LayoutInflater) context
-						.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				rowView = inflater.inflate(R.layout.simple_grid_item, null);
+
+				rowView = inflater
+						.inflate(R.layout.simple_list_item_news, null);
+				NewsViewBean news = getItem(position);
+
+				item = new NewsItemView(news, rowView, async);
+				rowView.setTag(item);
 			} else {
-
+				item = (NewsItemView) rowView.getTag();
 			}
-
-			NewsBean news = getItem(position);
-
-			NewsItemView item = new NewsItemView(news, rowView, async, context);
 			item.registerCallback(mCallback);
-			item.applyView();
-
+			item.apply();
 			return rowView;
 		}
+	}
+
+	public ArrayList<NewsViewBean> getNewsList() {
+		return newsList;
+	}
+
+	public void setNewsList(ArrayList<NewsViewBean> newsList) {
+		this.newsList = newsList;
 	}
 
 	private NewsItemView.ICallback mCallback = new NewsItemView.ICallback() {
@@ -95,10 +128,10 @@ public class NewsView {
 			}
 		}
 
-		public void OnNameClick(UserInfo info) {
+		public void OnNewsUserNameClick(UserInfo info) {
 			// TODO Auto-generated method stub
 			if (onNewsClickListener != null) {
-				onNewsClickListener.OnNameClick(info);
+				onNewsClickListener.OnNewsUserNameClick(info);
 			}
 		}
 
@@ -125,7 +158,9 @@ public class NewsView {
 	public interface OnNewsClickListener {
 		public void OnNewsImageClick(PhotoBean photo);
 
-		public void OnNameClick(UserInfo info);
+		public void OnNewsUserNameClick(UserInfo info);
+
+		public void onNewsItemClick(NewsViewBean bean);
 
 		public void OnUserHeadLoaded(ImageView image, Drawable drawable,
 				String url);

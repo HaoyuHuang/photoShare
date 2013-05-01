@@ -67,7 +67,7 @@ public class SignInFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnRightBtnClicked()
 	 */
 	@Override
-	protected void onRightBtnClicked() {
+	protected void onRightBtnClicked(View view) {
 		AsyncSignIn(signInView.getNameString(), signInView.getPwdString());
 	}
 
@@ -77,7 +77,7 @@ public class SignInFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnLeftBtnClicked()
 	 */
 	@Override
-	protected void onLeftBtnClicked() {
+	protected void onLeftBtnClicked(View view) {
 		backward(null);
 	}
 

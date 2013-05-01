@@ -20,7 +20,7 @@ import com.photoshare.exception.NetworkException;
 import com.photoshare.exception.ValveException;
 import com.photoshare.fragments.BaseFragment;
 import com.photoshare.service.FollowHelper;
-import com.photoshare.service.follow.FollowType;
+import com.photoshare.service.follow.FollowAction;
 import com.photoshare.service.follow.UserFollowRequestParam;
 import com.photoshare.service.follow.UserFollowResponseBean;
 import com.photoshare.service.follow.UserGetFollowInfoRequestParam;
@@ -28,6 +28,7 @@ import com.photoshare.service.follow.UserGetFollowInfoResponseBean;
 import com.photoshare.service.users.UserInfo;
 import com.photoshare.tabHost.R;
 import com.photoshare.view.AppTitleBarView;
+import com.photoshare.view.State;
 
 /**
  * @author Aron
@@ -36,7 +37,7 @@ import com.photoshare.view.AppTitleBarView;
 public class FollowsInfoFragment extends BaseFragment {
 
 	private FollowsView followsView;
-	private FollowType type;
+	private FollowAction followAction;
 	private UserInfo userInfo;
 	private ArrayList<UserInfo> userInfos;
 	private String leftBtnText = "";
@@ -44,6 +45,8 @@ public class FollowsInfoFragment extends BaseFragment {
 	private String titlebarText = "";
 	private int leftBtnVisibility = View.VISIBLE;
 	private int rightBtnVisibility = View.GONE;
+	private int currentPage;
+	private int demandPage;
 
 	// private NotificationDisplayer mNotificationDisplayer;
 
@@ -57,8 +60,8 @@ public class FollowsInfoFragment extends BaseFragment {
 		return getString(R.string.ffollowInfoFragment);
 	}
 
-	public FollowType getType() {
-		return type;
+	public FollowAction getType() {
+		return followAction;
 	}
 
 	public UserInfo getUserInfo() {
@@ -74,26 +77,48 @@ public class FollowsInfoFragment extends BaseFragment {
 			if (bundle.containsKey(UserInfo.KEY_USER_INFO)) {
 				userInfo = bundle.getParcelable(UserInfo.KEY_USER_INFO);
 			}
-			if (bundle.containsKey(UserInfo.KEY_FOLLOW_TYPE)) {
-				type = FollowType.SWITCH(bundle
-						.getString(UserInfo.KEY_FOLLOW_TYPE));
-				switch (type) {
+			if (bundle.containsKey(UserInfo.KEY_FOLLOW_ACTION)) {
+				followAction = FollowAction.SWITCH(bundle
+						.getInt(UserInfo.KEY_FOLLOW_ACTION));
+				switch (followAction) {
 				case FOLLOWER:
 					titlebarText = getFollowerText();
+					try {
+						AsyncGetFollowInfoByPage(currentPage, demandPage);
+					} catch (NetworkException e) {
+						AsyncSignIn();
+					}
 					break;
 				case FOLLOWING:
 					titlebarText = getFollowingText();
+					try {
+						AsyncGetFollowInfoByPage(currentPage, demandPage);
+					} catch (NetworkException e) {
+						AsyncSignIn();
+					}
+					break;
+				case DATED_FOLLOWER:
+					titlebarText = getFollowerText();
+					try {
+						AsyncGetFollowInfoByDateDiff(15);
+					} catch (NetworkException e) {
+						AsyncSignIn();
+					}
+					break;
+				case DATED_FOLLOWING:
+					titlebarText = getFollowingText();
+					try {
+						AsyncGetFollowInfoByDateDiff(15);
+					} catch (NetworkException e) {
+						AsyncSignIn();
+					}
 					break;
 				default:
 					break;
 				}
 			}
 		}
-		try {
-			AsyncGetFollowInfo();
-		} catch (NetworkException e) {
-			AsyncSignIn();
-		}
+
 	}
 
 	@Override
@@ -151,17 +176,12 @@ public class FollowsInfoFragment extends BaseFragment {
 		return getString(R.string.follower);
 	}
 
-	private void AsyncGetFollowInfo() throws NetworkException {
-		UserGetFollowInfoRequestParam param = null;
-		switch (type) {
-		case FOLLOWER:
-			param = new UserGetFollowInfoRequestParam(userInfo.getUid());
-			break;
-		case FOLLOWING:
-			param = new UserGetFollowInfoRequestParam(userInfo.getUid());
-			break;
-		}
-		param.setType(type);
+	private void AsyncGetFollowInfoByDateDiff(int datediff)
+			throws NetworkException {
+		UserGetFollowInfoRequestParam param = new UserGetFollowInfoRequestParam(
+				userInfo.getUid());
+		param.setDatediff(datediff);
+		param.setType(followAction);
 		AbstractRequestListener<UserGetFollowInfoResponseBean> listener = new AbstractRequestListener<UserGetFollowInfoResponseBean>() {
 
 			@Override
@@ -211,7 +231,63 @@ public class FollowsInfoFragment extends BaseFragment {
 		async.getFollowsInfo(param, listener);
 	}
 
-	private void AsyncOnFollowClick(final IObserver<Boolean> observer)
+	private void AsyncGetFollowInfoByPage(int currentPage, int demandPage)
+			throws NetworkException {
+		UserGetFollowInfoRequestParam param = new UserGetFollowInfoRequestParam(
+				userInfo.getUid());
+		param.setCurrentPage(currentPage);
+		param.setDemandPage(demandPage);
+		param.setType(followAction);
+		AbstractRequestListener<UserGetFollowInfoResponseBean> listener = new AbstractRequestListener<UserGetFollowInfoResponseBean>() {
+
+			@Override
+			public void onNetworkError(final NetworkError networkError) {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
+
+						public void run() {
+							mExceptionHandler.obtainMessage(
+									NetworkError.ERROR_REFRESH_DATA)
+									.sendToTarget();
+						}
+					});
+				}
+			}
+
+			@Override
+			public void onFault(final Throwable fault) {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
+
+						public void run() {
+							mExceptionHandler.obtainMessage(
+									NetworkError.ERROR_NETWORK).sendToTarget();
+						}
+					});
+				}
+			}
+
+			@Override
+			public void onComplete(final UserGetFollowInfoResponseBean bean) {
+				if (bean != null) {
+					userInfos = bean.getFollowInfos();
+				}
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
+
+						public void run() {
+							if (bean != null) {
+								initView();
+							}
+						}
+					});
+				}
+			}
+		};
+		async.getFollowsInfo(param, listener);
+	}
+
+	private void AsyncOnFollowClick(final IObserver<State> observer)
 			throws NetworkException {
 		UserFollowRequestParam param = new UserFollowRequestParam.FollowBuilder()
 				.FollowId(userInfo.getUid())
@@ -226,7 +302,7 @@ public class FollowsInfoFragment extends BaseFragment {
 					getActivity().runOnUiThread(new Runnable() {
 
 						public void run() {
-
+							observer.update(State.FAIL);
 						}
 					});
 				}
@@ -237,7 +313,7 @@ public class FollowsInfoFragment extends BaseFragment {
 					getActivity().runOnUiThread(new Runnable() {
 
 						public void run() {
-
+							observer.update(State.FAIL);
 						}
 					});
 				}
@@ -254,7 +330,11 @@ public class FollowsInfoFragment extends BaseFragment {
 								// mNotificationDisplayer
 								// .setTicker(getSuccessTicker());
 								// mNotificationDisplayer.displayNotification();
-								observer.update(userInfo.isFollowing());
+								if (userInfo.isFollowing()) {
+									observer.update(State.SUCCESS);
+								} else {
+									observer.update(State.START);
+								}
 								// mNotificationDisplayer.cancleNotification();
 							}
 						}
@@ -265,8 +345,8 @@ public class FollowsInfoFragment extends BaseFragment {
 		try {
 			async.publishFollow(param, mCallback);
 		} catch (ValveException e) {
-			mExceptionHandler.obtainMessage(
-					NetworkError.ERROR_NETWORK).sendToTarget();
+			mExceptionHandler.obtainMessage(NetworkError.ERROR_NETWORK)
+					.sendToTarget();
 		}
 		// mNotificationDisplayer.cancleNotification();
 	}
@@ -293,7 +373,7 @@ public class FollowsInfoFragment extends BaseFragment {
 			Command.UserHome(getActivity(), info.params());
 		}
 
-		public void OnFollowClick(UserInfo info, IObserver<Boolean> observer) {
+		public void OnFollowClick(UserInfo info, IObserver<State> observer) {
 			try {
 				AsyncOnFollowClick(observer);
 			} catch (NetworkException e) {
@@ -332,7 +412,7 @@ public class FollowsInfoFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnRightBtnClicked()
 	 */
 	@Override
-	protected void onRightBtnClicked() {
+	protected void onRightBtnClicked(View view) {
 
 	}
 
@@ -342,7 +422,7 @@ public class FollowsInfoFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnLeftBtnClicked()
 	 */
 	@Override
-	protected void onLeftBtnClicked() {
+	protected void onLeftBtnClicked(View view) {
 		backward(null);
 	}
 

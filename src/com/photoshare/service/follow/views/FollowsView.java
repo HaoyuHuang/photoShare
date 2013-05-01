@@ -17,6 +17,7 @@ import com.photoshare.common.IObserver;
 import com.photoshare.service.users.UserInfo;
 import com.photoshare.tabHost.R;
 import com.photoshare.utils.async.AsyncUtils;
+import com.photoshare.view.State;
 import com.photoshare.view.listview.MyListView;
 
 /**
@@ -89,7 +90,7 @@ public class FollowsView {
 			}
 		}
 
-		public void OnFollowClick(UserInfo info, IObserver<Boolean> observer) {
+		public void OnFollowClick(UserInfo info, IObserver<State> observer) {
 			// TODO Auto-generated method stub
 			if (onFollowActionListener != null) {
 				onFollowActionListener.OnFollowClick(info, observer);
@@ -118,8 +119,8 @@ public class FollowsView {
 
 	public interface OnFollowActionListener {
 		public void OnUserNameClick(UserInfo info);
-
-		public void OnFollowClick(UserInfo info, IObserver<Boolean> observer);
+		
+		public void OnFollowClick(UserInfo info, IObserver<State> observer);
 
 		public void OnUserHeadLoaded(ImageView image, Drawable drawable,
 				String url);

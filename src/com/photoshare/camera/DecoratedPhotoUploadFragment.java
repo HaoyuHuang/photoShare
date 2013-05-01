@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import com.photoshare.cache.FeedsList;
 import com.photoshare.common.AbstractRequestListener;
 import com.photoshare.common.RequestParam;
+import com.photoshare.exception.MessageUtils;
 import com.photoshare.exception.NetworkError;
 import com.photoshare.exception.NetworkException;
 import com.photoshare.fragments.BaseFragment;
@@ -26,6 +27,9 @@ import com.photoshare.service.photos.PhotoBean;
 import com.photoshare.service.photos.PhotoUploadRequestParam;
 import com.photoshare.service.photos.PhotoUploadResponseBean;
 import com.photoshare.tabHost.R;
+import com.photoshare.tabHost.TabHostActivity;
+import com.photoshare.utils.FileTools;
+import com.photoshare.utils.QuartzUtils;
 import com.photoshare.utils.Utils;
 import com.photoshare.view.NotificationDisplayer;
 
@@ -70,7 +74,7 @@ public class DecoratedPhotoUploadFragment extends BaseFragment {
 	}
 
 	@Override
-	protected void onRightBtnClicked() {
+	protected void onRightBtnClicked(View view) {
 		try {
 			upload();
 		} catch (NetworkException e) {
@@ -84,7 +88,7 @@ public class DecoratedPhotoUploadFragment extends BaseFragment {
 	}
 
 	@Override
-	protected void onLeftBtnClicked() {
+	protected void onLeftBtnClicked(View view) {
 		Bundle args = new Bundle();
 		args.putParcelable(PhotoBean.KEY_PHOTO, photo);
 		args.putString(PhotoBean.KEY_CAPTION, shareView.getCaption());
@@ -155,8 +159,20 @@ public class DecoratedPhotoUploadFragment extends BaseFragment {
 	private void upload() throws NetworkException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		photo.compress(CompressFormat.PNG, 100, baos);
-		File file = Utils.getFileFromBytes(baos.toByteArray(), "bitmap");
-
+		StringBuilder dir = new StringBuilder();
+		StringBuilder fileName = new StringBuilder();
+		dir.append(Utils.getSDPath());
+		dir.append(File.separator);
+		dir.append(Utils.APP_NAME);
+		dir.append(File.separator);
+		dir.append(Utils.DIR_UPLOAD_PHOTOS);
+		FileTools.makeDir(dir.toString());
+		fileName.append(QuartzUtils.formattedNow());
+		fileName.append(".jpg");
+		FileTools.makeFile(dir.toString(), fileName.toString());
+		File file = Utils.getFileFromBytes(baos.toByteArray(), dir.toString(),
+				fileName.toString());
+		
 		final PhotoUploadRequestParam photoParam = new PhotoUploadRequestParam();
 
 		photoParam.setFile(file);
@@ -214,12 +230,15 @@ public class DecoratedPhotoUploadFragment extends BaseFragment {
 								getActivity().runOnUiThread(new Runnable() {
 
 									public void run() {
+										mSuccessHandler
+												.obtainMessage(MessageUtils.SUCCESS_PUBLISH_PHOTO);
 										FeedsList feeds = FeedsList
 												.getInstance();
 										PhotoBean photo = bean.get();
 										feeds.addFeed(photo);
-										// TabHostActivity
-										// .setCurrentTab(TabHostActivity.TAB_HOME);
+
+										TabHostActivity
+												.setCurrentTab(TabHostActivity.TAB_HOME);
 
 									}
 

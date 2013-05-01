@@ -15,6 +15,7 @@ import android.widget.ImageView;
 
 import com.photoshare.common.AbstractRequestListener;
 import com.photoshare.common.IObserver;
+import com.photoshare.exception.MessageUtils;
 import com.photoshare.exception.NetworkError;
 import com.photoshare.exception.NetworkException;
 import com.photoshare.exception.ValveException;
@@ -34,6 +35,7 @@ import com.photoshare.service.photos.PhotoUploadRequestParam;
 import com.photoshare.service.photos.PhotoUploadResponseBean;
 import com.photoshare.tabHost.R;
 import com.photoshare.view.NotificationDisplayer;
+import com.photoshare.view.State;
 
 /**
  * @author Aron
@@ -133,7 +135,7 @@ public class MessageFragment extends BaseFragment {
 	}
 
 	private void AsyncPutComment(final MessageItem message,
-			final IObserver<Boolean> observer) throws NetworkException {
+			final IObserver<State> observer) throws NetworkException {
 		PutCommentRequestParam param = new PutCommentRequestParam();
 		param.setComment(param.getComment());
 		param.setmPhotoId(message.getEventId());
@@ -151,7 +153,7 @@ public class MessageFragment extends BaseFragment {
 						public void run() {
 							mExceptionHandler.obtainMessage(
 									NetworkError.ERROR_COMMENT).sendToTarget();
-							observer.update(false);
+							observer.update(State.FAIL);
 						}
 
 					});
@@ -165,7 +167,7 @@ public class MessageFragment extends BaseFragment {
 						public void run() {
 							mExceptionHandler.obtainMessage(
 									NetworkError.ERROR_NETWORK).sendToTarget();
-							observer.update(false);
+							observer.update(State.FAIL);
 						}
 
 					});
@@ -180,7 +182,10 @@ public class MessageFragment extends BaseFragment {
 							mNotificationDisplayer
 									.setTicker(getSuccessTicker());
 							mNotificationDisplayer.displayNotification();
-							observer.update(false);
+							mSuccessHandler.obtainMessage(
+									MessageUtils.SUCCESS_PUT_COMMENT)
+									.sendToTarget();
+							observer.update(State.SUCCESS);
 							messageList.remove(message);
 							mNotificationDisplayer.cancleNotification();
 						}
@@ -200,7 +205,7 @@ public class MessageFragment extends BaseFragment {
 	}
 
 	private void AsyncPublishLike(final MessageItem message,
-			final IObserver<Boolean> observer) throws NetworkException {
+			final IObserver<State> observer) throws NetworkException {
 		PhotoLikeRequestParam param = new PhotoLikeRequestParam.LikeBuilder()
 				.PhotoId(message.getEventId())
 				.UserId(user.getUserInfo().getUid())
@@ -216,7 +221,7 @@ public class MessageFragment extends BaseFragment {
 						public void run() {
 							mExceptionHandler.obtainMessage(
 									NetworkError.ERROR_LIKE).sendToTarget();
-							observer.update(false);
+							observer.update(State.FAIL);
 						}
 
 					});
@@ -230,7 +235,7 @@ public class MessageFragment extends BaseFragment {
 						public void run() {
 							mExceptionHandler.obtainMessage(
 									NetworkError.ERROR_NETWORK).sendToTarget();
-							observer.update(false);
+							observer.update(State.FAIL);
 						}
 
 					});
@@ -245,7 +250,7 @@ public class MessageFragment extends BaseFragment {
 							mNotificationDisplayer
 									.setTicker(getSuccessTicker());
 							mNotificationDisplayer.displayNotification();
-							observer.update(false);
+							observer.update(State.SUCCESS);
 							messageList.remove(message);
 							mNotificationDisplayer.cancleNotification();
 						}
@@ -264,7 +269,7 @@ public class MessageFragment extends BaseFragment {
 	}
 
 	private void AsyncPublishFollow(final MessageItem message,
-			final IObserver<Boolean> observer) throws NetworkException {
+			final IObserver<State> observer) throws NetworkException {
 		UserFollowRequestParam param = new UserFollowRequestParam.FollowBuilder()
 				.UserId(user.getUserInfo().getUid())
 				.isFollowing(message.isBtnStatus())
@@ -281,7 +286,7 @@ public class MessageFragment extends BaseFragment {
 						public void run() {
 							mExceptionHandler.obtainMessage(
 									NetworkError.ERROR_FOLLOW).sendToTarget();
-							observer.update(false);
+							observer.update(State.FAIL);
 						}
 
 					});
@@ -295,14 +300,15 @@ public class MessageFragment extends BaseFragment {
 						public void run() {
 							mExceptionHandler.obtainMessage(
 									NetworkError.ERROR_NETWORK).sendToTarget();
-							observer.update(false);
+							observer.update(State.FAIL);
 						}
 
 					});
 				}
 			}
 
-			public void OnComplete(UserFollowResponseBean bean) {
+			public void OnComplete(final UserFollowResponseBean bean) {
+				final boolean ret = checkFollowingResponseBean(bean);
 				if (getActivity() != null) {
 					getActivity().runOnUiThread(new Runnable() {
 
@@ -310,7 +316,13 @@ public class MessageFragment extends BaseFragment {
 							mNotificationDisplayer
 									.setTicker(getSuccessTicker());
 							mNotificationDisplayer.displayNotification();
-							observer.update(false);
+							if (ret) {
+								if (bean.isFollowing()) {
+									observer.update(State.SUCCESS);
+								} else {
+									observer.update(State.START);
+								}
+							}
 							messageList.remove(message);
 							mNotificationDisplayer.cancleNotification();
 						}
@@ -329,8 +341,21 @@ public class MessageFragment extends BaseFragment {
 		mNotificationDisplayer.cancleNotification();
 	}
 
+	private boolean checkFollowingResponseBean(UserFollowResponseBean bean) {
+		if (bean == null || bean.getUserId() != user.getUserInfo().getUid())
+			return false;
+		if (bean.isFollowing()) {
+			user.getUserInfo().setFollowingCnt(
+					user.getUserInfo().getFollowingCnt() + 1);
+		} else {
+			user.getUserInfo().setFollowingCnt(
+					user.getUserInfo().getFollowingCnt() - 1);
+		}
+		return true;
+	}
+
 	private void AsyncPublishPhoto(final MessageItem message,
-			final IObserver<Boolean> observer) throws NetworkException {
+			final IObserver<State> observer) throws NetworkException {
 		PhotoUploadRequestParam param = new PhotoUploadRequestParam();
 		param.setCaption(message.getMsgDescription());
 		param.setUid(user.getUserInfo().getUid());
@@ -349,7 +374,7 @@ public class MessageFragment extends BaseFragment {
 						public void run() {
 							mExceptionHandler.obtainMessage(
 									NetworkError.ERROR_PHOTO).sendToTarget();
-							observer.update(false);
+							observer.update(State.FAIL);
 						}
 
 					});
@@ -364,7 +389,7 @@ public class MessageFragment extends BaseFragment {
 						public void run() {
 							mExceptionHandler.obtainMessage(
 									NetworkError.ERROR_NETWORK).sendToTarget();
-							observer.update(false);
+							observer.update(State.FAIL);
 						}
 
 					});
@@ -378,10 +403,12 @@ public class MessageFragment extends BaseFragment {
 					getActivity().runOnUiThread(new Runnable() {
 
 						public void run() {
+							mSuccessHandler
+									.obtainMessage(MessageUtils.SUCCESS_PUBLISH_PHOTO);
 							mNotificationDisplayer
 									.setTicker(getSuccessTicker());
 							mNotificationDisplayer.displayNotification();
-							observer.update(false);
+							observer.update(State.SUCCESS);
 							messageList.remove(message);
 							mNotificationDisplayer.cancleNotification();
 						}
@@ -398,8 +425,7 @@ public class MessageFragment extends BaseFragment {
 
 	private MessageQueueView.OnMsgListener onMsgListener = new MessageQueueView.OnMsgListener() {
 
-		public void OnMsgClicked(MessageItem message,
-				IObserver<Boolean> observer) {
+		public void OnMsgClicked(MessageItem message, IObserver<State> observer) {
 			try {
 				switch (message.getMsgType()) {
 				case COMMENT:
@@ -458,7 +484,7 @@ public class MessageFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnRightBtnClicked()
 	 */
 	@Override
-	protected void onRightBtnClicked() {
+	protected void onRightBtnClicked(View view) {
 
 	}
 
@@ -468,7 +494,7 @@ public class MessageFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnLeftBtnClicked()
 	 */
 	@Override
-	protected void onLeftBtnClicked() {
+	protected void onLeftBtnClicked(View view) {
 		backward(null);
 	}
 

@@ -13,6 +13,7 @@ import com.photoshare.camera.CameraFragment;
 import com.photoshare.camera.DecoratedPhotoFragment;
 import com.photoshare.camera.DecoratedPhotoShareFragment;
 import com.photoshare.camera.DecoratedPhotoUploadFragment;
+import com.photoshare.camera.PhotoFilterFragment;
 import com.photoshare.fragments.BaseFragment;
 import com.photoshare.fragments.MainFragment;
 import com.photoshare.fragments.PhotoBarFragment;
@@ -173,6 +174,9 @@ public final class Command {
 		} else if (base.getString(R.string.fdecoratedPhotoFragment).equals(
 				invokeName)) {
 			target = DecoratedPhotoFragment.newInstance(fragmentViewId);
+		} else if (base.getString(R.string.fphotoFilterFragment).equals(
+				invokeName)) {
+			target = PhotoFilterFragment.newInstance(fragmentViewId);
 		} else if (base.getString(R.string.fdecoratedPhotoUploadFragment)
 				.equals(invokeName)) {
 			target = DecoratedPhotoUploadFragment.newInstance(fragmentViewId);

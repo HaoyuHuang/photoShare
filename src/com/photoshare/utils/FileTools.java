@@ -10,6 +10,12 @@ import java.io.OutputStream;
 import android.os.Environment;
 
 public class FileTools {
+
+	public static boolean fileExist(String fileName) {
+		File file = new File(fileName);
+		return file.exists();
+	}
+
 	public static void makeDirs(String[] dirs) {
 		String status = Environment.getExternalStorageState();
 		if (status.equals(Environment.MEDIA_MOUNTED)) {
@@ -32,6 +38,18 @@ public class FileTools {
 			}
 		}
 		return destDir;
+	}
+
+	public static void makeFile(String dir, String fileName) {
+		String filePath = dir + File.separator + fileName;
+		File file = new File(filePath);
+		if (!file.exists()) {
+			try {
+				file.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public static void deleteFile(String path) {

@@ -34,7 +34,7 @@ public class OtherHomeTitleBarView {
 	private UserTextView mUserNameView;
 	private TextView mUserBioView;
 	private UserTextView mUserWebsiteView;
-	private UserBooleanBtn mUserFollowBtn;
+	private UserStateBtn mUserFollowBtn;
 	private UserInfo userInfo;
 	private AsyncUtils async;
 	private BitmapDisplayConfig config;
@@ -59,10 +59,10 @@ public class OtherHomeTitleBarView {
 
 	public void applyView() {
 
-		mUserFollowBtn = new UserBooleanBtn(baseView, R.id.otherHomeFollowBtn,
-				userInfo.isFollowing(), MsgType.FOLLOW.getEnabledString(),
-				MsgType.FOLLOW.getIntermediateString(),
-				MsgType.FOLLOW.getDisabledString());
+		mUserFollowBtn = new UserStateBtn(baseView, R.id.otherHomeFollowBtn,
+				userInfo.isFollowing(), MsgType.FOLLOW.getStartText(),
+				MsgType.FOLLOW.getPendingText(),
+				MsgType.FOLLOW.getSuccessText(), MsgType.FOLLOW.getFailText());
 		mUserFollowBtn.registerListener(onObserverClickListener);
 		mUserFollowBtn.applyView();
 
@@ -130,9 +130,9 @@ public class OtherHomeTitleBarView {
 
 	}
 
-	private UserBooleanBtn.OnObserverClickListener onObserverClickListener = new UserBooleanBtn.OnObserverClickListener() {
+	private UserStateBtn.OnObserverClickListener onObserverClickListener = new UserStateBtn.OnObserverClickListener() {
 
-		public void OnClick(IObserver<Boolean> observer) {
+		public void OnClick(IObserver<State> observer) {
 			if (mCallback != null) {
 				mCallback.OnFollowClick(userInfo, observer);
 			}
@@ -201,7 +201,7 @@ public class OtherHomeTitleBarView {
 
 		public void OnWebsiteClick(UserInfo info);
 
-		public void OnFollowClick(UserInfo info, IObserver<Boolean> observer);
+		public void OnFollowClick(UserInfo info, IObserver<State> observer);
 
 		public void OnUserHeadLoaded(ImageView imageView, Drawable photo,
 				String url);

@@ -24,11 +24,11 @@ import com.photoshare.exception.NetworkException;
 import com.photoshare.exception.ValveException;
 import com.photoshare.fragments.BaseFragment;
 import com.photoshare.service.FollowHelper;
-import com.photoshare.service.follow.FollowType;
+import com.photoshare.service.follow.FollowAction;
 import com.photoshare.service.follow.UserFollowRequestParam;
 import com.photoshare.service.follow.UserFollowResponseBean;
 import com.photoshare.service.photos.PhotoBean;
-import com.photoshare.service.photos.RequestPhotoType;
+import com.photoshare.service.photos.PhotoAction;
 import com.photoshare.service.photos.PhotosGetInfoRequestParam;
 import com.photoshare.service.photos.PhotosGetInfoResponseBean;
 import com.photoshare.service.photos.views.PopularPhotosView;
@@ -38,6 +38,7 @@ import com.photoshare.service.users.UserInfo;
 import com.photoshare.tabHost.R;
 import com.photoshare.validate.Validator;
 import com.photoshare.view.OtherHomeTitleBarView;
+import com.photoshare.view.State;
 
 /**
  * @author Aron
@@ -49,7 +50,7 @@ public class UserHomeFragment extends BaseFragment {
 
 	// ---------- meta data
 	private ArrayList<PhotoBean> photos;
-	private RequestPhotoType type;
+	private PhotoAction type;
 	private UserInfo userInfo;
 
 	// ---------- title bar attributes
@@ -184,14 +185,14 @@ public class UserHomeFragment extends BaseFragment {
 				System.out.println(userInfo);
 			}
 			if (bundle.containsKey(PhotoBean.KEY_PHOTO_TYPE)) {
-				type = RequestPhotoType.SWITCH(bundle
+				type = PhotoAction.SWITCH(bundle
 						.getString(PhotoBean.KEY_PHOTO_TYPE));
 			}
 			if (bundle.containsKey(PhotoBean.KEY_PHOTOS)) {
 				photos = bundle.getParcelableArrayList(PhotoBean.KEY_PHOTOS);
 			}
 		}
-		type = RequestPhotoType.MyPhotos;
+		type = PhotoAction.MyPhotos;
 		DoGetUserInfoPart();
 	}
 
@@ -229,8 +230,8 @@ public class UserHomeFragment extends BaseFragment {
 	private void OnFollowClicked() {
 		Bundle param = new Bundle();
 		param.putParcelable(UserInfo.KEY_USER_INFO, userInfo);
-		param.putString(UserInfo.KEY_FOLLOW_TYPE,
-				FollowType.FOLLOWER.toString());
+		param.putInt(UserInfo.KEY_FOLLOW_ACTION,
+				FollowAction.FOLLOWER.getCode());
 		param.putParcelableArrayList(PhotoBean.KEY_PHOTOS, photos);
 		forward(getFollowFragment(), param);
 	}
@@ -238,8 +239,8 @@ public class UserHomeFragment extends BaseFragment {
 	private void OnFollowingClicked() {
 		Bundle param = new Bundle();
 		param.putParcelable(UserInfo.KEY_USER_INFO, userInfo);
-		param.putString(UserInfo.KEY_FOLLOW_TYPE,
-				FollowType.FOLLOWER.toString());
+		param.putInt(UserInfo.KEY_FOLLOW_ACTION,
+				FollowAction.FOLLOWER.getCode());
 		param.putParcelableArrayList(PhotoBean.KEY_PHOTOS, photos);
 		forward(getFollowFragment(), param);
 	}
@@ -519,7 +520,7 @@ public class UserHomeFragment extends BaseFragment {
 			OnFollowClicked();
 		}
 
-		public void OnFollowClick(UserInfo info, IObserver<Boolean> observer) {
+		public void OnFollowClick(UserInfo info, IObserver<State> observer) {
 			try {
 				AsyncOnFollowClick();
 			} catch (NetworkException e) {
@@ -569,7 +570,7 @@ public class UserHomeFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnRightBtnClicked()
 	 */
 	@Override
-	protected void onRightBtnClicked() {
+	protected void onRightBtnClicked(View view) {
 
 	}
 
@@ -583,7 +584,7 @@ public class UserHomeFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnLeftBtnClicked()
 	 */
 	@Override
-	protected void onLeftBtnClicked() {
+	protected void onLeftBtnClicked(View view) {
 		Command.TabHost(getActivity());
 	}
 

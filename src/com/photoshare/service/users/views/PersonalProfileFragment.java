@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.photoshare.common.AbstractRequestListener;
+import com.photoshare.exception.MessageUtils;
 import com.photoshare.exception.NetworkError;
 import com.photoshare.exception.NetworkException;
 import com.photoshare.fragments.BaseFragment;
@@ -46,7 +47,6 @@ public class PersonalProfileFragment extends BaseFragment {
 			}
 		}
 		super.onActivityCreated(savedInstanceState);
-
 		initViews();
 	}
 
@@ -94,7 +94,9 @@ public class PersonalProfileFragment extends BaseFragment {
 					getActivity().runOnUiThread(new Runnable() {
 
 						public void run() {
-
+							mSuccessHandler.obtainMessage(
+									MessageUtils.SUCCESS_EDIT_PROFILE)
+									.sendToTarget();
 						}
 
 					});
@@ -165,7 +167,7 @@ public class PersonalProfileFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnRightBtnClicked()
 	 */
 	@Override
-	protected void onRightBtnClicked() {
+	protected void onRightBtnClicked(View view) {
 		try {
 			AsyncSubmitUserInfo(user.getUserInfo());
 		} catch (NetworkException e) {
@@ -179,14 +181,14 @@ public class PersonalProfileFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnLeftBtnClicked()
 	 */
 	@Override
-	protected void onLeftBtnClicked() {
+	protected void onLeftBtnClicked(View view) {
 		backward(null);
 	}
 
 	@Override
 	protected void onLoginSuccess() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

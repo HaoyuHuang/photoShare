@@ -56,7 +56,7 @@ public class DecoratedPhotoShareView {
 			mPhotoCaptionView.setVisibility(View.GONE);
 		}
 		mSharePhotoPreferencesLayoutHolderId = R.id.decoratedPhotoSharingPreferenceListHolder;
-		photo = PhotoFactory.createBitmapBySize(photo,
+		photo = PhotoFactory.createScaledBitmap(photo,
 				PhotoType.MIDDLE.getWidth(), PhotoType.MIDDLE.getHeight());
 		Drawable drawable = new BitmapDrawable(photo);
 		if (photo != null) {

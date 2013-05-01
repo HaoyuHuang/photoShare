@@ -16,10 +16,11 @@ import android.view.ViewGroup;
 
 import com.photoshare.command.Command;
 import com.photoshare.common.AbstractRequestListener;
+import com.photoshare.exception.MessageUtils;
 import com.photoshare.exception.NetworkError;
 import com.photoshare.fragments.stacktrace.TraceConfig;
 import com.photoshare.service.photos.PhotoBean;
-import com.photoshare.service.photos.RequestPhotoType;
+import com.photoshare.service.photos.PhotoAction;
 import com.photoshare.service.photos.views.FeedsFragment;
 import com.photoshare.service.photos.views.PopularPhotosFragment;
 import com.photoshare.service.signin.UserSignInRequestParam;
@@ -129,7 +130,7 @@ public abstract class BaseFragment extends Fragment {
 		titleView.setRightBtnText(rightBtnText);
 		titleView.setTitlebarText(titlebarText);
 	}
-	
+
 	protected void setTitleBarVisibility(int leftBtn, int rightBtn) {
 		titleView.setTitleLeftButtonVisibility(leftBtn);
 		titleView.setTitleRightButtonVisibility(rightBtn);
@@ -263,14 +264,49 @@ public abstract class BaseFragment extends Fragment {
 	/**
 	 * 
 	 */
-	protected abstract void onRightBtnClicked();
+	protected abstract void onRightBtnClicked(View view);
 
 	/**
 	 * 
 	 */
-	protected abstract void onLeftBtnClicked();
+	protected abstract void onLeftBtnClicked(View view);
 
 	protected abstract void onLoginSuccess();
+
+	protected final Handler mSuccessHandler = new Handler() {
+
+		@Override
+		public void handleMessage(Message msg) {
+			String success = "";
+			switch (msg.what) {
+			case MessageUtils.SUCCESS_EDIT_PROFILE:
+				success = getEditProfileSuccess();
+				break;
+			case MessageUtils.SUCCESS_GET_FEEDS:
+				success = getGetFeedsSuccess();
+				break;
+			case MessageUtils.SUCCESS_OPERATION:
+				success = getOperationSuccess();
+				break;
+			case MessageUtils.SUCCESS_PUBLISH_PHOTO:
+				success = getPublishPhotoSuccess();
+				break;
+			case MessageUtils.SUCCESS_PUT_COMMENT:
+				success = getPutCommentSuccess();
+				break;
+			case MessageUtils.SUCCESS_REFRESH:
+				success = getRefreshSuccess();
+				break;
+			default:
+				success = getSuccess();
+				super.handleMessage(msg);
+			}
+			if (!"".equals(success)) {
+				displaySuccessMsg(success);
+			}
+		}
+
+	};
 
 	protected final Handler mExceptionHandler = new Handler() {
 
@@ -362,6 +398,34 @@ public abstract class BaseFragment extends Fragment {
 			}
 		}
 	};
+
+	private String getSuccess() {
+		return getString(R.string.sSuccess);
+	}
+
+	private String getOperationSuccess() {
+		return getString(R.string.sOperationSuccess);
+	}
+
+	private String getRefreshSuccess() {
+		return getString(R.string.sRefreshSuccess);
+	}
+
+	private String getPublishPhotoSuccess() {
+		return getString(R.string.sPublishPhotoSuccess);
+	}
+
+	private String getPutCommentSuccess() {
+		return getString(R.string.sPutCommentSuccess);
+	}
+
+	private String getGetFeedsSuccess() {
+		return getString(R.string.sGetFeedsSuccess);
+	}
+
+	private String getEditProfileSuccess() {
+		return getString(R.string.sEditProfileSuccess);
+	}
 
 	private String getRefreshError() {
 		return getString(R.string.erefreshError);
@@ -480,6 +544,19 @@ public abstract class BaseFragment extends Fragment {
 		}
 	}
 
+	private void displaySuccessMsg(final String success) {
+		if (getActivity() != null) {
+			getActivity().runOnUiThread(new Runnable() {
+
+				public void run() {
+					if (titleView != null) {
+						titleView.displaySuccessView(success);
+					}
+				}
+			});
+		}
+	}
+
 	public String getCanonicalTag() {
 		return Tag;
 	}
@@ -504,8 +581,8 @@ public abstract class BaseFragment extends Fragment {
 		persist(fragmentViewId, uhtbf);
 	}
 
-	protected void ShowPhotoBarFragment(int fragmentViewId,
-			RequestPhotoType type, UserInfo info, ArrayList<PhotoBean> photos) {
+	protected void ShowPhotoBarFragment(int fragmentViewId, PhotoAction type,
+			UserInfo info, ArrayList<PhotoBean> photos) {
 		PhotoBarFragment pbf = PhotoBarFragment.newInstance(fragmentViewId);
 		Bundle args = new Bundle();
 		args.putParcelable(UserInfo.KEY_USER_INFO, info);
@@ -580,12 +657,12 @@ public abstract class BaseFragment extends Fragment {
 
 	private AppTitleBarView.OnTitleBarBtnClickedListener onTitleBarBtnClickedListener = new AppTitleBarView.OnTitleBarBtnClickedListener() {
 
-		public void OnRightBtnClick() {
-			onRightBtnClicked();
+		public void OnRightBtnClick(View view) {
+			onRightBtnClicked(view);
 		}
 
-		public void OnLeftBtnClick() {
-			onLeftBtnClicked();
+		public void OnLeftBtnClick(View view) {
+			onLeftBtnClicked(view);
 		}
 	};
 }

@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -25,8 +26,11 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.photoshare.service.photos.DecoratePhotoType;
+import com.photoshare.service.photos.factory.BitmapDisplayConfig;
+import com.photoshare.service.photos.factory.PhotoFactory;
 import com.photoshare.tabHost.R;
 import com.photoshare.utils.FileTools;
 import com.photoshare.utils.Utils;
@@ -41,6 +45,7 @@ public class CameraView {
 	private View baseView;
 	private Bitmap photo;
 	private Bitmap decoratedPhoto;
+	private BitmapDisplayConfig config = BitmapDisplayConfig.SMALL;
 
 	/** Crop View */
 	private ImageView photoView;
@@ -72,11 +77,16 @@ public class CameraView {
 	}
 
 	private void applyImageTool() {
-		Collection<DecoratePhotoType> values = Arrays
-				.asList(DecoratePhotoType.values());
+		Collection<DecoratePhotoType> values = Arrays.asList(DecoratePhotoType
+				.values());
 		for (DecoratePhotoType type : values) {
 			photoToolsView.addView(insertImage(type));
 		}
+	}
+
+	public void destroy() {
+		photoToolsView.destroyDrawingCache();
+		photoToolsView.removeAllViewsInLayout();
 	}
 
 	public void DisappearPhotoTools() {
@@ -89,13 +99,14 @@ public class CameraView {
 
 	private View insertImage(final DecoratePhotoType type) {
 		LinearLayout layout = new LinearLayout(context);
-		layout.setLayoutParams(new LayoutParams(320, 320));
+		layout.setLayoutParams(new LayoutParams(220, 220));
 		layout.setGravity(Gravity.CENTER);
+		layout.setOrientation(LinearLayout.VERTICAL);
 
 		ImageView imageView = new ImageView(context);
-		imageView.setLayoutParams(new LayoutParams(300, 300));
-		imageView.setBackgroundResource(type.getImageId());
-
+		imageView.setLayoutParams(new LayoutParams(180, 180));
+		imageView.setImageDrawable(PhotoFactory.getDrawable(context,
+				type.getImageId(), config));
 		imageView.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
@@ -104,7 +115,14 @@ public class CameraView {
 				}
 			}
 		});
+
+		TextView textView = new TextView(context);
+		textView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
+				LayoutParams.WRAP_CONTENT));
+		textView.setText(type.getDescription());
+		textView.setTextColor(Color.BLACK);
 		layout.addView(imageView);
+		layout.addView(textView);
 		return layout;
 	}
 

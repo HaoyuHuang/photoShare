@@ -25,6 +25,7 @@ import com.photoshare.view.listview.MyListView;
  */
 public class LikesView {
 	private MyListView mLikesListView;
+	private LikesAdapter adapter;
 	private Context context;
 	private View baseView;
 	private ArrayList<LikeBean> beans;
@@ -46,11 +47,17 @@ public class LikesView {
 	}
 
 	public void applyView() {
-		mLikesListView = (MyListView) baseView
-				.findViewById(R.id.likesListView);
-		LikesAdapter adapter = new LikesAdapter();
+		mLikesListView = (MyListView) baseView.findViewById(R.id.likesListView);
+		adapter = new LikesAdapter();
 		mLikesListView.setAdapter(adapter);
 
+	}
+
+	public void addLikeBean(ArrayList<LikeBean> likeBeans) {
+		for (LikeBean likeBean : likeBeans) {
+			beans.add(likeBean);
+		}
+		notifyDataSetChanged();
 	}
 
 	private class LikesAdapter extends ArrayAdapter<LikeBean> {
@@ -73,7 +80,8 @@ public class LikesView {
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 			if (rowView == null) {
-				rowView = inflater.inflate(R.layout.simple_list_item_likes, null);
+				rowView = inflater.inflate(R.layout.simple_list_item_likes,
+						null);
 				LikeBean feed = getItem(position);
 				likes = new LikeItemView(rowView, async, feed);
 				rowView.setTag(likes);
@@ -85,6 +93,12 @@ public class LikesView {
 			likes.applyView();
 
 			return rowView;
+		}
+	}
+
+	private void notifyDataSetChanged() {
+		if (adapter != null) {
+			adapter.notifyDataSetChanged();
 		}
 	}
 

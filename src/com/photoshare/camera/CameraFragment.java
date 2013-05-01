@@ -26,7 +26,9 @@ import com.photoshare.fragments.BaseFragment;
 import com.photoshare.service.photos.DecoratePhotoType;
 import com.photoshare.service.photos.DecorateTextures;
 import com.photoshare.service.photos.PhotoBean;
+import com.photoshare.service.photos.Texture;
 import com.photoshare.service.photos.factory.DecoratePhotoWrapper;
+import com.photoshare.service.photos.factory.PhotoFactory;
 import com.photoshare.tabHost.R;
 import com.photoshare.utils.Utils;
 import com.photoshare.utils.async.AsyncImageLoader;
@@ -64,6 +66,15 @@ public class CameraFragment extends BaseFragment {
 		}
 		return inflater.inflate(R.layout.decorate_photo_layout, container,
 				false);
+	}
+
+	@Override
+	public void onDestroy() {
+		if (mCameraView != null) {
+			Utils.logger("Camera View Destroyed");
+			mCameraView.destroy();
+		}
+		super.onDestroy();
 	}
 
 	@Override
@@ -117,7 +128,7 @@ public class CameraFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnRightBtnClicked()
 	 */
 	@Override
-	protected void onRightBtnClicked() {
+	protected void onRightBtnClicked(View view) {
 		Bundle param = new Bundle();
 		param.putParcelable(PhotoBean.KEY_PHOTO, photo);
 		forward(getDecoratedPhotoFragment(), param);
@@ -129,7 +140,7 @@ public class CameraFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnLeftBtnClicked()
 	 */
 	@Override
-	protected void onLeftBtnClicked() {
+	protected void onLeftBtnClicked(View view) {
 		dispatchTakePictureIntent(ACTION_TAKE_PHOTO_S);
 	}
 
@@ -164,7 +175,7 @@ public class CameraFragment extends BaseFragment {
 	private String getDecoratedPhotoUploadFragment() {
 		return getString(R.string.fdecoratedPhotoUploadFragment);
 	}
-	
+
 	private String getMarbleTexture() {
 		return getString(R.string.textureMarble);
 	}
@@ -316,12 +327,27 @@ public class CameraFragment extends BaseFragment {
 				PackageManager.MATCH_DEFAULT_ONLY);
 		return list.size() > 0;
 	}
-	
+
 	private CameraView.OnCameraViewClick listener = new CameraView.OnCameraViewClick() {
 
+		private Texture texture;
+
 		public void OnToolsClick(DecoratePhotoType type, Bitmap map) {
-			DecoratePhotoWrapper wrapper = new DecoratePhotoWrapper(map,
-					DecorateTextures.getTextureByName(getMarbleTexture()), type);
+			DecoratePhotoWrapper wrapper = null;
+			if (DecoratePhotoType.HALFTONE.equals(type)) {
+				if (texture == null) {
+					texture = new Texture("marble",
+							PhotoFactory.createScaledBitmap(PhotoFactory
+									.readBitMap(getActivity(),
+											R.drawable.marble), map.getWidth(),
+									map.getHeight()), map.getWidth(),
+							map.getHeight());
+				}
+				wrapper = new DecoratePhotoWrapper(map, texture, type);
+			} else {
+				wrapper = new DecoratePhotoWrapper(map, type);
+			}
+
 			async.decorateImage(wrapper, mCallback);
 		}
 

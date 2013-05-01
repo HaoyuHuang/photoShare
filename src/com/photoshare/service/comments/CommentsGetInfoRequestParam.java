@@ -2,6 +2,7 @@ package com.photoshare.service.comments;
 
 import android.os.Bundle;
 
+import com.photoshare.common.Builder;
 import com.photoshare.common.RequestParam;
 import com.photoshare.exception.NetworkException;
 
@@ -10,10 +11,12 @@ public class CommentsGetInfoRequestParam extends RequestParam {
 	@Deprecated
 	private static final String METHOD = "commentGetInfo.do";
 
-	private static final String ACTION = "/CommentGetInfoAction";
+	private static final String ACTION = "/CommentGetInfoAction_";
+
+	private CommentAction commentAction;
 
 	public String getAction() {
-		return ACTION;
+		return ACTION + commentAction.getTag();
 	}
 
 	/**
@@ -36,9 +39,13 @@ public class CommentsGetInfoRequestParam extends RequestParam {
 
 	private int demandPage;
 
+	private int datediff;
+
 	public static final String CURRENT_PAGE = "currentPage";
 
 	public static final String DEMAND_PAGE = "demandPage";
+
+	public static final String DATE_DIFF = "datediff";
 
 	private String fields = FIELDS_DEFAULT;
 
@@ -51,6 +58,23 @@ public class CommentsGetInfoRequestParam extends RequestParam {
 		this.fields = fields;
 	}
 
+	public CommentAction getCommentAction() {
+		return commentAction;
+	}
+
+	public void setCommentAction(CommentAction commentAction) {
+		this.commentAction = commentAction;
+	}
+
+	public static class CommentsGetInfoRqeustParamBuilder implements
+			Builder<CommentsGetInfoRequestParam> {
+
+		public CommentsGetInfoRequestParam build() {
+			return null;
+		}
+
+	}
+
 	@Override
 	public Bundle getParams() throws NetworkException {
 		// TODO Auto-generated method stub
@@ -61,10 +85,19 @@ public class CommentsGetInfoRequestParam extends RequestParam {
 		}
 		parameters.putString(CommentInfo.KEY_COMMENT + "."
 				+ CommentInfo.KEY_PID, pid + "");
-		parameters.putString(CommentInfo.KEY_COMMENT + "." + CURRENT_PAGE,
-				currentPage + "");
-		parameters.putString(CommentInfo.KEY_COMMENT + "." + DEMAND_PAGE,
-				demandPage + "");
+		switch (commentAction) {
+		case COMMENTS:
+			parameters.putString(CommentInfo.KEY_COMMENT + "." + CURRENT_PAGE,
+					String.valueOf(currentPage));
+			parameters.putString(CommentInfo.KEY_COMMENT + "." + DEMAND_PAGE,
+					String.valueOf(demandPage));
+			break;
+		case DATED_COMMENTS:
+			parameters.putString(DATE_DIFF, String.valueOf(datediff));
+			break;
+		default:
+			break;
+		}
 		return parameters;
 	}
 
@@ -74,6 +107,14 @@ public class CommentsGetInfoRequestParam extends RequestParam {
 
 	public void setDemandPage(int demandPage) {
 		this.demandPage = demandPage;
+	}
+
+	public int getDatediff() {
+		return datediff;
+	}
+
+	public void setDatediff(int datediff) {
+		this.datediff = datediff;
 	}
 
 }

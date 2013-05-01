@@ -15,19 +15,19 @@ public enum MsgType {
 	NULL("") {
 
 		@Override
-		public String getEnabledString() {
+		public String getStartText() {
 			// TODO Auto-generated method stub
 			return "错误消息";
 		}
 
 		@Override
-		public String getDisabledString() {
+		public String getSuccessText() {
 			// TODO Auto-generated method stub
 			return "错误消息";
 		}
 
 		@Override
-		public String getIntermediateString() {
+		public String getPendingText() {
 			// TODO Auto-generated method stub
 			return "错误消息";
 		}
@@ -38,23 +38,29 @@ public enum MsgType {
 			return action;
 		}
 
+		@Override
+		public String getFailText() {
+			// TODO Auto-generated method stub
+			return "错误消息";
+		}
+
 	},
-	PHOTO("/UploadFileAction") {
+	PHOTO("/uploadPhoto") {
 
 		@Override
-		public String getEnabledString() {
+		public String getStartText() {
 			// TODO Auto-generated method stub
 			return "上传照片";
 		}
 
 		@Override
-		public String getDisabledString() {
+		public String getSuccessText() {
 			// TODO Auto-generated method stub
 			return "上传成功";
 		}
 
 		@Override
-		public String getIntermediateString() {
+		public String getPendingText() {
 			// TODO Auto-generated method stub
 			return "正在上传..";
 		}
@@ -65,23 +71,29 @@ public enum MsgType {
 			return action;
 		}
 
+		@Override
+		public String getFailText() {
+			// TODO Auto-generated method stub
+			return "上传失败";
+		}
+
 	},
-	COMMENT("/CommentAction_putComment") {
+	COMMENT("/CommentAction") {
 
 		@Override
-		public String getEnabledString() {
+		public String getStartText() {
 			// TODO Auto-generated method stub
-			return "添加評論";
+			return "添加评论";
 		}
 
 		@Override
-		public String getDisabledString() {
+		public String getSuccessText() {
 			// TODO Auto-generated method stub
-			return "評論成功";
+			return "评论成功";
 		}
 
 		@Override
-		public String getIntermediateString() {
+		public String getPendingText() {
 			// TODO Auto-generated method stub
 			return "正在评论..";
 		}
@@ -91,23 +103,29 @@ public enum MsgType {
 			// TODO Auto-generated method stub
 			return action;
 		}
+
+		@Override
+		public String getFailText() {
+			// TODO Auto-generated method stub
+			return "评论失败";
+		}
 	},
 	FOLLOW("/FollowAction") {
 
 		@Override
-		public String getEnabledString() {
+		public String getStartText() {
 			// TODO Auto-generated method stub
-			return "開始跟隨";
+			return "开始跟随";
 		}
 
 		@Override
-		public String getDisabledString() {
+		public String getSuccessText() {
 			// TODO Auto-generated method stub
 			return "跟隨成功";
 		}
 
 		@Override
-		public String getIntermediateString() {
+		public String getPendingText() {
 			// TODO Auto-generated method stub
 			return "正在跟随..";
 		}
@@ -117,23 +135,29 @@ public enum MsgType {
 			// TODO Auto-generated method stub
 			return action;
 		}
+
+		@Override
+		public String getFailText() {
+			// TODO Auto-generated method stub
+			return "跟随失败";
+		}
 	},
 	LIKE("/LikeAction") {
 
 		@Override
-		public String getEnabledString() {
+		public String getStartText() {
 			// TODO Auto-generated method stub
-			return "添加喜歡";
+			return "添加喜欢";
 		}
 
 		@Override
-		public String getDisabledString() {
+		public String getSuccessText() {
 			// TODO Auto-generated method stub
-			return "喜歡成功";
+			return "喜欢成功";
 		}
 
 		@Override
-		public String getIntermediateString() {
+		public String getPendingText() {
 			// TODO Auto-generated method stub
 			return "正在喜欢..";
 		}
@@ -142,6 +166,12 @@ public enum MsgType {
 		public String getAction() {
 			// TODO Auto-generated method stub
 			return action;
+		}
+
+		@Override
+		public String getFailText() {
+			// TODO Auto-generated method stub
+			return "喜欢失败";
 		}
 	};
 
@@ -153,11 +183,13 @@ public enum MsgType {
 
 	public abstract String getAction();
 
-	public abstract String getEnabledString();
+	public abstract String getStartText();
 
-	public abstract String getIntermediateString();
+	public abstract String getPendingText();
 
-	public abstract String getDisabledString();
+	public abstract String getSuccessText();
+
+	public abstract String getFailText();
 
 	public static MsgType SWITCH(String type) {
 		if (type.equals(COMMENT)) {

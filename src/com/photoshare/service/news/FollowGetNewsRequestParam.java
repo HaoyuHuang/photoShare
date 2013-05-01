@@ -11,11 +11,10 @@ import com.photoshare.service.users.UserInfo;
 
 /**
  * @author czj_yy
- *
+ * 
  */
 @Deprecated
 public class FollowGetNewsRequestParam extends RequestParam {
-
 
 	private static final String METHOD = "getMyNews";
 
@@ -28,7 +27,7 @@ public class FollowGetNewsRequestParam extends RequestParam {
 	 */
 	public static final String FIELDS_ALL = NewsBean.KEY_EVENT_TIME + ","
 			+ NewsBean.KEY_EVENT_TYPE + "," + NewsBean.KEY_USER_ID + ","
-			+ NewsBean.KEY_USER_NAME + "," + NewsBean.KEY_URLS;
+			+ NewsBean.KEY_USER_NAME;
 
 	/**
 	 * 默认字段<br>
@@ -36,7 +35,7 @@ public class FollowGetNewsRequestParam extends RequestParam {
 	 */
 	public static final String FIELD_DEFAULT = NewsBean.KEY_EVENT_TIME + ","
 			+ NewsBean.KEY_EVENT_TYPE + "," + NewsBean.KEY_USER_ID + ","
-			+ NewsBean.KEY_USER_NAME + "," + NewsBean.KEY_URLS;
+			+ NewsBean.KEY_USER_NAME;
 
 	/**
 	 * 需要获取的用户uid的数组
@@ -119,6 +118,5 @@ public class FollowGetNewsRequestParam extends RequestParam {
 				uid + "");
 		return parameters;
 	}
-
 
 }

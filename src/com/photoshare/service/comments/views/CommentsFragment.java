@@ -1,5 +1,7 @@
 package com.photoshare.service.comments.views;
 
+import java.util.ArrayList;
+
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,6 +16,8 @@ import com.photoshare.exception.NetworkException;
 import com.photoshare.exception.ValveException;
 import com.photoshare.fragments.BaseFragment;
 import com.photoshare.service.CommentHelper;
+import com.photoshare.service.comments.CommentAction;
+import com.photoshare.service.comments.CommentInfo;
 import com.photoshare.service.comments.CommentsGetInfoRequestParam;
 import com.photoshare.service.comments.CommentsGetInfoResponseBean;
 import com.photoshare.service.comments.PutCommentRequestParam;
@@ -21,6 +25,7 @@ import com.photoshare.service.comments.PutCommentResponseBean;
 import com.photoshare.service.photos.PhotoBean;
 import com.photoshare.service.users.UserInfo;
 import com.photoshare.tabHost.R;
+import com.photoshare.utils.Utils;
 import com.photoshare.view.AppTitleBarView;
 import com.photoshare.view.NotificationDisplayer;
 
@@ -38,6 +43,7 @@ public class CommentsFragment extends BaseFragment {
 	private int leftBtnVisibility = View.VISIBLE;
 	private int rightBtnVisibility = View.GONE;
 	private NotificationDisplayer mNotificationDisplayer;
+	private CommentAction commentAction;
 
 	public static CommentsFragment newInstance(int fragmentViewId) {
 		CommentsFragment comments = new CommentsFragment();
@@ -68,16 +74,31 @@ public class CommentsFragment extends BaseFragment {
 					leftBtnText = bundle
 							.getString(AppTitleBarView.LEFT_BTN_TEXT);
 				}
+				if (bundle.containsKey(CommentInfo.KEY_COMMENT_ACTION)) {
+					commentAction = CommentAction.SWITCH(bundle
+							.getInt(CommentInfo.KEY_COMMENT_ACTION));
+				}
 			}
 			initViews();
 			if (photo != null && photo.getComments() != null
 					&& !photo.getComments().isEmpty()) {
-
+				Utils.logger("Comments is not empty");
 			} else {
-				AsyncGetComments(0, 20);
+				if (commentAction != null) {
+					switch (commentAction) {
+					case COMMENTS:
+						AsyncGetCommentsByPage(0, 20);
+						break;
+					case DATED_COMMENTS:
+						AsyncGetCommentsByDateDiff(15);
+						break;
+					default:
+						break;
+					}
+				}
 			}
 		} catch (NetworkException e) {
-
+			e.printStackTrace();
 		}
 	}
 
@@ -86,6 +107,10 @@ public class CommentsFragment extends BaseFragment {
 		if (outState != null) {
 			outState.putParcelable(PhotoBean.KEY_PHOTO, photo);
 			outState.putString(AppTitleBarView.LEFT_BTN_TEXT, leftBtnText);
+			if (commentAction != null) {
+				outState.putInt(CommentInfo.KEY_COMMENT_ACTION,
+						commentAction.getCode());
+			}
 		}
 		super.onSaveInstanceState(outState);
 	}
@@ -98,8 +123,11 @@ public class CommentsFragment extends BaseFragment {
 		titlebarText = getCommentTitleText();
 		initTitleBar(leftBtnText, rightBtnText, titlebarText,
 				leftBtnVisibility, rightBtnVisibility);
+		if (photo.getComments() == null) {
+			photo.setComments(new ArrayList<CommentInfo>());
+		}
 		commentView = new CommentsInfoView(getActivity(), getActivity()
-				.findViewById(R.id.commentId), photo, async);
+				.findViewById(R.id.commentId), photo.getComments(), async);
 		commentView.registerListener(onCommentInfoClickListener);
 		commentView.applyView();
 		mNotificationDisplayer = new NotificationDisplayer.NotificationBuilder()
@@ -120,9 +148,9 @@ public class CommentsFragment extends BaseFragment {
 		param.setmPhotoId(photo.getPid());
 		param.setmUserId(user.getUserInfo().getUid());
 
-		mNotificationDisplayer.setTicker(getCommentTicker());
-		mNotificationDisplayer.setTag(getCommentTag());
-		mNotificationDisplayer.displayNotification();
+		// mNotificationDisplayer.setTicker(getCommentTicker());
+		// mNotificationDisplayer.setTag(getCommentTag());
+		// mNotificationDisplayer.displayNotification();
 		CommentHelper.ICallback callback = new CommentHelper.ICallback() {
 
 			public void OnNetworkError(NetworkError networkError) {
@@ -158,14 +186,14 @@ public class CommentsFragment extends BaseFragment {
 						public void run() {
 							if (comment != null) {
 								if (comment.getComment() != null) {
-									mNotificationDisplayer
-											.setTicker(getSuccessTicker());
-									mNotificationDisplayer
-											.setTag(getSuccessTag());
-									mNotificationDisplayer
-											.displayNotification();
+									// mNotificationDisplayer
+									// .setTicker(getSuccessTicker());
+									// mNotificationDisplayer
+									// .setTag(getSuccessTag());
+									// mNotificationDisplayer
+									// .displayNotification();
 									commentView.addComment(comment.getComment());
-									mNotificationDisplayer.cancleNotification();
+									// mNotificationDisplayer.cancleNotification();
 								}
 							}
 						}
@@ -178,18 +206,84 @@ public class CommentsFragment extends BaseFragment {
 		try {
 			async.publishComments(param, callback);
 		} catch (ValveException e) {
-			mExceptionHandler.obtainMessage(
-					NetworkError.ERROR_NETWORK).sendToTarget();
+			mExceptionHandler.obtainMessage(NetworkError.ERROR_NETWORK)
+					.sendToTarget();
 		}
-		mNotificationDisplayer.cancleNotification();
+		// mNotificationDisplayer.cancleNotification();
 	}
 
-	private void AsyncGetComments(int cPage, int dPage) throws NetworkException {
+	private void AsyncGetCommentsByPage(int cPage, int dPage)
+			throws NetworkException {
 
 		CommentsGetInfoRequestParam param = new CommentsGetInfoRequestParam(
 				photo.getPid());
 		param.setCurrentPage(cPage);
 		param.setDemandPage(dPage);
+		param.setCommentAction(CommentAction.COMMENTS);
+
+		mNotificationDisplayer.setTag(getRefreshTag());
+		mNotificationDisplayer.setTicker(getSuccessTicker());
+		mNotificationDisplayer.displayNotification();
+
+		AbstractRequestListener<CommentsGetInfoResponseBean> listener = new AbstractRequestListener<CommentsGetInfoResponseBean>() {
+
+			@Override
+			public void onComplete(final CommentsGetInfoResponseBean bean) {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
+
+						public void run() {
+							if (bean.getComments() != null) {
+								if (bean.getComments().size() != 0) {
+									commentView.addComments(bean.getComments());
+								}
+							}
+						}
+					});
+				}
+			}
+
+			@Override
+			public void onFault(final Throwable fault) {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
+
+						public void run() {
+							mExceptionHandler.obtainMessage(
+									NetworkError.ERROR_NETWORK).sendToTarget();
+						}
+
+					});
+				}
+			}
+
+			@Override
+			public void onNetworkError(final NetworkError networkError) {
+				if (getActivity() != null) {
+					getActivity().runOnUiThread(new Runnable() {
+
+						public void run() {
+							mExceptionHandler.obtainMessage(
+									NetworkError.ERROR_REFRESH_DATA)
+									.sendToTarget();
+						}
+
+					});
+				}
+			}
+
+		};
+		async.getCommentsInfo(param, listener);
+		mNotificationDisplayer.cancleNotification();
+	}
+
+	private void AsyncGetCommentsByDateDiff(int datediff)
+			throws NetworkException {
+
+		CommentsGetInfoRequestParam param = new CommentsGetInfoRequestParam(
+				photo.getPid());
+		param.setDatediff(datediff);
+		param.setCommentAction(CommentAction.COMMENTS);
 
 		mNotificationDisplayer.setTag(getRefreshTag());
 		mNotificationDisplayer.setTicker(getSuccessTicker());
@@ -253,7 +347,7 @@ public class CommentsFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnRightBtnClicked()
 	 */
 	@Override
-	protected void onRightBtnClicked() {
+	protected void onRightBtnClicked(View view) {
 
 	}
 
@@ -263,7 +357,7 @@ public class CommentsFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnLeftBtnClicked()
 	 */
 	@Override
-	protected void onLeftBtnClicked() {
+	protected void onLeftBtnClicked(View view) {
 		backward(null);
 	}
 
@@ -305,7 +399,7 @@ public class CommentsFragment extends BaseFragment {
 
 		public void OnLoadMore(int currentPage, int demandPage) {
 			try {
-				AsyncGetComments(currentPage, demandPage);
+				AsyncGetCommentsByPage(currentPage, demandPage);
 			} catch (NetworkException e) {
 				mExceptionHandler
 						.obtainMessage(NetworkError.ERROR_SIGN_IN_NULL)

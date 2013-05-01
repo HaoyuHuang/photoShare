@@ -54,6 +54,7 @@ public class TraceStack {
 
 			switch (phase) {
 			case CAMERA:
+				footprint.destory();
 				break;
 			case HOME:
 				footprint.destory();

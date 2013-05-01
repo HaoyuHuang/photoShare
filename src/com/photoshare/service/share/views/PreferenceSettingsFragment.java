@@ -13,9 +13,9 @@ import com.photoshare.exception.NetworkError;
 import com.photoshare.exception.NetworkException;
 import com.photoshare.fragments.BaseFragment;
 import com.photoshare.history.SearchHistory;
-import com.photoshare.service.follow.FollowType;
+import com.photoshare.service.follow.FollowAction;
 import com.photoshare.service.photos.PhotoBean;
-import com.photoshare.service.photos.RequestPhotoType;
+import com.photoshare.service.photos.PhotoAction;
 import com.photoshare.service.users.UserInfo;
 import com.photoshare.service.users.UserPrivacyRequestParam;
 import com.photoshare.service.users.UserPrivacyResponseBean;
@@ -33,7 +33,7 @@ public class PreferenceSettingsFragment extends BaseFragment {
 	private String rightBtnText = "";
 	private String titlebarText = "";
 	private int leftBtnVisibility = View.VISIBLE;
-	private int rightBtnVisibility = View.VISIBLE;
+	private int rightBtnVisibility = View.GONE;
 	private ArrayList<PhotoBean> likesPhoto;
 
 	public static PreferenceSettingsFragment newInstance(int fragmentViewId) {
@@ -193,7 +193,7 @@ public class PreferenceSettingsFragment extends BaseFragment {
 			titleBarBtnDrawable();
 			Bundle param = new Bundle();
 			param.putString(PhotoBean.KEY_PHOTO_TYPE,
-					RequestPhotoType.MyLikedPhotos.toString());
+					PhotoAction.MyLikedPhotos.toString());
 			param.putParcelable(UserInfo.KEY_USER_INFO, user.getUserInfo());
 			param.putBoolean(KEY_IGNORE_TITLE_VIEW, true);
 			forward(getFeedFragment(), param);
@@ -233,8 +233,8 @@ public class PreferenceSettingsFragment extends BaseFragment {
 			titleBarBtnDrawable();
 			Bundle args = new Bundle();
 			args.putParcelable(UserInfo.KEY_USER_INFO, user.getUserInfo());
-			args.putString(UserInfo.KEY_FOLLOW_TYPE,
-					FollowType.FOLLOWER.toString());
+			args.putInt(UserInfo.KEY_FOLLOW_ACTION,
+					FollowAction.FOLLOWER.getCode());
 			forward(getFollowFragment(), args);
 		}
 
@@ -243,8 +243,8 @@ public class PreferenceSettingsFragment extends BaseFragment {
 			titleBarBtnDrawable();
 			Bundle args = new Bundle();
 			args.putParcelable(UserInfo.KEY_USER_INFO, user.getUserInfo());
-			args.putString(UserInfo.KEY_FOLLOW_TYPE,
-					FollowType.FOLLOWING.toString());
+			args.putInt(UserInfo.KEY_FOLLOW_ACTION,
+					FollowAction.FOLLOWING.getCode());
 			forward(getFollowFragment(), args);
 		}
 
@@ -252,7 +252,7 @@ public class PreferenceSettingsFragment extends BaseFragment {
 			titleBarBtnDrawable();
 			Bundle param = new Bundle();
 			param.putString(PhotoBean.KEY_PHOTO_TYPE,
-					RequestPhotoType.MyPhotos.toString());
+					PhotoAction.MyPhotos.toString());
 			param.putParcelable(UserInfo.KEY_USER_INFO, user.getUserInfo());
 			param.putBoolean(KEY_IGNORE_TITLE_VIEW, true);
 			forward(getFeedFragment(), param);
@@ -285,7 +285,7 @@ public class PreferenceSettingsFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnRightBtnClicked()
 	 */
 	@Override
-	protected void onRightBtnClicked() {
+	protected void onRightBtnClicked(View view) {
 		Command.MsgList(getActivity());
 	}
 
@@ -295,7 +295,7 @@ public class PreferenceSettingsFragment extends BaseFragment {
 	 * @see com.photoshare.fragments.BaseFragment#OnLeftBtnClicked()
 	 */
 	@Override
-	protected void onLeftBtnClicked() {
+	protected void onLeftBtnClicked(View view) {
 		Command.UserHome(getActivity(), user.getUserInfo().params());
 	}
 

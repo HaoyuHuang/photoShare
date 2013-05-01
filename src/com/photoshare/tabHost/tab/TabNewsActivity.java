@@ -40,7 +40,6 @@ public class TabNewsActivity extends BaseActivity {
 		nf = (NewsFragment) getFragmentManager().findFragmentById(
 				R.id.TabNewsLayoutHolderId);
 		nf = NewsFragment.newInstance(R.id.TabNewsLayoutHolderId);
-		nf.setNews(news);
 		nf.setCanonicalTag(getNews());
 		Bundle bundle = new Bundle();
 		bundle.putParcelableArrayList(NewsBean.KEY_NEWS, news);

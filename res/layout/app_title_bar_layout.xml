@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/appTitleBarLayoutId"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" >
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -22,7 +23,7 @@
             android:text="@string/back"
             android:textColor="#FFFFFF"
             android:textSize="14dp" />
-
+
         <TextView
             android:id="@+id/titlebar_title_text"
             android:layout_width="match_parent"
@@ -45,19 +46,41 @@
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/successViewLayoutId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/green"
+        android:gravity="center"
+        android:visibility="gone" >
+
+        <TextView
+            android:id="@+id/successView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="@string/sSuccess"
+            android:textColor="@color/red" />
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/errorViewLayoutId"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/home_btn_bg_s"
+        android:background="@color/lightgrey"
+        android:gravity="center"
         android:visibility="gone" >
 
         <TextView
             android:id="@+id/errorView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:text="@string/eError" />
+            android:text="@string/eError"
+            android:textColor="@color/red" />
     </LinearLayout>
 
 </LinearLayout>

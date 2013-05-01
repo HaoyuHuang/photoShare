@@ -11,7 +11,6 @@ import org.json.JSONObject;
 
 import com.photoshare.common.ResponseBean;
 import com.photoshare.exception.NetworkException;
-import com.photoshare.service.users.UserInfo;
 
 /**
  * @author czj_yy
@@ -34,12 +33,14 @@ public class UserGetNewsResponseBean extends ResponseBean {
 
 		try {
 			JSONObject obj = new JSONObject(response);
-			JSONArray array = obj.optJSONArray(UserInfo.KEY_USER_INFO);
+			JSONArray array = obj.optJSONArray(NewsBean.KEY_NEWS);
 			if (array != null) {
-				NewsBean follower = new NewsBean();
 				for (int i = 0; i < array.length(); i++) {
+					NewsBean feed = new NewsBean();
 					try {
-						news.add(follower.parse(array.optJSONObject(i)));
+						feed.parse(array.optJSONObject(i));
+						System.out.println(feed);
+						news.add(feed);
 					} catch (NetworkException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

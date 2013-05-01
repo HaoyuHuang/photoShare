@@ -28,7 +28,7 @@ public class User {
 
 	public static final String KEY_MAIL = "mail";
 	public static final String KEY_PWD = "pwd";
-	public static final String KEY_CONFIGURE = "configur";
+	public static final String KEY_CONFIGURE = "configure";
 	public static final String KEY_UID = "userid";
 	/**
 	 * 登陆账号,登录后保存在SharePreference中
@@ -43,13 +43,20 @@ public class User {
 
 	private Pipeline pipeline = OutboundPipeline.getInstance();
 
+	public static final String SERVER_IP = "http://192.168.0.12:8080/";
+
 	/** 服务器地址 */
-	private final String SERVER_URL = "http://192.168.0.11:8080/photoShareServer/photoShare-mobile";
+	private final String SERVER_URI = "http://192.168.0.12:8080/photoShareServer/photoShare-mobile";
 	/** 响应形式为Json */
 	public static final String RESPONSE_FORMAT_JSON = "json";
 	private final String LOG_TAG_REQUEST = "request";
 	private final String LOG_TAG_RESPONSE = "response";
-	private UserInfo userInfo = new UserInfo.UserInfoBuilder().ID(2L).build();
+	private UserInfo userInfo = new UserInfo.UserInfoBuilder().ID(2L)
+			.Name("Joshuwa").Mail("hhyqwerty@gmail.com").PseudoName("Eric")
+			.Birthday("1991-07-23").TinyHeadUrl("/test/head3.jpg")
+			.Website("www.photoshare.com.cn").Bio("Just leave me alone.")
+			.Phone("4008208820").Gender("female").Privacy(false)
+			.HeadUrl("/test/head4.jpg").LargeHeadUrl("/test/head4.jpg").build();
 	private boolean Logging = false;
 
 	private static User user = new User();
@@ -192,13 +199,11 @@ public class User {
 		params.putString("method", method);
 		params.putString(PhotoBean.KEY_PHOTO + "." + PhotoBean.KEY_CAPTION,
 				description);
-		params.putLong(PhotoBean.KEY_PHOTO + "." + PhotoBean.KEY_UID,
-				userInfo.getUid());
+		params.putString(PhotoBean.KEY_UID, String.valueOf(userInfo.getUid()));
 		String contentType = parseContentType(fileName);
 		params.putString("format", format);
-
-		return Utils.uploadFile(SERVER_URL + method, params, "upload",
-				fileName, contentType, photo);
+		return Utils.uploadFile(SERVER_URI + method, params, "image", fileName,
+				contentType, photo);
 	}
 
 	/**
@@ -243,7 +248,7 @@ public class User {
 
 		logRequest(parameters);
 		String response = Utils
-				.openUrl(SERVER_URL + action, "POST", parameters);
+				.openUrl(SERVER_URI + action, "POST", parameters);
 		logResponse(parameters.getString("method"), response);
 		return response;
 	}
