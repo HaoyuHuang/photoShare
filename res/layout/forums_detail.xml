@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:scrollbars="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/titlebar_bg" >
+
+        <Button
+            android:id="@+id/forums_detail_backpage"
+            android:layout_width="55dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:layout_marginLeft="20px"
+            android:background="@drawable/title_confirm_b"
+            android:text="返回"
+            android:textColor="@color/white"
+            android:textSize="12dp" />
+
+        <TextView
+            android:id="@+id/forums_head"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="评论详细"
+            android:textColor="@color/white"
+            android:textSize="22dp" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.2"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/forums_detali_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1px"
+                android:gravity="center"
+                android:text="张立霞"
+                android:textColor="@color/dodgerblue"
+                android:textSize="50px"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20px"
+            android:layout_weight="0.8"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/forums_detail_time"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="15px"
+                android:gravity="right"
+                android:text="2小时前"
+                android:textColor="@color/orange"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/forums_detail_content"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="15px"
+                android:text="这是一张非常好看的图片，我和大家分享一下吧~ ^_^"
+                android:textColor="@color/black" />
+
+            <ImageView
+                android:id="@+id/forums_detail_img"
+                android:layout_width="182dp"
+                android:layout_height="107dp"
+                android:src="@drawable/forum_example" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5px"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/forums_detail_support"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="50px"
+                    android:layout_marginRight="50px"
+                    android:gravity="center"
+                    android:text="@string/forums_list_support"
+                    android:textColor="@color/red" />
+
+                <TextView
+                    android:id="@+id/forums_detail_comment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20px"
+                    android:gravity="center"
+                    android:text="@string/forums_list_comment"
+                    android:textColor="@color/red" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5px"
+                android:layerType="software"
+                android:src="@drawable/divide" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10px"
+                android:gravity="center"
+                android:text="评论列表"
+                android:textColor="@color/fuchsia"
+                android:textSize="30px" />
+
+            <TextView
+                android:id="@+id/forums_detail_remark"
+                android:layout_width="fill_parent"
+                android:layout_height="140dp"
+                android:scrollbars="vertical"
+                android:textColor="@color/black" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        
+        android:orientation="horizontal" >
+
+        <EditText
+            android:id="@+id/forums_detail_sent_remark_text"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_weight="8"
+            android:hint="请输入要评论的内容" />
+
+        <Button
+            android:id="@+id/forums_detail_sent_submit"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="发表" />
+    </LinearLayout>
+</LinearLayout>

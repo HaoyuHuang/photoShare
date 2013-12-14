@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10px"
+    android:background="@color/white"
+    android:orientation="horizontal" >
+
+    <LinearLayout
+        android:layout_width="50dp"
+        android:layout_height="43dp"
+        android:gravity="center" >
+
+        <ImageView
+            android:id="@+id/find_friend_img"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@drawable/woman" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="200px"
+        android:layout_height="45dp"
+        android:layout_marginLeft="15px"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/find_friend_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="王冲"
+            android:textColor="@color/black"
+            android:textSize="25px" >
+        </TextView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:layout_marginTop="0px"
+            android:layout_weight="1"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/email" />
+
+            <TextView
+                android:id="@+id/find_friend_email"
+                 android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginLeft="5px"
+                android:ems="12"
+                android:gravity="center_vertical"
+                android:text="771762167@qq.com"
+                android:textColor="@color/black"
+                android:textSize="15px" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="right" >
+
+        <Button
+            android:id="@+id/find_friend_add"
+               android:layout_width="33dp"
+            android:layout_height="33dp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/add_friend" />
+    </LinearLayout>
+
+</LinearLayout>

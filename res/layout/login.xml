@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/logo_bg"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/loginimg"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30px"
+        android:src="@drawable/logo" />
+
+    <EditText
+        android:id="@+id/account"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:layout_marginLeft="15px"
+        android:layout_marginRight="15px"
+        android:layout_marginTop="30px"
+        android:hint="@string/log_account"
+        android:text="wangchong" />
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:layout_marginLeft="15px"
+        android:layout_marginRight="15px"
+        android:layout_marginTop="15px"
+        android:hint="@string/log_password"
+        android:inputType="textPassword"
+        android:text="123456" />
+
+    <CheckBox
+        android:id="@+id/remberpassword"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="15px"
+        android:layout_marginRight="15px"
+        android:layout_marginTop="12px"
+        android:text="@string/log_remberpassword" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/btn_log"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15px"
+            android:layout_marginRight="12px"
+            android:layout_marginTop="15px"
+            android:layout_weight="1"
+            android:text="@string/log_log"
+            style="@style/text_view" />
+
+        <Button
+            android:id="@+id/btn_reg"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12px"
+            android:layout_marginRight="15px"
+            android:layout_marginTop="15px"
+            android:layout_weight="1"
+            android:text="@string/log_reg"
+            style="@style/text_view" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/copyright"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginBottom="30px"
+        android:text="@string/log_copyright"
+        android:textSize="17dp"
+         />
+
+</LinearLayout>

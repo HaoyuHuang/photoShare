@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="gen"/>
+	<classpathentry kind="src" path="OpenPlatformLib"/>
+	<classpathentry kind="lib" path="OpenPlatformLib/httpmime-4.1.3.jar"/>
+	<classpathentry kind="lib" path="OpenPlatformLib/Android_SDK_v1.2.jar"/>
+	<classpathentry kind="lib" path="OpenPlatformLib/RennSDK-Android.jar"/>
+	<classpathentry kind="lib" path="OpenPlatformLib/commons-codec.jar"/>
+	<classpathentry kind="lib" path="OpenPlatformLib/commons-httpclient-3.1.jar"/>
+	<classpathentry kind="lib" path="OpenPlatformLib/commons-logging.jar"/>
+	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
+	<classpathentry kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
+	<classpathentry kind="output" path="bin/classes"/>
+</classpath>

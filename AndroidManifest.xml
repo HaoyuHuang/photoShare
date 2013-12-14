@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.photoshare"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="17" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
+    <uses-feature android:name="android.hardware.camera" />
+
+    <!-- 授权认证 -->
+
+    <application
+        android:name="com.photoshare.app.PhotoShareApplication"
+        android:icon="@drawable/logo"
+        android:label="@string/app_name" >
+        <activity
+            android:name="com.photoshare.ui.LogoActivity"
+            android:theme="@style/theme_fullScreen" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.photoshare.ui.LogInActivity"
+            android:theme="@style/theme_fullScreen" >
+        </activity>
+        <activity
+            android:name="com.photoshare.ui.MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/theme_fullScreen" >
+        </activity>
+        <activity
+            android:name="com.photoshare.ui.tab.CameraActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/theme_fullScreen" >
+        </activity>
+        <activity
+            android:name="com.photoshare.ui.tab.ForumsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/theme_fullScreen" >
+        </activity>
+        <activity
+            android:name="com.photoshare.ui.tab.FriendsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/theme_fullScreen" >
+        </activity>
+        <activity
+            android:name="com.photoshare.ui.tab.PopularActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/theme_fullScreen" >
+        </activity>
+        <activity
+            android:name="com.photoshare.ui.tab.ProfileActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/theme_fullScreen" >
+        </activity>
+        <activity
+            android:name="com.photoshare.ui.RegistActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/theme_fullScreen" >
+        </activity>
+        <activity
+            android:name="com.photoshare.ui.tab.CameraUpLoadMainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/theme_fullScreen" >
+        </activity>
+        <activity
+            android:name="com.photoshare.Tencent.TencentOAuthWebView"
+            android:screenOrientation="portrait"
+            android:theme="@style/theme_fullScreen" >
+        </activity>
+        <activity
+            android:name="com.renn.rennsdk.oauth.OAuthActivity"
+            android:configChanges="orientation|navigation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@style/theme_fullScreen" />
+        <activity
+            android:name="com.photoshare.ui.tab.ForumsDetailActivity"
+            android:configChanges="orientation|navigation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@style/theme_fullScreen" >
+        </activity>
+        <activity
+            android:name="com.photoshare.ui.tab.FriendsFindActivity"
+            android:configChanges="orientation|navigation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@style/theme_fullScreen" />
+        <activity
+            android:name="com.photoshare.viewgroup.FriendsViewGroup"
+            android:configChanges="orientation|navigation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@style/theme_fullScreen" />
+        <activity
+            android:name="com.photoshare.viewgroup.ForumsViewGroup"
+            android:configChanges="orientation|navigation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@style/theme_fullScreen" />
+        <activity
+            android:name="com.photoshare.viewgroup.PopularViewGroup"
+            android:configChanges="orientation|navigation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@style/theme_fullScreen" />
+        <activity
+            android:name="com.photoshare.ui.tab.PopularDetailActivity"
+            android:configChanges="orientation|navigation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@style/theme_fullScreen" />
+        <activity
+            android:name="com.photoshare.ui.tab.GoShareActivity"
+            android:configChanges="orientation|navigation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@style/theme_fullScreen" />
+
+        <!-- 新浪收授权 -->
+
+        <activity android:name="com.sina.weibo.sdk.demo.WBAuthActivity" />
+        <activity android:name="com.sina.weibo.sdk.demo.WBAuthCodeActivity" />
+        <activity android:name="com.sina.weibo.sdk.demo.WBShareMainActivity" />
+
+        <service
+            android:name="com.photoshare.service.MainService"
+            android:enabled="true" >
+        </service>
+    </application>
+
+</manifest>

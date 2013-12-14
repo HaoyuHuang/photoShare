@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/titlebar_bg" >
+
+        <Button
+            android:id="@+id/find_friend_back"
+            android:layout_width="55dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:layout_marginLeft="20px"
+            android:background="@drawable/title_confirm_b"
+            android:text="@string/back"
+            android:textColor="@color/white"
+            android:textSize="12dp" />
+
+        <TextView
+            android:id="@+id/camera_head"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/find_friends"
+            android:textColor="@color/white"
+            android:textSize="22dp" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10px"
+        android:orientation="horizontal" >
+
+        <EditText
+            android:id="@+id/find_friend_text"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_weight="8"
+            android:hint="@string/please_input_find_friends_name" />
+
+        <Button
+            android:id="@+id/start_find_friends"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="@string/start_find_friends" />
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/find_friends_result"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="5px" >
+    </ListView>
+
+</LinearLayout>

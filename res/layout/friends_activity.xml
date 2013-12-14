@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white" >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/titlebar_bg" >
+
+        <Button
+            android:id="@+id/friend_refrush"
+            android:layout_width="55dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:layout_marginLeft="20px"
+            android:background="@drawable/title_confirm_b"
+            android:text="@string/refrush"
+            android:textColor="@color/white"
+            android:textSize="12dp" />
+
+        <TextView
+            android:id="@+id/forums_head"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/title_user_info_modify"
+            android:textColor="@color/white"
+            android:textSize="22dp" />
+
+        <Button
+            android:id="@+id/friend_find"
+            android:layout_width="55dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginRight="20px"
+            android:background="@drawable/title_confirm_b"
+            android:text="@string/find_friends"
+            android:textColor="@color/white"
+            android:textSize="12dp" />
+    </FrameLayout>
+
+    <ListView
+        android:id="@+id/friend_listview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+    </ListView>
+
+</LinearLayout>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/text_more"
+        android:layout_width="fill_parent"
+        android:layout_height="80px"
+        android:gravity="center"
+        android:text="@string/more"
+        android:textColor="@color/black"
+        android:textSize="30px"
+         />
+
+    <LinearLayout
+        android:id="@+id/more_wait_view"
+        android:layout_width="fill_parent"
+        android:layout_height="80px"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:visibility="gone" 
+        >
+
+        <ProgressBar
+            android:layout_width="25dp"
+            android:layout_height="25dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="5px"
+            android:gravity="center"
+            android:text="@string/on_loding_please_wait"
+            android:textColor="@color/black"
+            android:textSize="30px" />
+    </LinearLayout>
+
+</LinearLayout>

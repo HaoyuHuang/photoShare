@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/titlebar_bg" >
+
+        <Button
+            android:id="@+id/profile_refrush"
+            android:layout_width="55dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:layout_marginLeft="20px"
+            android:background="@drawable/title_confirm_b"
+            android:text="@string/refrush"
+            android:textColor="@color/white"
+            android:textSize="12dp" />
+
+        <TextView
+            android:id="@+id/forums_head"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/title_user_info_modify"
+            android:textColor="@color/white"
+            android:textSize="22dp" />
+
+        <Button
+            android:id="@+id/profile_submit"
+            android:layout_width="55dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginRight="20px"
+            android:background="@drawable/title_confirm_b"
+            android:text="@string/profile_confirm_fix"
+            android:textColor="@color/white"
+            android:textSize="12dp" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15px"
+        android:layout_marginRight="15px"
+        android:layout_marginTop="15px"
+        android:orientation="horizontal" >
+
+        <TextView
+            style="@style/text_view"
+            android:layout_width="0dp"
+            android:layout_height="42dp"
+            android:layout_weight="2"
+            android:gravity="center_vertical|fill_horizontal"
+            android:text="@string/regist_account"
+            android:textColor="@color/black" />
+
+        <EditText
+            android:id="@+id/profile_edtv_username"
+            style="@style/edittextview_hight"
+            android:layout_width="0dp"
+            android:layout_weight="6"
+            android:editable="false" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15px"
+        android:layout_marginRight="15px"
+        android:layout_marginTop="15px"
+        android:orientation="horizontal" >
+
+        <TextView
+            style="@style/text_view"
+            android:layout_width="0dp"
+            android:layout_height="42dp"
+            android:layout_weight="2"
+            android:gravity="center_vertical|fill_horizontal"
+            android:text="@string/regist_password"
+            android:textColor="@color/black" />
+
+        <EditText
+            android:id="@+id/profile_edtv_password"
+            style="@style/edittextview_hight"
+            android:layout_width="0dp"
+            android:layout_weight="6" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15px"
+        android:layout_marginRight="15px"
+        android:layout_marginTop="15px"
+        android:orientation="horizontal" >
+
+        <TextView
+            style="@style/text_view"
+            android:layout_width="0dp"
+            android:layout_height="42dp"
+            android:layout_weight="2"
+            android:gravity="center_vertical|fill_horizontal"
+            android:text="@string/regist_password_sure"
+            android:textColor="@color/black" />
+
+        <EditText
+            android:id="@+id/profile_edtv_password_sure"
+            style="@style/edittextview_hight"
+            android:layout_width="0dp"
+            android:layout_weight="6" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15px"
+        android:layout_marginRight="15px"
+        android:layout_marginTop="15px"
+        android:orientation="horizontal" >
+
+        <TextView
+            style="@style/text_view"
+            android:layout_width="0dp"
+            android:layout_height="42dp"
+            android:layout_weight="2"
+            android:gravity="center_vertical|fill_horizontal"
+            android:text="@string/regist_name"
+            android:textColor="@color/black" />
+
+        <EditText
+            android:id="@+id/profile_edtv_name"
+            style="@style/edittextview_hight"
+            android:layout_width="0dp"
+            android:layout_weight="6" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15px"
+        android:layout_marginRight="15px"
+        android:layout_marginTop="15px"
+        android:orientation="horizontal" >
+
+        <TextView
+            style="@style/text_view"
+            android:layout_width="0dp"
+            android:layout_height="42dp"
+            android:layout_weight="2"
+            android:gravity="center_vertical|fill_horizontal"
+            android:text="@string/regist_nickname"
+            android:textColor="@color/black" />
+
+        <EditText
+            android:id="@+id/profile_edtv_nickname"
+            style="@style/edittextview_hight"
+            android:layout_width="0dp"
+            android:layout_weight="6" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15px"
+        android:layout_marginRight="15px"
+        android:layout_marginTop="15px"
+        android:orientation="horizontal" >
+
+        <TextView
+            style="@style/text_view"
+            android:layout_width="0dp"
+            android:layout_height="42dp"
+            android:layout_weight="2"
+            android:gravity="center_vertical|fill_horizontal"
+            android:text="@string/regist_email"
+            android:textColor="@color/black" />
+
+        <EditText
+            android:id="@+id/profile_edtv_email"
+            style="@style/edittextview_hight"
+            android:layout_width="0dp"
+            android:layout_weight="6" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15px"
+        android:layout_marginRight="15px"
+        android:layout_marginTop="15px"
+        android:orientation="horizontal" >
+
+        <RadioGroup
+            android:id="@+id/profile_radiogroup_sex"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                style="@style/text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="42dp"
+                android:gravity="center_vertical|fill_horizontal"
+                android:text="@string/regist_sex"
+                android:textColor="@color/black" />
+
+            <RadioButton
+                android:id="@+id/profile_Radionbtn_m"
+                style="@style/text_view"
+                android:layout_width="0dp"
+                android:layout_height="42dp"
+                android:layout_marginLeft="10px"
+                android:layout_weight="3"
+                android:checked="true"
+                android:text="@string/regist_sex_m"
+                android:textColor="@color/black" />
+
+            <RadioButton
+                android:id="@+id/profile_Radionbtn_w"
+                style="@style/text_view"
+                android:layout_width="0dp"
+                android:layout_height="42dp"
+                android:layout_weight="3"
+                android:text="@string/regist_sex_w"
+                android:textColor="@color/black" />
+        </RadioGroup>
+    </LinearLayout>
+
+</LinearLayout>

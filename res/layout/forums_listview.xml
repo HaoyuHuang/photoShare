@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="10px"
+    android:background="@color/white"
+    android:orientation="horizontal" >
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.2"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/forums_list_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1px"
+            android:gravity="center"
+            android:text="张立霞"
+            android:textColor="@color/dodgerblue"
+            android:textSize="50px"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20px"
+        android:layout_weight="0.8"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/forums_list_time"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="15px"
+            android:gravity="right"
+            android:text="2小时前"
+            android:textColor="@color/orange"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/forums_list_content"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="15px"
+            android:text="这是一张非常好看的图片，我和大家分享一下吧~ ^_^"
+            android:textColor="@color/black" />
+
+        <ImageView
+            android:id="@+id/forums_list_img"
+            android:layout_width="182dp"
+            android:layout_height="107dp"
+            android:src="@drawable/forum_example" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5px"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/forums_list_support"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50px"
+                android:layout_marginRight="50px"
+                android:gravity="center"
+                android:text="@string/forums_list_support"
+                android:textColor="@color/red" />
+
+            <TextView
+                android:id="@+id/forums_list_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20px"
+                android:gravity="center"
+                android:text="@string/forums_list_comment"
+                android:textColor="@color/red" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

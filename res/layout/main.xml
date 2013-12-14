@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TabHost xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@android:id/tabhost"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context=".ui.LogoActivity" >
+
+    <TabWidget
+        android:id="@android:id/tabs"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
+   
+
+        <FrameLayout
+            android:id="@android:id/tabcontent"
+            android:layout_width="fill_parent"
+            android:layout_height="483dp" />
+ 
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom" >
+
+        <RadioGroup
+            android:id="@+id/main_radio"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@drawable/tab_toolbar_bg"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <RadioButton
+                android:id="@+id/tabforums"
+                style="@style/main_tab_bottom"
+                android:layout_marginTop="2.0dip"
+                android:checked="true"
+                android:drawableTop="@drawable/icon_forums_n"
+                android:tag="radio_button0"
+                android:text="@string/forums" />
+
+            <RadioButton
+                android:id="@+id/tabhome"
+                style="@style/main_tab_bottom"
+                android:layout_marginTop="2.0dip"
+                android:drawableTop="@drawable/icon_home_n"
+                android:tag="radio_button1"
+                android:text="@string/home" />
+
+            <RadioButton
+                android:id="@+id/tabcamera"
+                style="@style/main_tab_bottom"
+                android:layout_marginTop="2.0dip"
+                android:drawableTop="@drawable/icon_carema_n"
+                android:tag="radio_button2"
+                android:text="@string/camera" />
+
+            <RadioButton
+                android:id="@+id/tabfriends"
+                style="@style/main_tab_bottom"
+                android:layout_marginTop="2.0dip"
+                android:drawableTop="@drawable/icon_friends_n"
+                android:tag="radio_button3"
+                android:text="@string/friends" >
+            </RadioButton>
+
+            <RadioButton
+                android:id="@+id/tabprofile"
+                style="@style/main_tab_bottom"
+                android:layout_marginTop="2.0dip"
+                android:drawableTop="@drawable/icon_profile_n"
+                android:tag="radio_button4"
+                android:text="@string/profile" />
+        </RadioGroup>
+    </LinearLayout>
+
+</TabHost>
